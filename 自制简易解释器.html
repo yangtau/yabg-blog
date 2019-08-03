@@ -15,7 +15,7 @@
             "Roboto",
             "Unbuntu",
             "Noto Sans SC", serif;
-        background-color: cornsilk
+        background-color: #FDF6E3
     }
 
     p {
@@ -32,9 +32,13 @@
     }
 
     p code {
-        background-color: #e0dfcc;
+        /* background-color: #DF8E30; */
+        overflow: auto;
+        border-style: solid;
+        border-color: #e0dfcc;
         border-radius: 3px;
-        padding: 3px 3px;
+        padding: 2px 2px;
+
     }
 
     pre code {
@@ -49,6 +53,7 @@
         background-color: #f5f2f0;
         padding: 1em;
         margin: 2em 2em;
+        border-radius: 6px;
         border-width: 0.3em;
         border-color: #e0dfcc;
         border-style: solid;
@@ -62,11 +67,13 @@
     <div class="w3-container">
 
         <div class="w3-content" style="max-width: 800px">
+            <p>
+                <a href="/">Home</a>
+            </p>
             <h1>自制简易解释器</h1>
-            <div class="light">作者：yangtao</div>
+            <div class="light">作者：tau</div>
             <div class="light">日期：2019-02-18</div>
-            <h1>自制简易解释器</h1>
-<p>用C语言写了一个简单的动态语言解释器, 代码放在了github上面:<a href="https://github.com/yangtau/hedgehog">hedegehog</a>. 编译, 运行可以看看github上的readme.</p>
+            <p>我用C语言写了一个简单的动态语言解释器, 代码放在了github上面:<a href="https://github.com/yangtau/hedgehog">hedegehog</a>.</p>
 <p>先简单介绍下这门语言. hedgehog 的多数设计和 python 比较相似, 无需声明变量类型, <code>if</code>,<code>for</code>等语句没有块级作用域.  语法上又有点像 go 语言: <code>if</code>, <code>for</code>不需要<code>()</code>, 但是后面的代码块都必须加<code>{}</code>; 没有<code>while</code>, 不过有<code>for condition {}</code>来替代. 不过行尾必须加<code>;</code>这点和 go 不同. 大多数设计都是为了简化实现方式, 比如必须加<code>{}</code>, <code>;</code>是为了简化语法的解析.</p><!--more-->
 <h2>已实现的功能</h2><ul><li>
 <p>数据类型</p>
@@ -192,8 +199,7 @@ MUL_EXPRESSION:
 </code></pre>
 <p>词法分析和语法分析属于解释器的前端, 这部分没有自己编写, 主要把精力放在了后端.</p>
 <h2>表达式与语句</h2>
-<p>表达式与语句是整个后端最重要的两个模块, 大部分的逻辑都在两者中实现. 这里主要介绍一下表达式, 语句与之类似.
-大部分的代码都用C语言实现了面向对象, 这里必须推荐一下刘大的<a href="https://mp.weixin.qq.com/s/2ivQ9hcRvZnhk89jzAppSg">C语言：春节回家过年，我发现只有我没有对象！</a>. </p>
+<p>表达式与语句是整个后端最重要的两个模块, 大部分的逻辑都在两者中实现. 这里主要介绍一下表达式, 语句与之类似.</p>
 <pre><code class="c">// expression.h
 struct ExpressionTag {
     void (*free)(Expression *self);
@@ -293,9 +299,7 @@ Interpreter *getCurrentInterpreter();
 <h2>总结</h2>
 <p>整个解释器的大概构成就是这样. 目前只实现了一些简单的功能, 数组, 字典, 垃圾回收(目前只对字符串做了引用计数回收), 文件IO等特性都还没有写. 而且完全没有优化, 运行效率极低. 不过写这个解释器的时候还是收获不少: 深入学习了C语言, 对编译原理有了大概的了解, 更加深刻地理解了面向对象...</p><!--当我第一次看到屏幕上输出`Hello World`的时候, 内心有点激动, 有点像看到自己刚出生的孩子的感觉(虽然女朋友都没有).-->
 
-            <p>
-                <a href="/">back</a>
-            </p>
+
         </div>
 
 
@@ -319,7 +323,7 @@ Interpreter *getCurrentInterpreter();
         inlineMath: [ ['$','$'], ["\\(","\\)"] ],
         displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
         processEscapes: true
-      },
+      },    
       "HTML-CSS": { availableFonts: ["TeX"] }
     });
 </script>
