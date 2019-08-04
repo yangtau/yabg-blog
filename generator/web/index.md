@@ -1,5 +1,5 @@
 ---
-title: Tau's Blog
+title: τ
 type: index
 ---
 

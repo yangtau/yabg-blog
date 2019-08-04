@@ -7,3 +7,5 @@ dependencies:
   markdown: ^2.0.3
   mustache: ^1.1.1
   yaml: ^2.1.16
+  shelf: ^0.7.5
+  shelf_static: ^0.2.8

@@ -3,19 +3,18 @@
 <title>自制简易解释器</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/solarized-light.min.css">
-
 <link rel="stylesheet" href="style.css">
-
-<body>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/solarized-light.min.css">
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:100,300,400,500,700,900&display=swap" rel="stylesheet"><body>
 
     <div class="w3-container">
 
         <div class="w3-content" style="max-width: 800px">
-
+            <p>
+                <a href="/">Home</a>
+            </p>
             <h1>自制简易解释器</h1>
-            <div class="light">作者：tau</div>
+            <div class="light">作者：τ</div>
             <div class="light">日期：2019-02-18</div>
             <p>我用C语言写了一个简单的动态语言解释器, 代码放在了github上面:<a href="https://github.com/yangtau/hedgehog">hedegehog</a>.</p>
 <p>先简单介绍下这门语言. hedgehog 的多数设计和 python 比较相似, 无需声明变量类型, <code>if</code>,<code>for</code>等语句没有块级作用域.  语法上又有点像 go 语言: <code>if</code>, <code>for</code>不需要<code>()</code>, 但是后面的代码块都必须加<code>{}</code>; 没有<code>while</code>, 不过有<code>for condition {}</code>来替代. 不过行尾必须加<code>;</code>这点和 go 不同. 大多数设计都是为了简化实现方式, 比如必须加<code>{}</code>, <code>;</code>是为了简化语法的解析.</p><!--more-->
@@ -243,22 +242,17 @@ Interpreter *getCurrentInterpreter();
 <h2>总结</h2>
 <p>整个解释器的大概构成就是这样. 目前只实现了一些简单的功能, 数组, 字典, 垃圾回收(目前只对字符串做了引用计数回收), 文件IO等特性都还没有写. 而且完全没有优化, 运行效率极低. 不过写这个解释器的时候还是收获不少: 深入学习了C语言, 对编译原理有了大概的了解, 更加深刻地理解了面向对象...</p><!--当我第一次看到屏幕上输出`Hello World`的时候, 内心有点激动, 有点像看到自己刚出生的孩子的感觉(虽然女朋友都没有).-->
 
-            <p>
-                <a href="/">Home</a>
-            </p>
-        </div>
 
+        </div>
 
     </div>
 
 </body>
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
-<script>
-    document.querySelectorAll('pre code').forEach((block) => {
-        hljs.highlightBlock(block);
-    });
-</script>
+<script>hljs.initHighlightingOnLoad();</script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       extensions: ["tex2jax.js"],
@@ -271,5 +265,4 @@ Interpreter *getCurrentInterpreter();
       "HTML-CSS": { availableFonts: ["TeX"] }
     });
 </script>
-
 </html>

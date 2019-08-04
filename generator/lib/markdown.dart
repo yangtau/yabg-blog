@@ -2,7 +2,7 @@ import 'package:markdown/markdown.dart';
 import 'package:yaml/yaml.dart';
 import 'dart:io';
 import 'common.dart';
-
+import 'utils.dart';
 /*
 format of header of markdown
 
@@ -30,7 +30,9 @@ _readMetadata(String content) {
   if (!metadata.containsKey(METADATA_KEY_TYPE)) {
     throw ('metadata of markdown must contains `type`');
   }
-  metadata[METADATA_KEY_HTML_CONTENT] = markdownToHtml(splited[2]);
+  metadata[METADATA_KEY_HTML_CONTENT] = markdownToHtml(
+      splited.sublist(2).join(METADATA_SEARATOR),
+      extensionSet: ExtensionSet.gitHubFlavored);
   return metadata;
 }
 
@@ -63,5 +65,6 @@ Future<List<Map>> readMarkdown(String dirName) async {
     indexMetadata[METADATA_KEY_ARTICLES] =
         metadatas.where((m) => m[METADATA_KEY_TYPE] == METADATA_TYPE_ARTICLE);
   }
+  log("build: markdown done.");
   return metadatas;
 }

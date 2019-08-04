@@ -1,6 +1,11 @@
 body {
-    font-family: "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", "Roboto", "Unbuntu", "Noto Sans SC", serif;
+    font-family: "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", 'Noto Sans SC', "Roboto", "Ubuntu", serif;
     background-color: #FDF6E3
+}
+
+h1,
+h2 {
+    font-weight: 500;
 }
 
 p {
@@ -17,40 +22,55 @@ img {
 }
 
 p code {
-    /* background-color: #DF8E30; */
     overflow: auto;
     border-style: solid;
     border-color: #e0dfcc;
     border-radius: 3px;
     padding: 2px 2px;
+    margin: 2px 2px;
 }
 
 pre code {
     border-color: #e0dfcc;
     border-style: solid;
     border-radius: 6px;
-    text-shadow: 0 1px white;
-    overflow: auto;
+    padding: 8px 8px;
+    margin: 4px 4px;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 8px
+}
+
+thead th,
+thead td {
+    padding: 4px 4px;
+    border-bottom: 1px solid black;
+}
+
+tbody th,
+tbody td {
+    padding: 4px 4px;
+    border-top: 1px solid gainsboro;
+}
+
+pre code {
+    font-size: 14px
 }
 
 blockquote {
     background-color: #f5f2f0;
-    padding: 1em;
-    margin: 2em 2em;
+    padding: 8px 8px;
+    margin: 4px 4px;
     border-radius: 6px;
-    border-width: 0.3em;
     border-color: #e0dfcc;
     border-style: solid;
-    text-shadow: 0 1px white;
-    overflow: auto;
 }
 
 .w3-content {
     margin-left: auto;
-    margin-right: auto
-}
-
-.w3-content {
+    margin-right: auto;
     max-width: 980px
 }
 

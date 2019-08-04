@@ -17,3 +17,7 @@ copyFiles(String srcDirPath, String desDirPath,
     }
   });
 }
+
+log(String msg) {
+  print(msg);
+}

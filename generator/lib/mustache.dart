@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:mustache/mustache.dart';
 import 'common.dart';
+import 'utils.dart';
 
 String _getFileName(String path) {
   // print('here');
@@ -22,6 +23,7 @@ Future<Map<String, Template>> _readMustaches(String dir) async {
       templates[_getFileName(f.path)] = Template(
           await File(f.path).readAsString(),
           partialResolver: resolver);
+  log("build: read mustache done.");
   return templates;
 }
 
@@ -36,6 +38,7 @@ renderMustache(String outputDir, List<Map> metadatas) async {
     final rendered = tpl.renderString(metadata);
     File(outputDir + metadata[METADATA_KEY_URL]).writeAsString(rendered);
   }
+  log("build: render mustache done.");
 }
 
 // main(List<String> args) async {

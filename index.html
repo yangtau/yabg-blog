@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
-<title>Tau&#x27;s Blog</title>
+<title>τ</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="style.css">
-
-<body>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/solarized-light.min.css">
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:100,300,400,500,700,900&display=swap" rel="stylesheet"><body>
     <div class="w3-container">
-        <div class="w3-content" style="max-width: 700px;margin-top: 40px">
+        <div class="w3-content" style="max-width: 800px">
 
             <h2>关于我</h2>
 <p>感谢你访问我的博客。我是一名本科生，目前就读于电子科技大学。我的博客主要记录一些关于计算机和读书的内容。</p>
@@ -24,7 +24,7 @@
 
 
             <h2>
-                Articles
+                文章
             </h2>
             <li>2013-06-18 <a href=eggs.html> 高墙与鸡蛋</a></li>
             <li>2019-02-18 <a href=自制简易解释器.html> 自制简易解释器</a></li>
@@ -36,4 +36,18 @@
 
 </body>
 
-</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      extensions: ["tex2jax.js"],
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+      },    
+      "HTML-CSS": { availableFonts: ["TeX"] }
+    });
+</script></html>
