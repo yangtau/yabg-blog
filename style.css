@@ -1,0 +1,59 @@
+body {
+    font-family: "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", "Roboto", "Unbuntu", "Noto Sans SC", serif;
+    background-color: #FDF6E3
+}
+
+p {
+    font-size: 16px;
+    line-height: 170%;
+}
+
+img {
+    max-width: 100%;
+}
+
+.light {
+    font-weight: 300
+}
+
+p code {
+    /* background-color: #DF8E30; */
+    overflow: auto;
+    border-style: solid;
+    border-color: #e0dfcc;
+    border-radius: 3px;
+    padding: 2px 2px;
+}
+
+pre code {
+    border-color: #e0dfcc;
+    border-style: solid;
+    border-radius: 6px;
+    text-shadow: 0 1px white;
+    overflow: auto;
+}
+
+blockquote {
+    background-color: #f5f2f0;
+    padding: 1em;
+    margin: 2em 2em;
+    border-radius: 6px;
+    border-width: 0.3em;
+    border-color: #e0dfcc;
+    border-style: solid;
+    text-shadow: 0 1px white;
+    overflow: auto;
+}
+
+.w3-content {
+    margin-left: auto;
+    margin-right: auto
+}
+
+.w3-content {
+    max-width: 980px
+}
+
+.w3-container {
+    padding: 0.01em 16px
+}

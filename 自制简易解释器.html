@@ -3,73 +3,17 @@
 <title>自制简易解释器</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/solarized-light.min.css">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2018.css">
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:100,300,400,500,700,900&display=swap" rel="stylesheet">
-<style>
-    body {
-        font-family:
-            "Microsoft YaHei", "微软雅黑",
-            STXihei, "华文细黑",
-            "Roboto",
-            "Unbuntu",
-            "Noto Sans SC", serif;
-        background-color: #FDF6E3
-    }
 
-    p {
-        font-size: 16px;
-        line-height: 170%;
-    }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/solarized-light.min.css">
 
-    img {
-        max-width: 100%;
-    }
-
-    .light {
-        font-weight: 300
-    }
-
-    p code {
-        /* background-color: #DF8E30; */
-        overflow: auto;
-        border-style: solid;
-        border-color: #e0dfcc;
-        border-radius: 3px;
-        padding: 2px 2px;
-
-    }
-
-    pre code {
-        border-color: #e0dfcc;
-        border-style: solid;
-        border-radius: 6px;
-        text-shadow: 0 1px white;
-        overflow: auto;
-    }
-
-    blockquote {
-        background-color: #f5f2f0;
-        padding: 1em;
-        margin: 2em 2em;
-        border-radius: 6px;
-        border-width: 0.3em;
-        border-color: #e0dfcc;
-        border-style: solid;
-        text-shadow: 0 1px white;
-        overflow: auto;
-    }
-</style>
+<link rel="stylesheet" href="style.css">
 
 <body>
 
     <div class="w3-container">
 
         <div class="w3-content" style="max-width: 800px">
-            <p>
-                <a href="/">Home</a>
-            </p>
+
             <h1>自制简易解释器</h1>
             <div class="light">作者：tau</div>
             <div class="light">日期：2019-02-18</div>
@@ -299,18 +243,18 @@ Interpreter *getCurrentInterpreter();
 <h2>总结</h2>
 <p>整个解释器的大概构成就是这样. 目前只实现了一些简单的功能, 数组, 字典, 垃圾回收(目前只对字符串做了引用计数回收), 文件IO等特性都还没有写. 而且完全没有优化, 运行效率极低. 不过写这个解释器的时候还是收获不少: 深入学习了C语言, 对编译原理有了大概的了解, 更加深刻地理解了面向对象...</p><!--当我第一次看到屏幕上输出`Hello World`的时候, 内心有点激动, 有点像看到自己刚出生的孩子的感觉(虽然女朋友都没有).-->
 
-
+            <p>
+                <a href="/">Home</a>
+            </p>
         </div>
 
 
     </div>
 
 </body>
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 <script>
-    // hljs.configure({ useBR: true });
-
     document.querySelectorAll('pre code').forEach((block) => {
         hljs.highlightBlock(block);
     });
