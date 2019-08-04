@@ -1,0 +1,9 @@
+name: generator
+
+environment:
+  sdk: '>=2.4.0 <3.0.0'
+
+dependencies:
+  markdown: ^2.0.3
+  mustache: ^1.1.1
+  yaml: ^2.1.16

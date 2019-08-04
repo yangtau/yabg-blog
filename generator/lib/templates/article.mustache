@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<title>{{title}}</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/solarized-light.min.css">
+
+<link rel="stylesheet" href="style.css">
+
+<body>
+
+    <div class="w3-container">
+
+        <div class="w3-content" style="max-width: 800px">
+
+            <h1>{{title}}</h1>
+            <div class="light">作者：{{author}}</div>
+            <div class="light">日期：{{date}}</div>
+            {{{content}}}
+            <p>
+                <a href="/">Home</a>
+            </p>
+        </div>
+
+
+    </div>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+<script>
+    document.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightBlock(block);
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      extensions: ["tex2jax.js"],
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+      },    
+      "HTML-CSS": { availableFonts: ["TeX"] }
+    });
+</script>
+
+</html>
