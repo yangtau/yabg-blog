@@ -20,6 +20,6 @@ const MUSTACHE_EXTENSION = '.mustache';
 const MARKDOWN_DIR = 'web/';
 const MUSTACHE_DIR = 'lib/templates/';
 const EXTRA_DIR = null;
-const BUILD_DIR = '../';
+const BUILD_DIR = '/home/tau/dart-blog/';
 
 const TYPE_TO_TEMPLATE = {"article": "article", "index": "index"};
