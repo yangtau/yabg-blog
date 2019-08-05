@@ -2,6 +2,8 @@
 const METADATA_KEY_HTML_CONTENT = 'content';
 const METADATA_KEY_URL = 'url';
 const METADATA_KEY_TYPE = 'type';
+const METADATA_KEY_DATE = 'date';
+
 const METADATA_KEY_ARTICLES = 'articles'; // for metadata of index page
 
 ///metadata type
@@ -24,3 +26,4 @@ const BUILD_DIR = '/home/tau/dart-blog/';
 // const BUILD_DIR = 'test/web/';
 
 const TYPE_TO_TEMPLATE = {"article": "article", "index": "index"};
+

@@ -62,8 +62,13 @@ Future<List<Map>> readMarkdown(String dirName) async {
   }
 
   if (indexMetadata != null) {
-    indexMetadata[METADATA_KEY_ARTICLES] =
-        metadatas.where((m) => m[METADATA_KEY_TYPE] == METADATA_TYPE_ARTICLE);
+    final articles = metadatas
+        .where((m) => m[METADATA_KEY_TYPE] == METADATA_TYPE_ARTICLE)
+        .toList();
+
+    articles
+        .sort((a, b) => b[METADATA_KEY_DATE].compareTo(a[METADATA_KEY_DATE]));
+    indexMetadata[METADATA_KEY_ARTICLES] = articles;
   }
   log("build: markdown done.");
   return metadatas;
