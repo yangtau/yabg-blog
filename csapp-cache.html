@@ -121,7 +121,7 @@
 </code></pre>
 <p>为了使得同一个矩阵的在缓存中的内容不被相互替换，我们可以把分块的大小设为<code>8 x 8</code>。</p>
 <h3>普通分块</h3>
-<p>####　实现</p>
+<h4>实现</h4>
 <p>我们先直接按照<code>8 x 8</code>分块实现一个矩阵的转置：</p>
 <pre><code class="C">for (i = 0; i &lt; N; i += 8) {
     for (j = 0; j &lt; M; j += 8) {
@@ -325,8 +325,8 @@ func 2 (copy and then trans): hits:3586, misses:259, evictions:227
 <p>我的这个实现有些复杂。我尽量讲清楚我的具体步骤。</p>
 <p>同样，我们保持分块为<code>8 x 8</code>，在大的分块下再分成4个<code>4 x 4</code>的小分块。我们先将<code>A</code>的前四行全部复制到<code>B</code>的前四行，这个时候<code>B</code>的左上角是最终正确的元素，右上角是应该放到左下角的元素。然后，我们在复制后<code>A</code>的后四行到<code>B</code>的过程中，利用本地变量将<code>B</code>右上角的内容复制到右下角。</p>
 <p>具体步骤如下：</p>
-<p><img src="/home/tau/csapp/lab/cachelab/pictures/64x64_12.jpg" alt="" /></p><ol><li>先将<code>A</code>的前四行安装(1)复制到<code>B</code>中。</li><li>安装(2)将<code>A</code>中对应位置的元素存到本地变量中。</li></ol>
-<p><img src="/home/tau/csapp/lab/cachelab/pictures/64x64_34.jpg" alt="" /></p><ol start="3"><li><code>buf1</code>的四个元素与<code>B</code>右上角的第一行交换，将<code>buf2</code>中的值存到<code>B</code>右下角的对应位置。(B[4]替换B[0])</li><li>将<code>buf1</code>中的元素存放到<code>B</code>左下角对应位置。</li><li>改变位置，重复(2)，(3)，(4)，直到所有元素到达正确位置。</li></ol>
+<p><img src="pictures/64x64_12.jpg" alt="" /></p><ol><li>先将<code>A</code>的前四行安装(1)复制到<code>B</code>中。</li><li>安装(2)将<code>A</code>中对应位置的元素存到本地变量中。</li></ol>
+<p><img src="pictures/64x64_34.jpg" alt="" /></p><ol start="3"><li><code>buf1</code>的四个元素与<code>B</code>右上角的第一行交换，将<code>buf2</code>中的值存到<code>B</code>右下角的对应位置。(B[4]替换B[0])</li><li>将<code>buf1</code>中的元素存放到<code>B</code>左下角对应位置。</li><li>改变位置，重复(2)，(3)，(4)，直到所有元素到达正确位置。</li></ol>
 <p>整个过程比较复制，不过根据图应该可以看懂。下面是代码的实现：</p>
 <pre><code class="C">for (i = 0; i &lt; N; i += block_size) {
     for (j = 0; j &lt; M; j += block_size) {

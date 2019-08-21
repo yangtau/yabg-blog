@@ -151,7 +151,7 @@ void trans(int M, int N, int A[N][M], int B[M][N]) {
 
 ### 普通分块
 
-####　实现
+#### 实现
 
 我们先直接按照`8 x 8`分块实现一个矩阵的转置：
 
@@ -426,13 +426,13 @@ func 2 (copy and then trans): hits:3586, misses:259, evictions:227
 
 具体步骤如下：
 
-![](/home/tau/csapp/lab/cachelab/pictures/64x64_12.jpg)
+![](pictures/64x64_12.jpg)
 
 1. 先将`A`的前四行安装(1)复制到`B`中。
 2. 安装(2)将`A`中对应位置的元素存到本地变量中。
 
 
-![](/home/tau/csapp/lab/cachelab/pictures/64x64_34.jpg)
+![](pictures/64x64_34.jpg)
 
 3. `buf1`的四个元素与`B`右上角的第一行交换，将`buf2`中的值存到`B`右下角的对应位置。(B[4]替换B[0])
 4. 将`buf1`中的元素存放到`B`左下角对应位置。
