@@ -428,13 +428,13 @@ func 2 (copy and then trans): hits:3586, misses:259, evictions:227
 
 具体步骤如下：
 
-![](pictures/64x64_12.jpg)
+![](pictures/csapp-cachelab-1.jpg)
 
 1. 先将`A`的前四行按照(1)复制到`B`中。
 2. 按照(2)将`A`中对应位置的元素存到本地变量中。
 
 
-![](pictures/64x64_34.jpg)
+![](pictures/csapp-cachelab-2.jpg)
 
 3. `buf1`的四个元素与`B`右上角的第一行交换，将`buf2`中的值存到`B`右下角的对应位置。此时缓存中`B[4]`替换`B[0]`。
 4. 将`buf1`中的元素存放到`B`左下角对应位置。
