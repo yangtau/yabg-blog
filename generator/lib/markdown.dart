@@ -3,6 +3,7 @@ import 'package:yaml/yaml.dart';
 import 'dart:io';
 import 'common.dart';
 import 'utils.dart';
+
 /*
 format of header of markdown
 
@@ -32,7 +33,7 @@ _readMetadata(String content) {
   }
   metadata[METADATA_KEY_HTML_CONTENT] = markdownToHtml(
       splited.sublist(2).join(METADATA_SEARATOR),
-      extensionSet: ExtensionSet.gitHubFlavored);
+      extensionSet: ExtensionSet.gitHubWeb);
   return metadata;
 }
 
@@ -72,4 +73,27 @@ Future<List<Map>> readMarkdown(String dirName) async {
   }
   log("build: markdown done.");
   return metadatas;
+}
+
+class FootNoteSyntax extends InlineSyntax {
+  final String substitute;
+
+  FootNoteSyntax()
+      : substitute = null,
+        super(r'^\[\^([0-9]*)\]');
+
+  bool onMatch(InlineParser parser, Match match) {
+    print('here');
+    if (substitute == null) {
+      // Just use the original matched text.
+      parser.advanceBy(match[0].length);
+      print(match[0]);
+      return false;
+    }
+    print(match);
+
+    // Insert the substitution.
+    parser.addNode(Text(substitute));
+    return true;
+  }
 }
