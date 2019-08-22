@@ -1,5 +1,5 @@
 ---
-author: 
+author: τ
 title: CSAPP Cache Lab 缓存实验
 date: 2019-08-21
 type: article
