@@ -2,7 +2,7 @@
 author: 村上春树
 title: 高墙与鸡蛋
 date: 2013-06-18
-type: article
+template: post
 ---
 
 > “假如这里有坚固的高墙和撞墙破碎的鸡蛋，我总是站在鸡蛋一边。”——村上春树

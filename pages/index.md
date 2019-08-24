@@ -1,6 +1,6 @@
 ---
 title: τ
-type: index
+template: index
 ---
 
 ## 关于我
