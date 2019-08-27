@@ -1,6 +1,7 @@
 ---
 title: τ
 template: index
+hide: true
 ---
 
 ## 关于我

@@ -2,36 +2,38 @@
 <html>
 
 <head> 
-{% block head %}
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>{% block title %}{{ title }}{% endblock %}</title>
+<title>NOT FOUND</title>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/github.min.css">
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:100,300,400,500,700,900&display=swap" rel="stylesheet">
-{% endblock %}
+
 <head>
 
 <body>
-{% block body %}
+
 
     <div class="content">
-    {% block content %}
-    {{content}}
-    {% endblock %}
+    
+    <h1>404</h1>
+<p>The site configured at this address does not contain the requested file.</p>
+<p>Return to <a href="/">home</a>.</p>
+    
     </div>
 
     <div class="footer">
-    {% block footer %}
-    &copy; Copyright {{ copy_right_year }} by <a href={{ domain }}>{{ user }}</a>.
-    {% endblock %}
+    
+    &copy; Copyright  by <a href=https://yangtau.me>τ</a>.
+    
     </div>
 
-{% endblock %}
+
 </body>
 
-{% block script%}
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
@@ -49,5 +51,5 @@
     });
 </script>
 
-{% endblock%}
+
 </html>
