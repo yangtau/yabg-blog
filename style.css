@@ -1,7 +1,17 @@
 body {
     /* color: #333; */
     font-family: "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", 'Noto Sans SC', "Roboto", "Ubuntu", serif;
-    background-color: #FDF6E3;
+    /* background-color: #FDF6E3;
+     */
+    /* background-color: #FFF8DC; */
+    background-color: #F5F5DC;
+    color: #333;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-feature-settings: "kern" 1;
+    -moz-font-feature-settings: "kern" 1;
+    -o-font-feature-settings: "kern" 1;
+    font-feature-settings: "kern" 1;
+    font-kerning: normal;
 }
 
 h1,
@@ -10,7 +20,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-weight: 700;
+    font-weight: 500;
 }
 
 h1 {
@@ -54,6 +64,8 @@ h6 {
 p {
     font-size: 15px;
     line-height: 1.8;
+    margin-top: 4px;
+    margin-bottom: 4px
 }
 
 a {
@@ -72,12 +84,14 @@ a:focus {
 
 img {
     max-width: 100%;
+    margin-top: 16px;
+    margin-bottom: 16px;
 }
 
 blockquote {
     background-color: #f5f2f0;
     padding: 8px 8px;
-    margin: 4px 4px;
+    margin: 16px 4px;
     border-radius: 6px;
     border-color: #e0dfcc;
     border-style: solid;
@@ -114,13 +128,14 @@ tbody td {
 
 ol,
 ul {
-    margin-top: 12px;
-    margin-bottom: 12px;
+    margin-left: 4px;
+    margin-top: 8px;
+    margin-bottom: 6px;
 }
 
 li {
-    margin-bottom: 6px;
-    margin-top: 6px;
+    margin-bottom: 4px;
+    margin-top: 4px;
 }
 
 .content {
