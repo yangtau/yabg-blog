@@ -33,6 +33,24 @@
 Manjaro 最好用的应该是它的软件包管理，<code>pacman</code> 比 <code>apt</code> 方便了不少，软件比较全且新，不需要手动添加很多软件源。
 使用了大概有一周的时间，稳定性比起 Ubuntu 类的系统有过之而无不及。</p>
 <p>下面记录的是我使用的一些软件和我的配置。</p>
+<div class="toc">
+<ul>
+<li><a href="#pacman">pacman 配置</a><ul>
+<li><a href="#archlinuxcn">添加 ArchlinuxCN 镜像</a></li>
+<li><a href="#_1">更换中国源</a></li>
+</ul>
+</li>
+<li><a href="#i3">i3</a><ul>
+<li><a href="#xrandr">xrandr 配置多显示器</a></li>
+<li><a href="#_2">触控板</a></li>
+<li><a href="#i3lock">i3lock</a></li>
+</ul>
+</li>
+<li><a href="#polybar">polybar</a></li>
+<li><a href="#_3">其他软件</a></li>
+<li><a href="#_4">最后</a></li>
+</ul>
+</div>
 <h2 id="pacman">pacman 配置</h2>
 <h3 id="archlinuxcn">添加 ArchlinuxCN 镜像</h3>
 <p>我使用的是清华的镜像，配置可以参考 <a href="https://mirror.tuna.tsinghua.edu.cn/help/archlinuxcn/">ArchlinuxCN 镜像使用帮助</a>。</p>
@@ -47,7 +65,7 @@ Manjaro 最好用的应该是它的软件包管理，<code>pacman</code> 比 <co
 <p>i3 是不会像别的桌面环境自动检测多显示器，需要自己配置外接的显示器。 </p>
 <p>我这里使用的工具是 <code>xrandr</code>。直接输入这个命令会输出你所用显示器的信息。
 我的主显示器是 <code>eDP1</code>，副显示器是 <code>HDMI1</code>。主显示器会自动开启，副显示器不会默认打开。
-我可以输入 <code>xrandr --output HDMI1 --auto --right-of eDP1</code> 开启我的副显示器，<code>HDMI1</code> 在 <code>eDP1</code>，所以用了 <code>--right-of</code>。</p>
+我可以输入 <code>xrandr --output HDMI1 --auto --right-of eDP1</code> 开启我的副显示器，<code>HDMI1</code> 在 <code>eDP1</code> 右边，所以用了 <code>--right-of</code>。</p>
 <p>为了避免每次开机都需要重新输入命令的麻烦，可以写一个脚本在每次 i3 启动时自动检测是否插入副显示器。</p>
 <pre><code class="bash">#!env /bin/bash
 hdmi=$(xrandr | grep 'HDMI1 connected')
@@ -117,10 +135,11 @@ rm $TMPBG
 <ul>
 <li><a href="https://github.com/davatorium/rofi">rofi</a> 可以作为一个启动器使用，功能很强大。</li>
 <li><a href="https://github.com/robbyrussell/oh-my-zsh">oh-my-zsh</a> 我的shell是 zsh ，当然要用 oh my zsh。</li>
-<li><a href="https://github.com/tryone144/compton.git">compton</a> 这个是一个原版的 fork ，可以实现毛玻璃效果。</li>
+<li><del><a href="https://github.com/tryone144/compton.git">compton</a> 这个是一个原版的 fork ，可以实现毛玻璃效果。</del></li>
+<li><a href="https://github.com/yshui/compton">compton</a> 切换回了 Archlinux 库中的版本，上面的版本在浏览器渲染的时候 CPU 占用率很高。</li>
 <li><a href="https://neovim.io/">nvim</a> 从 vim 切换到了 nvim。无痛切换，因为我才入坑 vim 不久 :) 。</li>
 <li><a href="https://github.com/skilion/onedrive.git">onedrive</a> 一个命令行的 onedrive, 用 D 语言构建，目前感觉很好用。</li>
-<li>[variety] (https://github.com/varietywalls/variety) 自动切换壁纸。</li>
+<li><a href="https://github.com/varietywalls/variety">variety</a> 自动切换壁纸。</li>
 </ul>
 <h2 id="_4">最后</h2>
 <p>我的配置文件放在了github上 <a href="https://github.com/yangtau/dotfiles">dotfiles</a>。</p>

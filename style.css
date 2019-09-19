@@ -1,5 +1,5 @@
 body {
-    font-family: "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", 'Noto Sans SC', "Roboto", "Ubuntu", serif;
+    font-family: STXihei, "华文细黑", 'Noto Sans SC', "Roboto", "Ubuntu", serif;
     background-color: #F5F5DC;
     color: #333;
     -webkit-text-size-adjust: 100%;
@@ -152,4 +152,8 @@ li {
     margin-top: 40px;
     color: darkslategray;
     text-align: center;
+}
+
+mark {
+    background-color: rgb(255, 188, 174);
 }

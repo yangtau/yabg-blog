@@ -15,6 +15,8 @@ Manjaro 最好用的应该是它的软件包管理，`pacman` 比 `apt` 方便�
 
 下面记录的是我使用的一些软件和我的配置。
 
+[TOC]
+
 ## pacman 配置
 
 ### 添加 ArchlinuxCN 镜像
@@ -39,7 +41,7 @@ i3 是不会像别的桌面环境自动检测多显示器，需要自己配置�
 
 我这里使用的工具是 `xrandr`。直接输入这个命令会输出你所用显示器的信息。
 我的主显示器是 `eDP1`，副显示器是 `HDMI1`。主显示器会自动开启，副显示器不会默认打开。
-我可以输入 `xrandr --output HDMI1 --auto --right-of eDP1` 开启我的副显示器，`HDMI1` 在 `eDP1`，所以用了 `--right-of`。
+我可以输入 `xrandr --output HDMI1 --auto --right-of eDP1` 开启我的副显示器，`HDMI1` 在 `eDP1` 右边，所以用了 `--right-of`。
 
 为了避免每次开机都需要重新输入命令的麻烦，可以写一个脚本在每次 i3 启动时自动检测是否插入副显示器。
 
@@ -125,10 +127,11 @@ polybar 的配置最麻烦了。要想得到比较好看的效果最好在别人
 
  - [rofi](https://github.com/davatorium/rofi) 可以作为一个启动器使用，功能很强大。
  - [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) 我的shell是 zsh ，当然要用 oh my zsh。
- - [compton](https://github.com/tryone144/compton.git) 这个是一个原版的 fork ，可以实现毛玻璃效果。
+ - ~~[compton](https://github.com/tryone144/compton.git) 这个是一个原版的 fork ，可以实现毛玻璃效果。~~
+ - [compton](https://github.com/yshui/compton) 切换回了 Archlinux 库中的版本，上面的版本在浏览器渲染的时候 CPU 占用率很高。
  - [nvim](https://neovim.io/) 从 vim 切换到了 nvim。无痛切换，因为我才入坑 vim 不久 :) 。
  - [onedrive](https://github.com/skilion/onedrive.git) 一个命令行的 onedrive, 用 D 语言构建，目前感觉很好用。
- - [variety] (https://github.com/varietywalls/variety) 自动切换壁纸。
+ - [variety](https://github.com/varietywalls/variety) 自动切换壁纸。
 
 ## 最后
 
