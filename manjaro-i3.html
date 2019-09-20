@@ -42,13 +42,18 @@ Manjaro 最好用的应该是它的软件包管理，<code>pacman</code> 比 <co
 </li>
 <li><a href="#i3">i3</a><ul>
 <li><a href="#xrandr">xrandr 配置多显示器</a></li>
-<li><a href="#_2">触控板</a></li>
 <li><a href="#i3lock">i3lock</a></li>
 </ul>
 </li>
 <li><a href="#polybar">polybar</a></li>
-<li><a href="#_3">其他软件</a></li>
-<li><a href="#_4">最后</a></li>
+<li><a href="#_2">其他软件</a></li>
+<li><a href="#_3">问题与解决方案</a><ul>
+<li><a href="#_4">触控板配置</a></li>
+<li><a href="#_5">亮度调节</a></li>
+<li><a href="#compton-chrome-cpu">compton 开启后 Chrome 占用大量 CPU 资源</a></li>
+</ul>
+</li>
+<li><a href="#_6">最后</a></li>
 </ul>
 </div>
 <h2 id="pacman">pacman 配置</h2>
@@ -78,20 +83,6 @@ fi
 
 <p>在 i3 的配置文件里面将上面的脚步添加为 <code>exec_always</code>。这样每次启动的时候，可以自动决定是否开启副显示器。
 如果在运行过程中卸载或装载显示器，可以通过快捷键重启 i3。</p>
-<h3 id="_2">触控板</h3>
-<p>触控板默认的滑动方向我不是很习惯，而且不能轻触点击。我添加了配置改变触控板的默认设置，具体的文档可以参考 <a href="https://wiki.archlinux.org/index.php/Libinput">libinput</a>。</p>
-<p>下面是我的配置，配置文件需要放在 <code>/usr/share/X11/xorg.conf.d/</code> 目录下。</p>
-<pre><code>Section &quot;InputClass&quot;
-    Identifier &quot;touchpad&quot;
-    Driver &quot;libinput&quot;
-    MatchIsTouchpad &quot;on&quot;
-    Option &quot;Tapping&quot; &quot;on&quot;
-    Option &quot;AccelSpeed&quot; &quot;0.6&quot;
-    Option &quot;HorizontalScrolling&quot; &quot;on&quot;
-    Option &quot;NaturalScrolling&quot; &quot;True&quot;
-EndSection
-</code></pre>
-
 <h3 id="i3lock">i3lock</h3>
 <p>i3lock 是锁屏软件。
 我使用的是一个 fork 版本 <a href="https://github.com/PandorasFox/i3lock-color">i3lock-color</a>,
@@ -131,7 +122,7 @@ rm $TMPBG
 <p>polybar 的配置最麻烦了。要想得到比较好看的效果最好在别人的基础上修改。
 我的配置文件是在 <a href="https://github.com/adi1090x/polybar-themes">polybar-theme</a> 的基础上修改而来的，增加了一些 module 和多显示器的支持。
 配置文件需要根据自己的硬件修改，官方的<a href="https://github.com/polybar/polybar/wiki">文档</a>有详尽的说明。 </p>
-<h2 id="_3">其他软件</h2>
+<h2 id="_2">其他软件</h2>
 <ul>
 <li><a href="https://github.com/davatorium/rofi">rofi</a> 可以作为一个启动器使用，功能很强大。</li>
 <li><a href="https://github.com/robbyrussell/oh-my-zsh">oh-my-zsh</a> 我的shell是 zsh ，当然要用 oh my zsh。</li>
@@ -141,8 +132,35 @@ rm $TMPBG
 <li><a href="https://github.com/skilion/onedrive.git">onedrive</a> 一个命令行的 onedrive, 用 D 语言构建，目前感觉很好用。</li>
 <li><a href="https://github.com/varietywalls/variety">variety</a> 自动切换壁纸。</li>
 </ul>
-<h2 id="_4">最后</h2>
-<p>我的配置文件放在了github上 <a href="https://github.com/yangtau/dotfiles">dotfiles</a>。</p>
+<h2 id="_3">问题与解决方案</h2>
+<p>i3 不像其他完整的桌面环境提供所以设置的图形界面，所以很多操作需要通过命令来完成。
+对 Linux 不精通的人来说，这是个让人头痛的事。
+下面记录一些我遇到的问题和我的解决方案。</p>
+<h3 id="_4">触控板配置</h3>
+<p>触控板默认的滑动方向我不是很习惯，而且不能轻触点击。我添加了配置改变触控板的默认设置，具体的文档可以参考 <a href="https://wiki.archlinux.org/index.php/Libinput">libinput</a>。</p>
+<p>下面是我的配置，配置文件需要放在 <code>/usr/share/X11/xorg.conf.d/</code> 目录下。</p>
+<pre><code>Section &quot;InputClass&quot;
+    Identifier &quot;touchpad&quot;
+    Driver &quot;libinput&quot;
+    MatchIsTouchpad &quot;on&quot;
+    Option &quot;Tapping&quot; &quot;on&quot;
+    Option &quot;AccelSpeed&quot; &quot;0.6&quot;
+    Option &quot;HorizontalScrolling&quot; &quot;on&quot;
+    Option &quot;NaturalScrolling&quot; &quot;True&quot;
+EndSection
+</code></pre>
+
+<h3 id="_5">亮度调节</h3>
+<p>没有装 nvidia 显卡驱动之前，使用 xbacklight 是可以调节的，之后失效(<code>sudo pacman -S xorg-xbacklight</code> 安装 xbacklight)。</p>
+<p>在网上查了一圈发现还有一个可以调节亮度的工具 <a href="https://github.com/haikarainen/light">light</a>, manjaro 下可以直接 <code>sudo pacman -S light-git</code> 安装。</p>
+<p><strong>注意</strong>：你的用户需要加入 <code>video</code> 用户组，可以通过 <code>sudo gpasswd -a [your_user_name] video</code> 来添加。</p>
+<h3 id="compton-chrome-cpu">compton 开启后 Chrome 占用大量 CPU 资源</h3>
+<p>我最开始使用 compton 的时候发现 Chrome 在渲染比较复杂的网页或者播放视频的时候， CPU 的使用率会特别的高。
+关闭 compton 之后又会恢复正常。</p>
+<p>所以我换回了 Archlinux 软件库里面的 compton 版本。
+配置文件也是在这个版本的 github 仓库中的 <a href="https://github.com/yshui/compton/blob/next/compton.sample.conf">sample</a> 上修改而来， 主要就把 <code>backend</code> 的默认值 <code>xrender</code> 改成了 <code>glx</code> (需要根据自己的电脑修改)。</p>
+<h2 id="_6">最后</h2>
+<p>我的部分配置文件放在了 github 上 <a href="https://github.com/yangtau/dotfiles">dotfiles</a>。</p>
 <p>自己手动配置了很多东西后才发现开源的可贵，我现在使用的大多数软件都是开源的。感谢所有为开源软件做贡献的开发人员，他们为我们提供了无数的好用的软件。希望我在不久的将来也能为开源软件做点贡献。</p>
     
 

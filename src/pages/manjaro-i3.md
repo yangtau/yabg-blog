@@ -58,22 +58,6 @@ fi
 在 i3 的配置文件里面将上面的脚步添加为 `exec_always`。这样每次启动的时候，可以自动决定是否开启副显示器。
 如果在运行过程中卸载或装载显示器，可以通过快捷键重启 i3。
 
-### 触控板
-
-触控板默认的滑动方向我不是很习惯，而且不能轻触点击。我添加了配置改变触控板的默认设置，具体的文档可以参考 [libinput](https://wiki.archlinux.org/index.php/Libinput)。
-
-下面是我的配置，配置文件需要放在 `/usr/share/X11/xorg.conf.d/` 目录下。
-```
-Section "InputClass"
-    Identifier "touchpad"
-    Driver "libinput"
-    MatchIsTouchpad "on"
-    Option "Tapping" "on"
-    Option "AccelSpeed" "0.6"
-    Option "HorizontalScrolling" "on"
-    Option "NaturalScrolling" "True"
-EndSection
-```
 
 ### i3lock
 
@@ -133,8 +117,48 @@ polybar 的配置最麻烦了。要想得到比较好看的效果最好在别人
  - [onedrive](https://github.com/skilion/onedrive.git) 一个命令行的 onedrive, 用 D 语言构建，目前感觉很好用。
  - [variety](https://github.com/varietywalls/variety) 自动切换壁纸。
 
+## 问题与解决方案
+
+i3 不像其他完整的桌面环境提供所以设置的图形界面，所以很多操作需要通过命令来完成。
+对 Linux 不精通的人来说，这是个让人头痛的事。
+下面记录一些我遇到的问题和我的解决方案。
+
+### 触控板配置
+
+触控板默认的滑动方向我不是很习惯，而且不能轻触点击。我添加了配置改变触控板的默认设置，具体的文档可以参考 [libinput](https://wiki.archlinux.org/index.php/Libinput)。
+
+下面是我的配置，配置文件需要放在 `/usr/share/X11/xorg.conf.d/` 目录下。
+```
+Section "InputClass"
+    Identifier "touchpad"
+    Driver "libinput"
+    MatchIsTouchpad "on"
+    Option "Tapping" "on"
+    Option "AccelSpeed" "0.6"
+    Option "HorizontalScrolling" "on"
+    Option "NaturalScrolling" "True"
+EndSection
+```
+
+### 亮度调节
+
+没有装 nvidia 显卡驱动之前，使用 xbacklight 是可以调节的，之后失效(`sudo pacman -S xorg-xbacklight` 安装 xbacklight)。
+
+在网上查了一圈发现还有一个可以调节亮度的工具 [light](https://github.com/haikarainen/light), manjaro 下可以直接 `sudo pacman -S light-git` 安装。
+
+**注意**：你的用户需要加入 `video` 用户组，可以通过 `sudo gpasswd -a [your_user_name] video` 来添加。
+
+### compton 开启后 Chrome 占用大量 CPU 资源
+
+我最开始使用 compton 的时候发现 Chrome 在渲染比较复杂的网页或者播放视频的时候， CPU 的使用率会特别的高。
+关闭 compton 之后又会恢复正常。
+
+所以我换回了 Archlinux 软件库里面的 compton 版本。
+配置文件也是在这个版本的 github 仓库中的 [sample](https://github.com/yshui/compton/blob/next/compton.sample.conf) 上修改而来， 主要就把 `backend` 的默认值 `xrender` 改成了 `glx` (需要根据自己的电脑修改)。
+
+
 ## 最后
 
-我的配置文件放在了github上 [dotfiles](https://github.com/yangtau/dotfiles)。
+我的部分配置文件放在了 github 上 [dotfiles](https://github.com/yangtau/dotfiles)。
 
 自己手动配置了很多东西后才发现开源的可贵，我现在使用的大多数软件都是开源的。感谢所有为开源软件做贡献的开发人员，他们为我们提供了无数的好用的软件。希望我在不久的将来也能为开源软件做点贡献。

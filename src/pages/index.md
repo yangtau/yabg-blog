@@ -8,9 +8,9 @@ hide: true
 
 感谢你访问我的博客。我是一名本科生，目前就读于电子科技大学。我的博客主要记录一些关于计算机和读书的内容。
 
-这个博客托管在GitHub Pages上，静态页面生成器是我用Python写的[blog-generator](https://github.com/yangtau/static-blog-generator)。
+这个博客托管在 GitHub Pages 上，静态页面生成器是我用 Python 写的 [blog-generator](https://github.com/yangtau/static-blog-generator)。
 
-我的邮箱是yangtaojay **at** gmail **dot** com, 如果你有任何想与我交流的，请邮件联系我。
+我的邮箱是 yangtaojay **at** gmail **dot** com, 如果你有任何想与我交流的，请邮件联系我。
 
 ## 小项目
 
