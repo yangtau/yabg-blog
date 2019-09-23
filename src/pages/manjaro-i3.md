@@ -2,6 +2,7 @@
 author: τ
 title: Manjaro i3 配置
 date: 2019-09-18
+update-date: 2019-09-23
 template: post
 ---
 
@@ -106,6 +107,23 @@ i3 也有一个 bar 叫 i3-status, 简单的显示足够了，想要更丰富的
 polybar 的配置最麻烦了。要想得到比较好看的效果最好在别人的基础上修改。
 我的配置文件是在 [polybar-theme](https://github.com/adi1090x/polybar-themes) 的基础上修改而来的，增加了一些 module 和多显示器的支持。
 配置文件需要根据自己的硬件修改，官方的[文档](https://github.com/polybar/polybar/wiki)有详尽的说明。 
+
+## Alacritty
+
+我把终端模拟器从 xfce-terminal 换到了 [Alacritty](https://github.com/jwilm/alacritty/)。
+
+这个终端模拟器支持 GPU 加速，所有配置需要通过修改配置文件完成。它比较简单而且性能很好。
+
+多显示器下，它不会自动根据显示器的 DPI 缩放内容，所以在不同的屏幕上文字的大小不一样。
+这个问题这样通过在配置文件中添加 `WINIT_HIDPI_FACTOR` 环境变量解决，具体可以看看 github 上相关 [Issues](https://github.com/jwilm/alacritty/issues/1339)。
+
+```
+env:
+
+	WINIT_HIDPI_FACTOR: '1.6'
+...
+```
+
 
 ## 其他软件
 

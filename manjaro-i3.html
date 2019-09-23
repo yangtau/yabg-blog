@@ -46,6 +46,7 @@ Manjaro 最好用的应该是它的软件包管理，<code>pacman</code> 比 <co
 </ul>
 </li>
 <li><a href="#polybar">polybar</a></li>
+<li><a href="#alacritty">Alacritty</a></li>
 <li><a href="#_2">其他软件</a></li>
 <li><a href="#_3">问题与解决方案</a><ul>
 <li><a href="#_4">触控板配置</a></li>
@@ -122,6 +123,17 @@ rm $TMPBG
 <p>polybar 的配置最麻烦了。要想得到比较好看的效果最好在别人的基础上修改。
 我的配置文件是在 <a href="https://github.com/adi1090x/polybar-themes">polybar-theme</a> 的基础上修改而来的，增加了一些 module 和多显示器的支持。
 配置文件需要根据自己的硬件修改，官方的<a href="https://github.com/polybar/polybar/wiki">文档</a>有详尽的说明。 </p>
+<h2 id="alacritty">Alacritty</h2>
+<p>我把终端模拟器从 xfce-terminal 换到了 <a href="https://github.com/jwilm/alacritty/">Alacritty</a>。</p>
+<p>这个终端模拟器支持 GPU 加速，所有配置需要通过修改配置文件完成。它比较简单而且性能很好。</p>
+<p>多显示器下，它不会自动根据显示器的 DPI 缩放内容，所以在不同的屏幕上文字的大小不一样。
+这个问题这样通过在配置文件中添加 <code>WINIT_HIDPI_FACTOR</code> 环境变量解决，具体可以看看 github 上相关 <a href="https://github.com/jwilm/alacritty/issues/1339">Issues</a>。</p>
+<pre><code>env:
+
+    WINIT_HIDPI_FACTOR: '1.6'
+...
+</code></pre>
+
 <h2 id="_2">其他软件</h2>
 <ul>
 <li><a href="https://github.com/davatorium/rofi">rofi</a> 可以作为一个启动器使用，功能很强大。</li>
