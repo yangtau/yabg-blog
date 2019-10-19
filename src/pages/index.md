@@ -12,12 +12,10 @@ hide: true
 
 我的邮箱是 yangtaojay **at** gmail **dot** com, 如果你有任何想与我交流的，请邮件联系我。
 
-## 小项目
+## 项目
 
 - [hedgehog](https://github.com/yangtau/hedgehog)
-
     我写的第一门编程语言，一门简单甚至简陋的解释型语言。
 
 - [example-engine](https://github.com/yangtau/example-engine)
-
     简单的MySQL的存储引擎，内部由B+树实现。

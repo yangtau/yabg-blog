@@ -2,6 +2,7 @@
 author: Charlie Chaplin
 title: As I Began to Love Myself
 date: 2019-09-11
+hide: true
 template: post
 ---
 
