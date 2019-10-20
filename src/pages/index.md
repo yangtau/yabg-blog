@@ -10,7 +10,7 @@ hide: true
 
 这个博客托管在 GitHub Pages 上，静态页面生成器是我用 Python 写的 [blog-generator](https://github.com/yangtau/static-blog-generator)。
 
-我的邮箱是 yangtaojay **at** gmail **dot** com, 如果你有任何想与我交流的，请邮件联系我。
+我的邮箱是 yanggtau **at** gmail **dot** com, 如果你有任何想与我交流的，请邮件联系我。
 
 ## 项目
 
