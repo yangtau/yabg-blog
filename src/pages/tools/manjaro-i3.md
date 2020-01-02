@@ -6,7 +6,7 @@ update-date: 2019-09-23
 template: post
 ---
 
-![](pictures/manjaro-i3.jpg)
+![](/pictures/manjaro-i3.jpg)
 
 从 Windows 转战到 Linux 后，我用过 Elementray OS，国产的 Deepin，现在又换到了 Manjaro 。前面两个虽然总体上还算稳定，但是总是有一些小瑕疵让我难以忍受。例如 Deepin 的特效和动画总是有奇怪的线条出现，而且UI设计对 MAC OS 的模仿太明显了。
 
@@ -93,14 +93,14 @@ rm $TMPBG
 ```
 
 锁屏界面：
-![](pictures/manjaro-i3-lock.jpg)
+![](/pictures/manjaro-i3-lock.jpg)
 
 ---
 i3 的具体的配置可以看看我的[i3配置](https://github.com/yangtau/dotfiles/tree/master/i3).
 
 ## polybar 
 
-![](pictures/manjaro-i3-bar.jpg)
+![](/pictures/manjaro-i3-bar.jpg)
 
 i3 也有一个 bar 叫 i3-status, 简单的显示足够了，想要更丰富的信息显示可以使用 polybar。
 

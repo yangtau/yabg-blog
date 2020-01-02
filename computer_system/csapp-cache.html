@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>CSAPP Cache Lab 缓存实验</title>
-<link rel="stylesheet" href="style-mf.css">
+<link rel="stylesheet" href="/whitey.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/atom-one-light.min.css">
 
 <head>
@@ -17,13 +17,11 @@
 
     <div class="content">
     
-    <p>
-        <a href="/">Home</a>
-    </p>
-    
-    <h1>CSAPP Cache Lab 缓存实验</h1>
+   
     <div class="light">作者：τ</div>
     <div class="light">日期：2019-08-21</div>
+
+    <h1>CSAPP Cache Lab 缓存实验</h1>
 
     
     <p>我最开始觉得这个实验就是写一个缓存模拟器和利用缓存优化代码，应该挺简单的。结果发现，这个实验设计得真的很好，并没用那么简单。所以，赶紧写篇文章记录自己的实验。</p>
@@ -399,12 +397,12 @@ func 2 (copy and then trans): hits:3586, misses:259, evictions:227
 <p>我的这个实现有些复杂，我尽量讲清楚我的具体步骤。</p>
 <p>同样，我们保持分块为<code>8 x 8</code>，在大的分块下再分成4个<code>4 x 4</code>的小分块。我们先将<code>A</code>的前四行全部复制到<code>B</code>的前四行，这个时候<code>B</code>的左上角的元素在最终正确的位置，<code>B</code>的右上角元素是应该放到左下角的元素。然后，我们在复制后<code>A</code>的后四行到<code>B</code>的过程中，利用本地变量将<code>B</code>右上角的内容复制到左下角。</p>
 <p>具体步骤如下：</p>
-<p><img alt="" src="pictures/csapp-cachelab-1.jpg" /></p>
+<p><img alt="" src="/pictures/csapp-cachelab-1.jpg" /></p>
 <ol>
 <li>先将<code>A</code>的前四行按照(1)复制到<code>B</code>中。</li>
 <li>按照(2)将<code>A</code>中对应位置的元素存到本地变量中。</li>
 </ol>
-<p><img alt="" src="pictures/csapp-cachelab-2.jpg" /></p>
+<p><img alt="" src="/pictures/csapp-cachelab-2.jpg" /></p>
 <ol>
 <li><code>buf1</code>的四个元素与<code>B</code>右上角的第一行交换，将<code>buf2</code>中的值存到<code>B</code>右下角的对应位置。此时缓存中<code>B[4]</code>替换<code>B[0]</code>。</li>
 <li>将<code>buf1</code>中的元素存放到<code>B</code>左下角对应位置。</li>

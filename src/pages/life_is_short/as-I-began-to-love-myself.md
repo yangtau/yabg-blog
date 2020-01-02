@@ -1,32 +1,13 @@
-<!DOCTYPE html>
-<html>
+---
+author: Charlie Chaplin
+title: As I Began to Love Myself
+date: 2019-09-11
+hide: true
+template: post
+---
 
-<head> 
+<link href="https://fonts.googleapis.com/css?family=Kalam&display=swap" rel="stylesheet">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>As I Began to Love Myself</title>
-<link rel="stylesheet" href="style-mf.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/atom-one-light.min.css">
-
-<head>
-
-<body>
-
-
-    <div class="content">
-    
-    <p>
-        <a href="/">Home</a>
-    </p>
-    
-    <h1>As I Began to Love Myself</h1>
-    <div class="light">作者：Charlie Chaplin</div>
-    <div class="light">日期：2019-09-11</div>
-
-    
-    <p><link href="https://fonts.googleapis.com/css?family=Kalam&display=swap" rel="stylesheet"></p>
 <style>
 .poem , .poem p  {
     font-family: 'Kalam', cursive;
@@ -34,7 +15,8 @@
 }
 </style>
 
-<p><img src="pictures/Fotolia_52747829_XS.jpg" style="float: right; margin-left: 8px"> </img></p>
+<img src="/pictures/Fotolia_52747829_XS.jpg" style="float: right; margin-left: 8px"> </img>
+
 <div class="poem">
 
 <p>As I began to love myself I found that anguish and emotional suffering are only warning signs that I was living against my own truth. 
@@ -60,9 +42,7 @@ Today, I know, this is "AUTHENTICITY".
 </p>
 
 <p>
-<b>
 As I began to love myself I refused to go on living in the past and worrying about the future. Now, I only live for the moment, where everything is happening. Today I live each day, day by day, and I call it "FULFILLMENT".
-</b>
 </p>
 
 <p> As I began to love myself I recognized that my mind can disturb me and it can make me sick. But as I connected it to my heart, my mind became a valuable ally. Today I call this connection "WISDOM OF THE HEART".
@@ -74,46 +54,18 @@ We no longer need to fear arguments, confrontations or any kind of problems with
 
 </div>
 
-<hr />
-<p>当我开始爱自己的时候</p>
-<p>我不再沉溺于过去</p>
-<p>也不再为将来担忧</p>
-<p>现在，我只活在一切正在发生的当下</p>
-<p>今天，我活在此时此地</p>
-<p>如此日复一日</p>
-<p>这就叫完美</p>
-    
+---
 
+当我开始爱自己的时候
 
-    </div>
+我不再沉溺于过去
 
-    <!-- 
-    <div class="footer">
-    
-    &copy; Copyright  by <a href=https://yangtau.me>τ</a>.
-    
-    </div>
-    -->
+也不再为将来担忧
 
-</body>
+现在，我只活在一切正在发生的当下
 
+今天，我活在此时此地
 
+如此日复一日
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
-<script>hljs.initHighlightingOnLoad();</script>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      extensions: ["tex2jax.js"],
-      jax: ["input/TeX", "output/HTML-CSS"],
-      tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
-        processEscapes: true
-      },    
-      "HTML-CSS": { availableFonts: ["TeX"] }
-    });
-</script>
-
-
-</html>
+这就叫完美
