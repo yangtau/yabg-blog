@@ -84,10 +84,9 @@ blockquote {
  margin-top:2em;
  margin-bottom:2em
 }
-
 blockquote p {
- float:left;
- margin-left:1rem;
+/* float:left;*/
+ margin-left:2.3em;
  padding-top:1rem
 }
 
@@ -151,8 +150,8 @@ h1 a:hover {
 
 img {
     max-width: 100%;
-    margin-top: 16px;
-    margin-bottom: 16px;
+    margin: 16px auto;
+    display: block;
 }
 
 hr {
