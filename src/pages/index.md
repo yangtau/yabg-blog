@@ -14,10 +14,8 @@ hide: true
 
 ## 项目
 
-- [hedgehog](https://github.com/yangtau/hedgehog)
+- hedgehog
+<div class="github-card" data-github="yangtau/hedgehog" data-width="400" data-height="150" data-theme="default"></div>
 
-	我写的第一门编程语言，一门简陋的解释型语言。
-
-- [example-engine](https://github.com/yangtau/example-engine)
-
-	简单的MySQL的存储引擎，内部由B+树实现。
+- example-engine
+<div class="github-card" data-github="yangtau/example-engine" data-width="400" data-height="150" data-theme="default"></div>
