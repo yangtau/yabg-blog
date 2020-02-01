@@ -14,8 +14,5 @@ hide: true
 
 ## 项目
 
-- hedgehog
-<div class="github-card" data-github="yangtau/hedgehog" data-width="400" data-height="150" data-theme="default"></div>
-
-- example-engine
-<div class="github-card" data-github="yangtau/example-engine" data-width="400" data-height="150" data-theme="default"></div>
+<a href="https://github.com/yangtau/hedgehog"><img style="margin:8px" src="https://gh-card.dev/repos/yangtau/hedgehog.svg"></a>
+<a href="https://github.com/yangtau/example-engine"><img style="margin:8px" src="https://gh-card.dev/repos/yangtau/example-engine.svg"></a>
