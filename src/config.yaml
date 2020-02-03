@@ -1,0 +1,9 @@
+# dir path should be the relative path of this file
+template_dir: gen/templates
+page_dir: pages
+output_dir: ../
+style_dir: gen/style
+
+user_name: τ
+domin: yangtau.me
+ 
