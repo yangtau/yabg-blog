@@ -14,5 +14,5 @@ hide: true
 
 ## 项目
 
-<a href="https://github.com/yangtau/hedgehog"><img style="margin:8px" src="https://gh-card.dev/repos/yangtau/hedgehog.svg"></a>
-<a href="https://github.com/yangtau/example-engine"><img style="margin:8px" src="https://gh-card.dev/repos/yangtau/example-engine.svg"></a>
+<a href="https://github.com/yangtau/hedgehog"><img style="margin:8px" src="pictures/hedgehog.svg"></a>
+<a href="https://github.com/yangtau/example-engine"><img style="margin:8px" src="pictures/example-engine.svg"></a>
