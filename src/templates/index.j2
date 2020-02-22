@@ -1,0 +1,13 @@
+{% extends "base.j2" %}
+{% block content %}
+
+{{ super() }}
+<!-- __posts post.hide post.date post.title post.__url 
+<h2>文章</h2>
+<ul>
+{% for post in __posts|rejectattr('hide')|sort(attribute='date', reverse=True) %}
+<li>{{ post.date }} <a href={{ post.__url }}> {{ post.title }}</a></li>
+{% endfor %}
+</ul>
+-->
+{% endblock %}

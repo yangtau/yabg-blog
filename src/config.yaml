@@ -1,5 +1,5 @@
 # dir path should be the relative path of this file
-template_dir: gen/templates
+template_dir: templates
 page_dir: pages
 output_dir: ../
 style_dir: gen/style
