@@ -2,7 +2,7 @@
 template_dir: templates
 page_dir: pages
 output_dir: ../
-style_dir: gen/style
+style_dir: style
 
 sitemap: sitemap.txt
 user_name: τ
