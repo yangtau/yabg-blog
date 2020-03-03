@@ -3,7 +3,7 @@ author: τ
 title: Manjaro i3 配置
 date: 2019-09-18
 update-date: 2019-09-23
-template: post
+template: post-code
 ---
 
 ![](/pictures/manjaro-i3.jpg)

@@ -89,7 +89,7 @@ blockquote p {
 
 blockquote:before {
  color:#666;
- content:open-quote;
+ content:"\"";
  font-size:2.2em;
  font-weight:600;
  float:left;

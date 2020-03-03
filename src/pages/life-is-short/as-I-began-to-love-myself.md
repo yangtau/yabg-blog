@@ -14,7 +14,6 @@ template: post
     font-size: 22px
 }
 </style>
-
 <img src="/pictures/Fotolia_52747829_XS.jpg" style="float: right; margin-left: 8px"> </img>
 
 <div class="poem">

@@ -3,11 +3,12 @@
 
 <head> 
 
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>自制简易解释器</title>
+<title>写一个简单的解释器</title>
 <link rel="stylesheet" href="/whitey.css">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/atom-one-light.min.css">
 
 <head>
@@ -18,10 +19,10 @@
 
 <div class="light">作者：τ</div>
 <div class="light">日期：2019-02-18</div>
-<h1>自制简易解释器</h1>
+<h1>写一个简单的解释器</h1>
 
-<p>我用 C 语言写了一个简单的动态语言解释器 , 代码放在了 github 上面 :<a href="https://github.com/yangtau/hedgehog">hedegehog</a>.</p>
-<p>先简单介绍下这门语言 . hedgehog 的多数设计和 python 比较相似 , 无需声明变量类型 , <code>if</code>,<code>for</code> 等语句没有块级作用域 .  语法上又有点像 go 语言 : <code>if</code>, <code>for</code> 不需要 <code>()</code>, 但是后面的代码块都必须加 <code>{}</code>; 没有 <code>while</code>, 不过有 <code>for condition {}</code> 来替代 . 不过行尾必须加 <code>;</code> 这点和 go 不同 . 大多数设计都是为了简化实现方式 , 比如必须加 <code>{}</code>, <code>;</code> 是为了简化语法的解析 .</p>
+<p>我用 C 语言写了一个简单的动态语言解释器，代码放在了 github 上面：<a href="https://github.com/yangtau/hedgehog">hedegehog</a>。</p>
+<p>先简单介绍下这门语言。hedgehog 的多数设计和 python 比较相似，无需声明变量类型，<code>if</code>,<code>for</code> 等语句没有块级作用域。 语法上又有点像 go 语言： <code>if</code>, <code>for</code> 不需要 <code>()</code>, 但是后面的代码块都必须加 <code>{}</code>; 没有 <code>while</code>, 不过有 <code>for condition {}</code> 来替代。不过行尾必须加 <code>;</code> 这点和 go 不同。大多数设计都是为了简化实现方式，比如必须加 <code>{}</code>, <code>;</code> 是为了简化语法的解析。</p>
 <div class="toc">
 <ul>
 <li><a href="#_1">已实现的功能</a></li>
@@ -79,9 +80,9 @@ for i&lt;10 {
 
 <ul>
 <li>函数
-  function 也被看作一种值 ( 基本数据类型 ), 不过目前还没有对它实现垃圾回收 , 所以直接以函数赋值或者其他操作会出现内存错误 .</li>
+  function 也被看作一种值 ( 基本数据类型 ), 不过目前还没有对它实现垃圾回收，所以直接以函数赋值或者其他操作会出现内存错误。</li>
 </ul>
-<pre><code>// 模仿 python 首页的函数 :)
+<pre><code>// 模仿 python 首页的函数：)
 func fbi(n) {
     a, b = 0, 1;
     for a&lt;n {
@@ -99,10 +100,10 @@ fbi(100);
 print(factorial(5));
 </code></pre>
 
-<p>目前只实现了一个原生函数 <code>print</code>. <code>print</code> 接收一个基本数据类型作为参数 , 输出并换行 , 或者无参数 , 直接换行 .</p>
+<p>目前只实现了一个原生函数 <code>print</code>。<code>print</code> 接收一个基本数据类型作为参数，输出并换行，或者无参数，直接换行。</p>
 <ul>
 <li>运算符
-  大多数与 c 保持一致 , 除了 <code>&amp;</code>, <code>|</code>. 因为没有提供位运算的功能 , 所以直接用这两个符号表示逻辑与和逻辑或 .</li>
+  大多数与 c 保持一致，除了 <code>&amp;</code>, <code>|</code>。因为没有提供位运算的功能，所以直接用这两个符号表示逻辑与和逻辑或。</li>
 </ul>
 <pre><code>b = 2;
 a = 10;
@@ -115,27 +116,27 @@ if a&gt;20 | b&lt;10 {
 </code></pre>
 
 <h2 id="_2">概述</h2>
-<p><img alt="image" src="http://upload-images.jianshu.io/upload_images/8192385-7068aa4406b6a547.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" /></p>
-<p>首先词法分析和语法分析 , 构建分析树 . 这里以 <code>a=1+2*3+fn();</code> 为例 , 介绍一下表达式分析树的构建 .</p>
-<p>首先 , 它是一个赋值表达式 , 把右边的值 <code>1+2*3+fn()</code> 赋给左边的变量 <code>a</code>. 而 <code>1+2*3+fn()</code> 又由加法表达式 , 乘法表达式 , 函数调用表达式构成 . yacc 中编写的规则会约束表达式构建的顺序 , 构建过程大概是这样的 :</p>
+<p><img alt="" src="pictures/interpreter-process.webp" /></p>
+<p>首先词法分析和语法分析，构建分析树。这里以 <code>a=1+2*3+fn();</code> 为例，介绍一下表达式分析树的构建。</p>
+<p>首先，它是一个赋值表达式，把右边的值 <code>1+2*3+fn()</code> 赋给左边的变量 <code>a</code>。而 <code>1+2*3+fn()</code> 又由加法表达式，乘法表达式，函数调用表达式构成。yacc 中编写的规则会约束表达式构建的顺序，构建过程大概是这样的：</p>
 <pre><code>a = 1 + 2 * 3 + fn()
 identifier = value + value * value + function_call // 词法分析
 identifier = value + value * value + value // function_call 约归为 value
-identifier = value + multiply_expression + value // 根据规则 , 先生成乘法表达式
+identifier = value + multiply_expression + value // 根据规则，先生成乘法表达式
 identifier = add_expression + value // 把前两项归约为加法表达式
 identifier = add_expression // 继续归约 ( 加法运算遵循从左到右 )
 identifier = expression // 归约为更一般的普通表达式
-assgin_expression // 匹配到赋值表达式的规则 , 归约为赋值表达式
+assgin_expression // 匹配到赋值表达式的规则，归jj为赋值表达式
 expression // 赋值表达式归约为一般表达式
 </code></pre>
 
-<p>然后就可以构建了下面的分析树了 :</p>
-<p><img alt="image" src="http://upload-images.jianshu.io/upload_images/8192385-e47681a26d7b3279.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" /></p>
-<p>求值的时候从最底层依次往上求值 , 就能得到表达式的值 .</p>
+<p>然后就可以构建了下面的分析树了：</p>
+<p><img alt="" src="pictures/interpreter-parse-tree.webp" /></p>
+<p>求值的时候从最底层依次往上求值，就能得到表达式的值。</p>
 <h2 id="_3">语法与词法分析</h2>
-<p>这部分直接使用 lex 做词法分析 , yacc 做语法分析 . 这两个工具在大多数 UNIX 上都有预装 , GUN 提供的版本分别叫 bison, flex. 直接用 bison 生成的文件可能和 yacc 有些区别 ( 需要修改生成文件的的文件名 , 或者改 c 语言文件中包含的头文件名 ), 不过在 Linux 下安装了 bison 可以直接使用 yacc 命令 . flex 与 lex 生成文件没有区别 .</p>
-<p>yacc 与 lex 网上有大量的资料 , 而且使用比较简单 , 这里就仅作简单的介绍 .</p>
-<p>lex 可以使用正则表达式做匹配 :</p>
+<p>这部分直接使用 lex 做词法分析，yacc 做语法分析。这两个工具在大多数 UNIX 上都有预装，GUN 提供的版本分别叫 bison, flex。直接用 bison 生成的文件可能和 yacc 有些区别 ( 需要修改生成文件的的文件名，或者改 c 语言文件中包含的头文件名 ), 不过在 Linux 下安装了 bison 可以直接使用 yacc 命令。flex 与 lex 生成文件没有区别。</p>
+<p>yacc 与 lex 网上有大量的资料，而且使用比较简单，这里就仅作简单的介绍。</p>
+<p>lex 可以使用正则表达式做匹配：</p>
 <pre><code class="lex">&quot;func&quot; return FUNCTION;//func 函数定义关键字
 [A-Za-z_][A-Za-z0-9_]* {
     // 辨识符匹配
@@ -144,10 +145,10 @@ expression // 赋值表达式归约为一般表达式
 }
 </code></pre>
 
-<p>这里的 <code>FUNCTION</code> 和 <code>IDENTIFIER</code> 被称为 token, 一般在 yacc 的文件中定义 . 在生成的 C 语言文件中 token 用枚举变量表示 .</p>
-<p>lex 词法分析的结果会交给 yacc 处理 . yacc 使用类似 BNF 的规范来编写规则 .</p>
-<pre><code>// 加法表达式由乘法表达式归约 , 这样可以限制乘法 ( 除法 , 取模 ) 优先于
-// 加法 ( 减法 ) 运算 .
+<p>这里的 <code>FUNCTION</code> 和 <code>IDENTIFIER</code> 被称为 token, 一般在 yacc 的文件中定义。在生成的 C 语言文件中 token 用枚举变量表示。</p>
+<p>lex 词法分析的结果会交给 yacc 处理。yacc 使用类似 BNF 的规范来编写规则。</p>
+<pre><code>// 加法表达式由乘法表达式归约，这样可以限制乘法 ( 除法，取模 ) 优先于
+// 加法 ( 减法 ) 运算
 ADD_EXPRESSION:
     MUL_EXPRESSION
     |
@@ -177,9 +178,9 @@ MUL_EXPRESSION:
     ;
 </code></pre>
 
-<p>词法分析和语法分析属于解释器的前端 , 这部分没有自己编写 , 主要把精力放在了后端 .</p>
+<p>词法分析和语法分析属于解释器的前端，这部分没有自己编写，主要把精力放在了后端。</p>
 <h2 id="_4">表达式与语句</h2>
-<p>表达式与语句是整个后端最重要的两个模块 , 大部分的逻辑都在两者中实现 . 这里主要介绍一下表达式 , 语句与之类似 .</p>
+<p>表达式与语句是整个后端最重要的两个模块，大部分的逻辑都在两者中实现。这里主要介绍一下表达式，语句与之类似。</p>
 <pre><code class="c">// expression.h
 struct ExpressionTag {
     void (*free)(Expression *self);
@@ -190,17 +191,17 @@ struct ExpressionTag {
 };
 </code></pre>
 
-<p>这是表达式接口的结构体 , <code>free</code> 和 <code>evaluate</code> 是 C 语言中的函数指针 , 定义了所有表达式都应该具备的方法 . 这个 <code>pre</code> 看起来有些突兀 , 它其实是为了函数传参和多变量同时赋值时链接表达式使用的 . 比如 <code>a, b = 1, 2;</code>, <code>1, 2</code> 会分别解析为两个表达式 , 通过 <code>pre</code> 链接 . 这样的设计可能不符合面向对象 , 不过为了实现链表更加简单 , 就暂时这样写了 .</p>
-<p>所有需要释放内存的结构体都有 <code>free</code> 函数指针 , 所以可以定义一个简单的宏 <code>#define del(x) x-&gt;free(x)</code>, 使用 <code>del(obj)</code> 就可以释放内存了 .</p>
-<p>下面以赋值表达式介绍一下赋值表达式的实现过程 .</p>
+<p>这是表达式接口的结构体，<code>free</code> 和 <code>evaluate</code> 是 C 语言中的函数指针，定义了所有表达式都应该具备的方法。这个 <code>pre</code> 看起来有些突兀，它其实是为了函数传参和多变量同时赋值时链接表达式使用的。比如 <code>a, b = 1, 2;</code>, <code>1, 2</code> 会分别解析为两个表达式，通过 <code>pre</code> 链接。这样的设计可能不符合面向对象，不过为了实现链表更加简单，就暂时这样写了。</p>
+<p>所有需要释放内存的结构体都有 <code>free</code> 函数指针，所以可以定义一个简单的宏 <code>#define del(x) x-&gt;free(x)</code>, 使用 <code>del(obj)</code> 就可以释放内存了。</p>
+<p>下面以赋值表达式介绍一下赋值表达式的实现过程。</p>
 <pre><code class="c">// expression.h
 void *initAssignExpression(String *id, Expression *expression) 
 </code></pre>
 
-<p>向外提供的唯一接口是 <code>initAssignExpression</code>, 也就是说所有一般的表达式在模块外引用时都会被向上转型为 <code>Expression</code>, 只有 <code>free</code> 和 <code>evaluate</code> 两个方法 .</p>
+<p>向外提供的唯一接口是 <code>initAssignExpression</code>, 也就是说所有一般的表达式在模块外引用时都会被向上转型为 <code>Expression</code>, 只有 <code>free</code> 和 <code>evaluate</code> 两个方法。</p>
 <pre><code class="c">// expression.c
 typedef struct {
-    Expression base;//base 必须放在第一个 , 保证类型转换时的正确性 .
+    Expression base;//base 必须放在第一个，保证类型转换时的正确性
     String *id;
     Expression *expression;
 } AssignExpression;
@@ -228,16 +229,16 @@ const static Expression AssignExpressionBase = {freeAssignExpression,evaluateAss
 void *initAssignExpression(String *id, Expression *expression) {
     AssignExpression *exp = malloc(sizeof(AssignExpression));
     exp-&gt;expression = expression;
-    // 给 base 赋值 , 函数的绑定在 new 的时候完成 .
+    // 给 base 赋值，函数的绑定在 new 的时候完成
     exp-&gt;base = AssignExpressionBase;
     exp-&gt;id = id;
     return exp;
 }
 </code></pre>
 
-<p><code>AssignExpression</code> 的结构体和除 <code>init</code> 外方法都在 .c 文件中实现 , 并且标记为 <code>static</code>, 从而就实现了封装 . 在 <code>init</code> 中实现函数的绑定 , 以 <code>Expression</code> 引用的时候就能调用相应的方法 , 这就实现了多态 .</p>
-<p>其他的表达式根据具体的功能如法炮制 .</p>
-<p>语句的实现也是类似 :</p>
+<p><code>AssignExpression</code> 的结构体和除 <code>init</code> 外方法都在 .c 文件中实现，并且标记为 <code>static</code>, 从而就实现了封装。在 <code>init</code> 中实现函数的绑定，以 <code>Expression</code> 引用的时候就能调用相应的方法，这就实现了多态。</p>
+<p>其他的表达式根据具体的功能如法炮制。</p>
+<p>语句的实现也是类似：</p>
 <pre><code class="c">struct StatementTag {
     StatementResult (*execute)(Statement *self, Environment *env);
 
@@ -262,8 +263,8 @@ void *initAssignExpression(String *id, Expression *expression) {
 void *initEnvironment();
 </code></pre>
 
-<p>运行环境主要负责变量和函数的保存 , 查找 . Global environment 保存所有的全局变量和函数 . 函数有独立于 global environment 的 local environment. <code>for</code>, <code>if</code> 等语句块没有 environment, 它们使用所在函数或者全局的 environment.</p>
-<p>Environment 中的 <code>trie</code> 是字典树 , 负责记录变量名和函数名 .</p>
+<p>运行环境主要负责变量和函数的保存，查找。Global environment 保存所有的全局变量和函数。函数有独立于 global environment 的 local environment。<code>for</code>, <code>if</code> 等语句块没有 environment, 它们使用所在函数或者全局的 environment。</p>
+<p>Environment 中的 <code>trie</code> 是字典树，负责记录变量名和函数名。</p>
 <h3 id="interpreter">Interpreter</h3>
 <pre><code class="c">typedef struct InterpreterTag {
     Environment *globalEnv;
@@ -281,10 +282,9 @@ Interpreter *initInterpreter();
 Interpreter *getCurrentInterpreter();
 </code></pre>
 
-<p>Interpreter 中 <code>compile</code> 实现分析树的构建 , <code>interpret</code> 实现语句的执行 . 因为全局只需要一个 interpreter, 所以别的地方可以通过 <code>getCurrentInterpreter</code> 获取当前 interpreter.</p>
+<p>Interpreter 中 <code>compile</code> 实现分析树的构建，<code>interpret</code> 实现语句的执行。因为全局只需要一个 interpreter, 所以别的地方可以通过 <code>getCurrentInterpreter</code> 获取当前 interpreter。</p>
 <h2 id="_6">总结</h2>
-<p>整个解释器的大概构成就是这样 . 目前只实现了一些简单的功能 , 数组 , 字典 , 垃圾回收 ( 目前只对字符串做了引用计数回收 ), 文件 IO 等特性都还没有写 . 而且完全没有优化 , 运行效率极低 . 不过写这个解释器的时候还是收获不少 : 深入学习了 C 语言 , 对编译原理有了大概的了解 , 更加深刻地理解了面向对象 ...</p>
-<!-- 当我第一次看到屏幕上输出 `Hello World` 的时候 , 内心有点激动 , 有点像看到自己刚出生的孩子的感觉 ( 虽然女朋友都没有 ).-->
+<p>整个解释器的大概构成就是这样。目前只实现了一些简单的功能，数组，字典，垃圾回收 ( 目前只对字符串做了引用计数回收 ), 文件 IO 等特性都还没有写。而且完全没有优化，运行效率极低。不过写这个解释器的时候还是收获不少： 深入学习了 C 语言，对编译原理有了大概的了解, 更加深刻地理解了面向对象。</p>
 
 
 </div>
@@ -292,20 +292,9 @@ Interpreter *getCurrentInterpreter();
 </body>
 
 
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      extensions: ["tex2jax.js"],
-      jax: ["input/TeX", "output/HTML-CSS"],
-      tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
-        processEscapes: true
-      },    
-      "HTML-CSS": { availableFonts: ["TeX"] }
-    });
-</script>
 
 </html>

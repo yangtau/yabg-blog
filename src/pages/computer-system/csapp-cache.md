@@ -2,7 +2,7 @@
 author: τ
 title: CSAPP Cache Lab 缓存实验
 date: 2019-08-21
-template: post
+template: post-code
 ---
 
 我最开始觉得这个实验就是写一个缓存模拟器和利用缓存优化代码，应该挺简单的。结果发现，这个实验设计得真的很好，并没用那么简单。所以，赶紧写篇文章记录自己的实验。
