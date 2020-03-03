@@ -2,9 +2,9 @@ https://yangtau.me/tools/manjaro-i3.html
 https://yangtau.me/computer-system/csapp-cache.html
 https://yangtau.me/index.html
 https://yangtau.me/programming-languages/simple-interpreter.html
-https://yangtau.me/life-is-short/为什么读书.html
 https://yangtau.me/life-is-short/eggs.html
 https://yangtau.me/life-is-short/never-let-me-go.html
 https://yangtau.me/life-is-short/2019-summary.html
 https://yangtau.me/life-is-short/as-I-began-to-love-myself.html
+https://yangtau.me/life-is-short/why-do-I-read.html
 https://yangtau.me/life-is-short/kafka-on-the-shore.html
