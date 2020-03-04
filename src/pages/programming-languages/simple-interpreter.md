@@ -7,7 +7,7 @@ author: τ
 
 我用 C 语言写了一个简单的动态语言解释器，代码放在了 github 上面：[hedegehog](https://github.com/yangtau/hedgehog)。
 
-先简单介绍下这门语言。hedgehog 的多数设计和 python 比较相似，无需声明变量类型，`if`,`for` 等语句没有块级作用域。 语法上又有点像 go 语言： `if`, `for` 不需要 `()`, 但是后面的代码块都必须加 `{}`; 没有 `while`, 不过有 `for condition {}` 来替代。不过行尾必须加 `;` 这点和 go 不同。大多数设计都是为了简化实现方式，比如必须加 `{}`, `;` 是为了简化语法的解析。
+先简单介绍下这门语言。hedgehog 的多数设计和 python 比较相似，无需声明变量类型，`if`,`for` 等语句没有块级作用域。 语法上又有点像 go 语言： `if`, `for` 不需要 `()`, 但是后面的代码块都必须加 `{}`； 没有 `while`, 不过有 `for condition {}` 来替代。不过行尾必须加 `;` 这点和 go 不同。大多数设计都是为了简化实现方式，比如必须加 `{}`, `;` 是为了简化语法的解析。
 
 [TOC]
 
@@ -15,11 +15,11 @@ author: τ
 - 数据类型
 
 ```
-a = 10;//int
-b = 3.14;//float
-c = true;//boolean
-d = null;//null
-s = "Hello, World!";//string
+a = 10;                 // int
+b = 3.14;               // float
+c = true;               // boolean
+d = null;               // null
+s = "Hello, World!";    // string
 ```
 
 - 控制语句 

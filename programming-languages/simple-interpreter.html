@@ -22,7 +22,7 @@
 <h1>写一个简单的解释器</h1>
 
 <p>我用 C 语言写了一个简单的动态语言解释器，代码放在了 github 上面：<a href="https://github.com/yangtau/hedgehog">hedegehog</a>。</p>
-<p>先简单介绍下这门语言。hedgehog 的多数设计和 python 比较相似，无需声明变量类型，<code>if</code>,<code>for</code> 等语句没有块级作用域。 语法上又有点像 go 语言： <code>if</code>, <code>for</code> 不需要 <code>()</code>, 但是后面的代码块都必须加 <code>{}</code>; 没有 <code>while</code>, 不过有 <code>for condition {}</code> 来替代。不过行尾必须加 <code>;</code> 这点和 go 不同。大多数设计都是为了简化实现方式，比如必须加 <code>{}</code>, <code>;</code> 是为了简化语法的解析。</p>
+<p>先简单介绍下这门语言。hedgehog 的多数设计和 python 比较相似，无需声明变量类型，<code>if</code>,<code>for</code> 等语句没有块级作用域。 语法上又有点像 go 语言： <code>if</code>, <code>for</code> 不需要 <code>()</code>, 但是后面的代码块都必须加 <code>{}</code>； 没有 <code>while</code>, 不过有 <code>for condition {}</code> 来替代。不过行尾必须加 <code>;</code> 这点和 go 不同。大多数设计都是为了简化实现方式，比如必须加 <code>{}</code>, <code>;</code> 是为了简化语法的解析。</p>
 <div class="toc">
 <ul>
 <li><a href="#_1">已实现的功能</a></li>
@@ -41,11 +41,11 @@
 <ul>
 <li>数据类型</li>
 </ul>
-<pre><code>a = 10;//int
-b = 3.14;//float
-c = true;//boolean
-d = null;//null
-s = &quot;Hello, World!&quot;;//string
+<pre><code>a = 10;                 // int
+b = 3.14;               // float
+c = true;               // boolean
+d = null;               // null
+s = &quot;Hello, World!&quot;;    // string
 </code></pre>
 
 <ul>
