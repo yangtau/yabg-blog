@@ -2,7 +2,7 @@
 author: τ
 title: "疫情沉思"
 date: 2020-03-15
-hide: true
+hide: false
 template: post
 ---
 
