@@ -19,6 +19,8 @@ def update(filename):
             return c
 
     lines = [''.join(map(replace, l)) for l in lines]
+    lines = [l.replace('……', '…') for l in lines]
+    lines = [l.replace('。。。', '…') for l in lines]
     with open(filename, 'w') as f:
         f.writelines(lines)
 
