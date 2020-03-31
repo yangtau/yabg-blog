@@ -14,9 +14,12 @@ hide: true
 
 简历：[resume.pdf](pictures/resume-zh_CN.pdf)
 
+Github: [yangtau](https://github.com/yangtau)
+
 ## 项目
 
-<a href="https://github.com/yangtau/hedgehog"><img style="margin:2px" src="pictures/hedgehog.svg"></a>
-<a href="https://github.com/yangtau/example-engine"><img style="margin:2px" src="pictures/example-engine.svg"></a>
+<div class="github-card" data-github="yangtau/hedgehog" data-width="400" data-height="" data-theme="default"></div>
+
+<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
 
 
