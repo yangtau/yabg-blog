@@ -1,3 +1,3 @@
-[submodule "src/gen"]
-	path = src/gen
-	url = https://github.com/yangtau/static-blog-generator.git
+[submodule "src/yabg"]
+	path = src/yabg
+	url = https://github.com/yangtau/yabg.git
