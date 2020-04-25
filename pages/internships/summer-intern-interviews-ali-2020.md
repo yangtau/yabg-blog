@@ -141,7 +141,7 @@ struct list {
   void *p;
 };
 
-/** list_remove: remove `n` in the list if `cmp(n->p, v) == 0`
+/**list_remove: remove `n` in the list if `cmp(n->p, v) == 0`
  * version 3.0
  * @RETURN: 0 if `v` is found, -1 otherwise
  * @res: return `p` in the removed node
