@@ -87,7 +87,7 @@ struct list {
   struct list *next;
 };
 
-/**list_remove: version 1.0
+/**list_remove: version 2.0
  * return 0 if `v` is found, -1 otherwise
  */
 int list_remove(struct list **head, int v, int *res) {

@@ -55,5 +55,5 @@ template: post
 >
 > 丧钟为你而鸣。
 >
-> <footer style="text-align:right; margin-right:30px"> <cite>——《没有谁是一座孤岛》</cite> </footer>
+> <cite>约翰·多恩 《没有谁是一座孤岛》</cite>
 

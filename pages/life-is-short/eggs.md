@@ -7,7 +7,7 @@ template: post
 ---
 
 > 假如这里有坚固的高墙和撞墙破碎的鸡蛋，我总是站在鸡蛋一边。
-> <footer style="text-align:right; margin-right:30px"> <cite>—— 村上春树</cite> </footer>
+> <cite>村上春树</cite>
 
 我作为一个小说家，换句话说，作为以巧妙说谎为职业的人来到这里、来到耶路撒冷市。
 
