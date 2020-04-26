@@ -1,13 +1,17 @@
 html, body {
 	margin: auto;
 	background: #fefefe;
-	font-size: 17px;
+	font-size: 19px;
 }
 
 body {
-	font-family: "Vollkorn", Palatino, Times, "Noto Sans CJK SC", "微软雅黑", "FangSong", "仿宋", STFangSong, "华文仿宋", serif;
-	color: #323232;
-	line-height: 1.8;
+	font-family: Georgia, "Times New Roman", Vollkorn, Palatino, Times, 
+				 "Noto Sans CJK SC", 
+				 "微软雅黑",  "Microsoft YaHei",
+ 			     STXihei, "华文细黑", 
+				 serif;
+	color: #222222;
+	line-height: 1.6;
 	text-align: left;
 	max-width: 800px;
 	margin: 2em auto;
@@ -60,7 +64,8 @@ ol {
 blockquote {
 	position: relative;
 	margin: 24px 0 30px 0;
-	color: #696969;
+	color: #555555;
+	font-size: 18px;
 }
 
 blockquote::before, blockquote::after {
@@ -132,8 +137,8 @@ hr {
 	color: #ddd;
 	height: 1px;
 	margin: 2em 0;
-	border-top: solid 1px #ddd;
-	border-bottom: none;
+	border: none;
+	border-bottom: 2px dashed #888;
 	border-left: 0;
 	border-right: 0;
 }
