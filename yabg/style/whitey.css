@@ -103,7 +103,7 @@ blockquote cite::before {
 }
 
 code, pre {
-	font-family: "JetBrians Mono", "Cascadia Code", "Fira Code", "Consolas", 
+	font-family: "JetBrains Mono", "Cascadia Code", "Fira Code", "Consolas", 
                  "Menlo", "Monaco", monospace, serif;
 	font-size: .9em;
 }
