@@ -6,12 +6,14 @@ html, body {
 
 body {
 	font-family: Georgia, "Times New Roman", Vollkorn, Palatino, Times, 
-				 "Noto Sans CJK SC", 
+                 "WenQuanYi Zen Hei Mono",
+                 "Source Han Mono SC",
 				 "微软雅黑",  "Microsoft YaHei",
  			     STXihei, "华文细黑", 
+				 "Noto Sans CJK SC", 
 				 serif;
 	color: #222222;
-	line-height: 1.6;
+	line-height: 1.7;
 	text-align: left;
 	max-width: 800px;
 	margin: 2em auto;
@@ -101,7 +103,8 @@ blockquote cite::before {
 }
 
 code, pre {
-	font-family: "Cascadia Code", "Fira Code", "Consolas", "Menlo", "Monaco", monospace, serif;
+	font-family: "JetBrians Mono", "Cascadia Code", "Fira Code", "Consolas", 
+                 "Menlo", "Monaco", monospace, serif;
 	font-size: .9em;
 }
 
