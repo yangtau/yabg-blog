@@ -5,19 +5,22 @@ html, body {
 }
 
 body {
-	font-family: Georgia, "Times New Roman", Vollkorn, Palatino, Times, 
-                 "WenQuanYi Zen Hei Mono",
-                 "Source Han Mono SC",
-				 "微软雅黑",  "Microsoft YaHei",
- 			     STXihei, "华文细黑", 
-				 "Noto Sans CJK SC", 
-				 serif;
+	font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+                "PingFang SC", "Microsoft YaHei", 
+                "WenQuanYi Zen Hei","WenQuanYi Micro Hei",
+                "Source Han Sans SC", "Source Han Sans CN", 
+                "Noto Sans CJK SC",  sans-serif;
 	color: #222222;
 	line-height: 1.7;
 	text-align: left;
 	max-width: 800px;
 	margin: 2em auto;
 	padding: 1em;
+}
+
+h1, h2, h3, h4 {
+font-family: Garamond, Georgia, 'Times New Roman', Times, 'Bookman Old Style',
+             'Palatino Linotype', 'Book Antiqua', Palatino, serif;
 }
 
 h1 {
@@ -104,7 +107,7 @@ blockquote cite::before {
 
 code, pre {
 	font-family: "JetBrains Mono", "Cascadia Code", "Fira Code", "Consolas", 
-                 "Menlo", "Monaco", monospace, serif;
+                 "Menlo", "Monaco", monospace;
 	font-size: .9em;
 }
 
