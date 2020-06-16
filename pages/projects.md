@@ -1,6 +1,6 @@
 ---
 title: τ
-template: index
+template: base
 hide: true
 ---
 ## 项目
