@@ -38,7 +38,7 @@ hide: true
 ### SMS
 <a href="https://github.com/yangtau/SMS"><img style="margin:2px" src="https://gh-card.dev/repos/yangtau/SMS.svg"></a>
 这个项目是一个学生管理系统的前后端的实现。由于当时正好迷恋 Dart 语言，就前后端都用了 Dart。
-个人认为一些小的 WEB 应用用 Dart 开发还是挺不错的。独特的类型系统使得它既可以有很高的开发效率，同时又能有不错的可维护性和执行效率。
+个人认为一些小的 WEB 应用用 Dart 开发还是挺不错的，独特的类型系统使得它既可以有很高的开发效率，同时又能有不错的可维护性和执行效率。
 缺点是 Dart 目前主要寄生在 Flutter 身上，可用的第三方库并不多。
 在这个项目中，我在利用 Dart 的反射机制，开发了一个支持 MySQL 的 ORM 库。
 

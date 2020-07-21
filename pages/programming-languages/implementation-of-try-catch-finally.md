@@ -25,8 +25,8 @@ hide: true
 ```
     jump try
 catch_entry:
-	#if has_catch
-	reset_e
+    #if has_catch
+    reset_e
     push_e(finally)
     +-------------+
     | catch-block |
@@ -41,10 +41,10 @@ try:
     +-------------+
     pop_e
 finally:
-	+-------------+
-	|finally-block|
-	+-------------+
-	test_e
+    +-------------+
+    |finally-block|
+    +-------------+
+    test_e
 ```
 
 ### 特殊情况
@@ -55,7 +55,7 @@ finally:
 
 ```javascript
 for (var i = 0; i < 2; i++) {
-	try {
+    try {
         console.log(i);
         throw 1; // enable catch
     } catch (e) {
@@ -85,7 +85,7 @@ for (var i = 0; i < 2; i++) {
 
 ```js
 for (var i = 0; i < 2; i++) {
-	try {
+    try {
         console.log(i);
     } catch (e) {
     } finally { // finally3
@@ -113,7 +113,7 @@ for (var i = 0; i < 2; i++) {
 
 ```js
 for (var i = 0; i < 2; i++) {
-	try {
+    try {
         console.log(i);
     } catch (e) {
         try {
