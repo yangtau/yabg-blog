@@ -5,7 +5,7 @@ hide: true
 ---
 ## 项目
 
-这是我大学期间做个的部分项目的一个简单介绍。
+这是我大学期间部分项目的一个简单介绍。
 
 ### Hedgehog
 <a href="https://github.com/yangtau/hedgehog"><img style="margin:2px" src="https://gh-card.dev/repos/yangtau/hedgehog.svg"></a>
@@ -24,8 +24,8 @@ hide: true
 ### YABG
 <a href="https://github.com/yangtau/yabg"><img style="margin:2px" src="https://gh-card.dev/repos/yangtau/yabg.svg"></a> 
 一个静态博客网页生成器。相比与 Hexo 之类的应用，YABG 非常迷你，大概只有 200 行代码。
-但是 YABG 可以 Jinja2 配置页面模板，使得它的拓展能力非常强大。
-因为现在流行的博客生成器都太复杂了，我不能便捷地根据自己的需求修改，所以只好自己写一个。
+但是 YABG 使用 Jinja2 配置页面模板，这使得它的拓展能力非常强大。
+现在流行的博客生成器都太复杂了，我不能便捷地根据自己的需求修改，所以只好自己写一个。
 
 ### Feed the Dragon 游戏
 <a href="https://github.com/yangtau/feed-the-dragon"><img style="margin:2px" src="https://gh-card.dev/repos/yangtau/feed-the-dragon.svg"></a>
