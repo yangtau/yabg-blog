@@ -1,7 +1,6 @@
 html, body {
 	margin: auto;
 	background: #fefefe;
-	font-size: 19px;
 }
 
 body {
@@ -16,11 +15,7 @@ body {
 	max-width: 800px;
 	margin: 2em auto;
 	padding: 1em;
-}
-
-h1, h2, h3, h4 {
-font-family: Garamond, Georgia, 'Times New Roman', Times, 'Bookman Old Style',
-             'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+	font-size: 18px;
 }
 
 h1 {

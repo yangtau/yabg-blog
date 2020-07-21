@@ -5,7 +5,7 @@ template: post-code
 author: τ
 ---
 
-Hedgehog 是我在编译课上完成的一门编程语言, 其目的是学习编译原理相关知识。它语法简洁，动态类型，内置 List，Map 等常用数据结构，运行在栈式虚拟机上。本文将简单介绍这门玩具式的编程语言，以及我在设计实现它的过程中的一些思考。它的源码开源在了 Github 上： [hedgehog](https://github.com/yangtau/hedeghog)，欢迎 star、fork 和提 issue。
+Hedgehog 是我在编译课上完成的一门编程语言, 其目的是学习编译原理相关知识。它语法简洁，动态类型，内置 List，Map 等常用数据结构，运行在栈式虚拟机上。本文将简单介绍这门玩具式的编程语言，以及我在设计实现它的过程中的一些思考。它的源码开源在了 Github 上： [hedgehog](https://github.com/yangtau/hedgehog)，欢迎 star、fork 和提 issue。
 
 [TOC]
 
