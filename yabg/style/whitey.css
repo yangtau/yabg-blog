@@ -53,7 +53,6 @@ h2:after {
 }
 
 ul {
-	list-style: square;
 	padding-left: 1.2em;
 }
 
@@ -170,3 +169,15 @@ table caption+thead tr:first-child th, table caption+thead tr:first-child td, ta
 table tbody+tbody {
 	border-top: 2px solid #ddd
 }
+
+
+/* task list */
+.task-list-item {
+list-style-type: none !important;
+}
+.task-list-item input[type="checkbox"] {
+margin: 0 4px 0.25em -20px;
+vertical-align: middle;
+}
+
+

@@ -8,6 +8,8 @@ hide: true
 
 *try-catch-finally* 是一种常见的异常处理范式，在众多常见编程语言中被采用，如 Java，JavaScript 等。本文会简单探讨其实现机制。
 
+[TOC]
+
 ## 语义
 
 要讲清楚 try-catch-finally 的实现，就必须先明确它的语义。
@@ -49,7 +51,7 @@ finally:
 
 ### 特殊情况
 
-#### try-block，catch-block，finally-block 中有 break，continue 语句
+#### break，continue 语句
 
 先在 break 或 continue 之前冗余 finally 语句。需要注意的是嵌套异常处理中，外层的 finally 也可能被冗余进来。当前层的 finally 应该被外层异常处理程序处理，所以每次冗余 finally 之前都应该 pop_e。
 

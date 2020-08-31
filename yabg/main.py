@@ -23,6 +23,8 @@ MARKDOWN_EXTS = ['markdown.extensions.extra',
                  'pymdownx.mark',
                  'pymdownx.tilde',
                  'markdown.extensions.toc',
+                 'pymdownx.magiclink',
+                 'pymdownx.tasklist',
                  ]
 
 '''config'''
