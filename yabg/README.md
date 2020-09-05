@@ -28,7 +28,7 @@ python3 yabg/main.py config.yaml
 
 ```
 FRAMEWORK PRESET: other
-BUILD COMMAND: python3 -m pip install PyYAML && python3 -m pip install Jinja2 && python3 -m pip install markdown && python3 -m pip install pymdown-extensions && python3 yabg/main.py
+BUILD COMMAND: pip install PyYAML Jinja2 markdown pymdown-extensions && python3 yabg/main.py
 OUTPUT DICTORY: public # setted in your config.yaml
 ```
 

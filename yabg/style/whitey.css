@@ -1,183 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap');
+
 html, body {
-	margin: auto;
-	background: #fefefe;
+  background: #fefefe;
 }
 
 body {
-	font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
-                "PingFang SC", "Microsoft YaHei", 
-                "WenQuanYi Zen Hei","WenQuanYi Micro Hei",
-                "Source Han Sans SC", "Source Han Sans CN", 
-                "Noto Sans CJK SC",  sans-serif;
-	color: #222222;
-	line-height: 1.7;
-	text-align: left;
-	max-width: 800px;
-	margin: 2em auto;
-	padding: 1em;
-	font-size: 18px;
+  color: #222222;
+  line-height: 1.7;
+  text-align: left;
+  max-width: 800px;
+  margin: 2em auto;
+  padding: 1em;
+  font-size: 18px;
 }
 
-h1 {
-	margin-top: 1em;
-	font-weight: normal;
-	font-size: 2.4em;
-	text-align: center;
+body {
+  font-family: "Georgia", "Noto Serif SC", serif;  
 }
 
-h2 {
-	margin-top: 2em;
-	font-weight: normal;
-	font-size: 1.8em;
-	text-align: center;
-}
-
-h3 {
-	font-weight: normal;
-	font-style: italic;
-	margin-top: 1.6em;
-	font-size: 1.5em;
-}
-
-h1+h2, h2+h3 {
-	margin-top: 0.83em;
-}
-
-h2:after {
-	border-bottom: 1px solid #2f2f2f;
-	content: '';
-	width: 100px;
-	display: block;
-	margin: 0 auto;
-	height: 1px;
-}
-
-ul {
-	padding-left: 1.2em;
-}
-
-ol {
-	padding-left: 1.2em;
+h1, h1, h2, h3, h4, h5, h6 {
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+  font-weight: normal;
 }
 
 blockquote {
-	position: relative;
-	margin: 24px 0 30px 0;
-	color: #555555;
-	font-size: 18px;
+  position: relative;
+  margin: 24px 0 30px 0;
+  color: #555555;
+  font-size: 18px;
 }
 
 blockquote::before, blockquote::after {
-	position: absolute;
-	font: italic 40px "Crimson", Georgia, serif;
-	color: #888888;
+  position: absolute;
+  font: italic 40px "Crimson", Georgia, serif;
+  color: #888888;
 }
 
 blockquote::before {
-	content: "\201c";
-	left: -7px;
-	top: -20px;
+  content: "\201c";
+  left: -7px;
+  top: -20px;
 }
 
 blockquote::after {
-	content: "\201d";
-	right: 7px;
+  content: "\201d";
+  right: 7px;
 }
 
 blockquote p {
-	margin: 0 24px;
+  margin: 0 24px;
 }
 
 blockquote cite {
-	display: block;
-	text-align: right;
-	font-style: italic;
-	font-size: 16px;
+  display: block;
+  text-align: right;
+  font-style: italic;
+  font-size: 16px;
 }
 
 blockquote cite::before {
-	content: "\2014\00a0";
+  content: "\2014\00a0";
 }
 
 code, pre {
-	font-family: "JetBrains Mono", "Cascadia Code", "Fira Code", "Consolas", 
+  font-family: "JetBrains Mono", "Cascadia Code", "Fira Code", "Consolas", 
                  "Menlo", "Monaco", monospace;
-	font-size: .9em;
-}
-
-code {
-	color: #c7264e;
+  font-size: .9em;
 }
 
 a {
-	color: #2484c1;
-	text-decoration: none;
+  color: #0366d6;
+  text-decoration: none;
 }
 
 a:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 a img {
-	border: none;
+  border: none;
 }
 
 h1 a, h1 a:hover {
-	color: #333;
-	text-decoration: none;
+  color: #333;
+  text-decoration: none;
 }
 
 img {
-	max-width: 100%;
-	margin: 16px auto;
-	display: block;
+  max-width: 100%;
+  margin: 16px auto;
+  display: block;
 }
 
 hr {
-	color: #ddd;
-	height: 1px;
-	margin: 2em 0;
-	border: none;
-	border-bottom: 2px dashed #888;
-	border-left: 0;
-	border-right: 0;
+  color: #ddd;
+  height: 1px;
+  margin: 2em 0;
+  border: none;
+  border-bottom: 2px dashed #888;
+  border-left: 0;
+  border-right: 0;
 }
 
 table {
-	margin-bottom: 1.333333rem
+  margin-bottom: 1.333333rem;
+  border-collapse: collapse;
 }
 
 table th, table td {
-	padding: 8px;
-	line-height: 1.333333rem;
-	vertical-align: top;
-	border-top: 1px solid #ddd
+  padding: 8px;
+  line-height: 1.333333rem;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
 }
 
 table th {
-	font-weight: bold
+  font-weight: bold
 }
 
 table thead th {
-	vertical-align: bottom
+  vertical-align: bottom;
 }
 
 table caption+thead tr:first-child th, table caption+thead tr:first-child td, table colgroup+thead tr:first-child th, table colgroup+thead tr:first-child td, table thead:first-child tr:first-child th, table thead:first-child tr:first-child td {
-	border-top: 0
+  border-top: 0;
 }
 
 table tbody+tbody {
-	border-top: 2px solid #ddd
+  border-top: 2px solid #ddd;
 }
 
 
 /* task list */
 .task-list-item {
-list-style-type: none !important;
+  list-style-type: none !important;
 }
+
 .task-list-item input[type="checkbox"] {
-margin: 0 4px 0.25em -20px;
-vertical-align: middle;
+  margin: 0 4px 0.25em -20px;
+  vertical-align: middle;
 }
 
-
+.light {
+  color: #567;
+  font-size: 16px;
+}
