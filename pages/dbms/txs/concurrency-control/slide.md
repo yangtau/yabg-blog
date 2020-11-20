@@ -1,5 +1,8 @@
 ---
 hide: true
+title: 乐观事务处理
+author: 杨韬
+template: slide
 render: false
 ---
 
@@ -21,9 +24,11 @@ class: middle, center
   - MVOCC
 
 ---
+
 ## Transactions
 
 **事务**: 一系列数据库操作的逻辑单元。
+
 --
 
 ### 事务的特性（ACID）
@@ -50,6 +55,7 @@ layout: true
 ## 页模型（Page Model）
 
 ---
+
 $D$ : 数据项集合
 
 $w(x)$ : 写数据项 $x$
@@ -73,23 +79,26 @@ $T = \\{p_1, ..., p_i, ..., p_n\\} \ where \ x \in D, p_i \in \\{w(x), r(x)\\}$
 ]
 
 --
+
 .right-column[
-| T | U | x|
-|-----|------|--:|
-|r(x) |  | 10 |
-|x:=x+100|   | |
-||  r(x)| 10|
-||  x:=x+10 | |
-|w(x)|  | 110 |
-||   w(x) | .red[20]|
+| T        | U       |        x |
+| -------- | ------- | -------: |
+| r(x)     |         |       10 |
+| x:=x+100 |         |          |
+|          | r(x)    |       10 |
+|          | x:=x+10 |          |
+| w(x)     |         |      110 |
+|          | w(x)    | .red[20] |
 ]
 
 ---
+
 layout: true
 
 ## Serializability
 
 ---
+
 > Concurrently executing transactions see the stored information as if they were running serially (one after another).
 > .right[Jim Gray]
 
@@ -99,6 +108,7 @@ the outcome of its transactions executed serially.
 
 
 --
+
 count: false
 .center[**可串行化的调度可以保证并行执行的事务的隔离性**]
 
@@ -118,11 +128,15 @@ of non-conflicting swap of adjacent actions.
 ### Conflicts
 
 
-$$U = r(x)w(y), \ T = w(x)r(y)$$
+$$T = r(x)w(y), \ U = w(x)r(y)$$
 
-- $S_1 = r_T(x)w_U(x)w_T(y)r_U(y)$ is conflict-equivalent to execute U, T serially.
+- $S_1 = r_T(x)w_U(x)w_T(y)r_U(y)$ is conflict-equivalent to execute T, U serially.
 
-- $S_2 = w_U(x)r_T(x)r_U(y)w_T(y)$ is conflict-equivalent to execute T, U serially.
+- $S_2 = w_U(x)r_T(x)r_U(y)w_T(y)$ is conflict-equivalent to execute U, T serially.
+
+???
+TODO: add figure
+???
 
 ---
 
@@ -138,13 +152,18 @@ A schedule is ***conflict-serializable*** if it is *conflict-equivalent* to a se
 
 ### Conflict-Serializability
 
-$$U = r(x)w(y), \ T = w(x)r(y)$$
+$$T = r(x)w(y), \ U = w(x)r(y)$$
 
 - $S_1 = r_T(x)w_U(x)w_T(y)r_U(y)$ is conflict-serializable.
 
 - $S_2 = w_U(x)r_T(x)w_T(y)r_U(y)$ is not conflict-serializable.
 
+???
+TODO: add figure
+???
+
 ---
+
 layout: false
 
 ## Concurrency Control
@@ -160,10 +179,12 @@ layout: false
   - MVOCC
 
 ---
+
 layout: true
 ## Timestamp Ordering
 
 ---
+
 每个事务 $T_i$ 被分配一个.red[唯一]的固定的时间戳 $TS(T_i)$。
 
 如果 $TS(T_i) \lt TS(T_j)$，那么事务的调度必须等效于 $T_i$ 在 $T_j$ 之前执行。
@@ -191,6 +212,7 @@ layout: true
 - otherwise: 执行 $r(x)$，$RT(x)=max(RT(x),\ TS(T))$
 
 ---
+
 **Writes**
 
 对于事物 $T$ 中的 $w(x)$:
@@ -199,7 +221,9 @@ layout: true
     <img src="write-too-late.png" style="display: inline;" alt="">
 
 -  otherwise: 执行 $w(x)$，$WT(x) = TS(T)$
+
 ---
+
 .left-column-top[
 ### Example #2 update loss
 ]
@@ -246,8 +270,11 @@ $U=r(y)w(x)$
 
 -  otherwise: 执行 $w(x)$，$WT(x) = TS(T)$, $c(x)=false$
 
+???
+增加例子
+???
+
 --
-count: false
 
 .center.red[Thomas Write Rule 违背了 Conflict-Serializability]
 
@@ -260,6 +287,7 @@ count: false
 --
 
 <img src="to-dead-lock.png" style="max-width: 100%" alt="">
+
 --
 
 .center.red[
@@ -279,15 +307,6 @@ count: false
 
 ---
 
-**可以避免出现阻塞的情况吗？**
-
---
-
-→ 避免 read uncommitted
-
-→ .red[**Validation**]
-
----
 layout: true
 ## Validation
 
@@ -322,7 +341,6 @@ If there are no conflicts, the write set is installed into the "global" database
    The scheduler checks if the transaction conflicts with other transactions.
 
    If validation fails, abort and restart the transaction.
-   
 
 --
 
@@ -362,6 +380,7 @@ $VAL(U) > VAL(T) \ and \ FIN(U) < START(T)$
 $VAL(U) > VAL(T) \ and \ FIN(U) > START(T)$
 
 <img src="validation-2.png" style="max-width: 100%" alt="">
+
 --
 
 .red[
@@ -373,6 +392,7 @@ $$WS(U) \cap RS(T) = \emptyset$$
 $VAL(U) > VAL(T) \ and \ FIN(U) > VAL(T)$
 
 <img src="validation-3.png" style="max-width: 100%" alt="">
+
 --
 
 .red[
@@ -380,6 +400,7 @@ $$WS(U) \cap RS(T) = \emptyset \ and \ WS(U) \cap WS(T) = \emptyset $$
 ]
 
 ---
+
 layout: false
 ## Summery of TO and OCC
 
@@ -389,9 +410,7 @@ layout: false
 
   - timestamp allocation bottleneck
 
-- TO
-
- - long running transactions can get starved
+  - long running transactions can get starved
 
 - OCC
 
@@ -410,6 +429,7 @@ OCC 更加形式化的表达
 ???
 
 ---
+
 layout: false
 ## Multi-Version Concurrency Control
 
@@ -433,6 +453,7 @@ layout: true
 .center[**MVTO  = MVCC + Timestamp Ordering**]
 
 ---
+
 ### Reads
 
 对于事务 T 中的 $r(x)$:
@@ -456,70 +477,75 @@ layout: true
       - $WT(x_{j+1}) = TS(T)$。
 
 ---
+
 ### Example #5
 
 $TS(T) = 1 \ \ TS(U) = 2$
 
 .left-grid[
-<img src="example5-1.png" style="max-width: 100%" alt="">
+<img src="example5-1.png" style="max-width: 100%">
 ]
 
 .right-grid[
-|Version|Value|WT|RT|
-|-------|-----|--|--|
-| $x_1$ | 10  | 0| 0|
+| Version | Value | WT  | RT  |
+| ------- | ----- | --- | --- |
+| $x_1$   | 10    | 0   | 0   |
 ]
 
 ---
+
 ### Example #5
 
 $TS(T) = 1 \ \ TS(U) = 2$
 
 .left-grid[
-<img src="example5-2.png" style="max-width: 100%" alt="">
+<img src="example5-2.png" style="max-width: 100%">
 ]
 .right-grid[
-|Version|Value|WT|RT|
-|-------|-----|--|--|
-| $x_1$ | 10  | 0 | 0 |
-| .red[$x_2$] | .red[20]  | .red[2] | |
+| Version     | Value    | WT      | RT      |
+| ----------- | -------- | ------- | ------- |
+| $x_1$       | 10       | 0       | 0       |
+| .red[$x_2$] | .red[20] | .red[2] | .red[-] |
 ]
 
 ---
+
 ### Example #5
 
 $TS(T) = 1 \ \ TS(U) = 2$
 
 .left-grid[
-<img src="example5-3.png" style="max-width: 100%" alt="">
+<img src="example5-3.png" style="max-width: 100%">
 ]
 
 .right-grid[
-|Version|Value|WT|RT|
-|-------|-----|--|--|
-| $x_1$ | 10  | 0 |.red[1] |
-| $x_2$ | 20  | 2 | |
+| Version | Value | WT  | RT      |
+| ------- | ----- | --- | ------- |
+| $x_1$   | 10    | 0   | .red[1] |
+| $x_2$   | 20    | 2   | -       |
 ]
 
 
 ---
+
 ### Example #5
 
 $TS(T) = 1 \ \ TS(U) = 2$
 
 .left-grid[
-<img src="example5-4.png" style="max-width: 100%" alt="">
+<img src="example5-4.png" style="max-width: 100%">
 ]
 
 .right-grid[
-|Version|Value|WT|RT|
-|-------|-----|--|--|
-| $x_1$ | 10  | 0 |1 |
-| .orange[$x_3$] | 20  | 2 | |
-| .red[$x_2$] | .red[0]  | .red[1] | |
+| Version        | Value   | WT      | RT  |
+| -------------- | ------- | ------- | --- |
+| $x_1$          | 10      | 0       | 1   |
+| .orange[$x_3$] | 20      | 2       | -   |
+| .red[$x_2$ ]   | .red[0] | .red[1] | -   |
 ]
 
 ---
+
 layout: false
 ### Summery of MVCC
 
@@ -528,5 +554,3 @@ layout: false
 - read-only transactions can read a consistent snapshot of the database without using locks of any kind
 
 - multi-versioned DBMSs can easily support time-travel queries,
-
-

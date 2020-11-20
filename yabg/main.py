@@ -159,11 +159,8 @@ def generate(config_file: str):
         if f.endswith('.md'):
             md = render_markdown(f)
             url = f.replace(pages_dir+'/', '')
-            if md[METADATA_RENDER]:
-                md[METADATA_URL] = url[:-2]+'html'
-                md[METADATA_POSTS] = pages
-            else:
-                md[METADATA_URL] = url
+            md[METADATA_URL] = url[:-2]+'html'
+            md[METADATA_POSTS] = pages
             pages.append(md)
             continue
         # copy to output dir directly
@@ -175,8 +172,7 @@ def generate(config_file: str):
     j2_env = get_jinja2_env(config[TEMPLATE_DIR])
     for page in pages:
         print('jinja2: rendering %s...' % page[METADATA_URL])
-        render_res = render_jinja(
-            page, j2_env) if page[METADATA_RENDER] else page[METADATA_CONTENT]
+        render_res = render_jinja(page, j2_env)
         file_name = os.path.join(output_dir, page[METADATA_URL])
         os.makedirs(os.path.dirname(file_name), exist_ok=True)
         with open(file_name, "w") as f:
