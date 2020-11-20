@@ -1,13 +1,15 @@
 ---
 title: τ
-template: index
+template: base
 hide: true
 ---
 
-## 关于我
+# τ's homepage
 
-邮箱：yanggtau **at** gmail **dot** com
+- Email：yanggtau **at** gmail **dot** com
 
-Github: [yangtau](https://github.com/yangtau)
+- Github: [yangtau](https://github.com/yangtau)
 
-项目: [projects](/projects.html)
+- [Projects](/projects.html)
+
+- [Posts](/posts.html)

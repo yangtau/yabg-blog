@@ -1,6 +1,5 @@
 ---
-hide: true
-title: 乐观事务处理
+title: 乐观事务处理-slides
 author: 杨韬
 template: slide
 render: false
@@ -8,6 +7,7 @@ render: false
 
 class: middle, center
 # 事务处理
+
 ### 基于 MVCC 的乐观事务处理
 .pull-right.footnote[杨韬]
 
