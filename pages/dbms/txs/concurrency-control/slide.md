@@ -3,6 +3,7 @@ title: 乐观事务处理-slides
 author: 杨韬
 template: slide
 render: false
+date: 2020-11-20
 ---
 
 class: middle, center
