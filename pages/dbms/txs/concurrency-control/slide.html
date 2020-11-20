@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Title</title>
+  <meta charset="utf-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap');
+    @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+    @import url(https://fonts.googleapis.com/css?family=Droid+Serif);
+
+    body {
+      font-family: "Noto Serif SC", serif;
+    }
+
+    h1,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: "Yanone Kaffeesatz", "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+      font-weight: normal;
+    }
+
+    .remark-code,
+    .remark-inline-code {
+      font-family: 'Monaco';
+    }
+
+    .remark-slide-content h1 {
+      font-size: 3em;
+    }
+
+    .remark-slide-content h2 {
+      font-size: 2em;
+      margin-block-end: 10px;
+    }
+
+    .remark-slide-content h3 {
+      font-size: 1.6em;
+    }
+
+    .footnote {
+      position: absolute;
+      bottom: 3em;
+    }
+
+    li p {
+      line-height: 1.25em;
+    }
+
+    .red {
+      color: #fa0000;
+    }
+
+    .orange {
+      color: #e67700;
+    }
+
+
+    .large {
+      font-size: 2em;
+    }
+
+    a,
+    a>code {
+      color: rgb(249, 38, 114);
+      text-decoration: none;
+    }
+
+    .pull-left {
+      float: left;
+      width: 47%;
+    }
+
+    .pull-right {
+      float: right;
+      width: 47%;
+    }
+
+    .pull-right~p {
+      clear: both;
+    }
+
+    #slideshow .slide .content code {
+      font-size: 0.8em;
+    }
+
+    #slideshow .slide .content pre code {
+      font-size: 0.9em;
+      padding: 15px;
+    }
+
+    .inverse {
+      background: #272822;
+      color: #777872;
+      text-shadow: 0 0 20px #333;
+    }
+
+    .inverse h1,
+    .inverse h2 {
+      color: #f3f3f3;
+      line-height: 0.8em;
+    }
+
+    /* Slide-specific styling */
+
+    #slide-inverse .footnote {
+      bottom: 12px;
+      left: 20px;
+    }
+
+    #slide-how .slides {
+      font-size: 0.9em;
+      position: absolute;
+      top: 151px;
+      right: 140px;
+    }
+
+    #slide-how .slides h3 {
+      margin-top: 0.2em;
+    }
+
+    #slide-how .slides .first,
+    #slide-how .slides .second {
+      padding: 1px 20px;
+      height: 90px;
+      width: 120px;
+      -moz-box-shadow: 0 0 10px #777;
+      -webkit-box-shadow: 0 0 10px #777;
+      box-shadow: 0 0 10px #777;
+    }
+
+    #slide-how .slides .first {
+      background: #fff;
+      position: absolute;
+      top: 20%;
+      left: 20%;
+      z-index: 1;
+    }
+
+    #slide-how .slides .second {
+      position: relative;
+      background: #fff;
+      z-index: 0;
+    }
+
+    /* Two-column layout */
+
+    .left-column {
+      color: #777;
+      width: 20%;
+      height: 92%;
+      float: left;
+    }
+
+    .left-column h2:last-of-type,
+    .left-column h3:last-child {
+      color: #000;
+    }
+
+    .right-column {
+      width: 75%;
+      float: right;
+      padding-top: 1em;
+    }
+
+    .left-column-top {
+      color: #777;
+      width: 35%;
+      float: left;
+    }
+
+    .left-column-top h2:last-of-type,
+    .left-column-top h3:last-child {
+      color: #000;
+    }
+
+    .right-column-top {
+      width: 60%;
+      float: right;
+      padding-top: 0.8em;
+    }
+
+    .left-grid {
+      width: 45%;
+      height: 92%;
+      float: left;
+    }
+
+    .right-grid {
+      width: 45%;
+      float: right;
+      padding-top: 1em;
+    }
+
+    blockquote {
+      position: relative;
+      margin: 24px 0 30px 0;
+      color: #555555;
+      font-size: 18px;
+    }
+
+    blockquote::before,
+    blockquote::after {
+      position: absolute;
+      font: italic 40px "Crimson", Georgia, serif;
+      color: #888888;
+    }
+
+    blockquote::before {
+      content: "\201c";
+      left: -7px;
+      top: -20px;
+    }
+
+    blockquote::after {
+      content: "\201d";
+      right: 7px;
+    }
+
+    blockquote p {
+      margin: 0 24px;
+    }
+
+    blockquote cite {
+      display: block;
+      text-align: right;
+      font-style: italic;
+      font-size: 16px;
+    }
+
+    blockquote cite::before {
+      content: "\2014\00a0";
+    }
+
+    hr {
+      color: #ddd;
+      height: 1px;
+      margin: 2em 0;
+      border: none;
+      border-bottom: 2px dashed #888;
+      border-left: 0;
+      border-right: 0;
+    }
+
+    table {
+      margin-bottom: 1.333333rem;
+      border-collapse: collapse;
+    }
+
+    table th,
+    table td {
+      padding: 8px;
+      line-height: 1.333333rem;
+      vertical-align: top;
+      border-top: 1px solid #ddd;
+    }
+
+    table th {
+      font-weight: bold
+    }
+
+    table thead th {
+      vertical-align: bottom;
+    }
+
+    table caption+thead tr:first-child th,
+    table caption+thead tr:first-child td,
+    table colgroup+thead tr:first-child th,
+    table colgroup+thead tr:first-child td,
+    table thead:first-child tr:first-child th,
+    table thead:first-child tr:first-child td {
+      border-top: 0;
+    }
+
+    table tbody+tbody {
+      border-top: 2px solid #ddd;
+    }
+  </style>
+</head>
+
+<body>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+      }
+    }
+  </script>
+
+  <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+  <script>var slideshow = remark.create({
+      countIncrementalSlides: false, sourceUrl: "slide.md"
+    });
+  </script>
+
+</body>
+
+</html>

@@ -3,6 +3,7 @@ title: if-else： 表达式还是语句？
 date: 2020-04-25
 template: post-code
 author: τ
+hide: true
 ---
 
 *if-else* 语句应该是语句还是表达式呢？这是一个有趣的问题，不同答案会使得编程语言的表现形式很不一样。
