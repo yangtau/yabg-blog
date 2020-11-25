@@ -204,7 +204,7 @@ layout: true
 
 **Reads**
 
-对于事物 T 中的 $r(x)$:
+对于事务 T 中的 $r(x)$:
 
 - $TS(T) \lt WT(x)$: *read too late*，终止 T，给 T 分配一个新的时间戳并重启
 
@@ -216,7 +216,7 @@ layout: true
 
 **Writes**
 
-对于事物 $T$ 中的 $w(x)$:
+对于事务 $T$ 中的 $w(x)$:
 -  $TS(T) \lt RT(x)\ or \ TS(T) \lt WT(x)$: write too late, abort and restart T
 
     <img src="write-too-late.png" style="display: inline;" alt="">
@@ -264,7 +264,7 @@ $U=r(y)w(x)$
 
 ### Thomas Write Rule
 
-对于事物 $T$ 中的 $w(x)$:
+对于事务 $T$ 中的 $w(x)$:
 -  $TS(T) \lt RT(x)$，或者 $TS(T) \lt WT(x) \ and \ c(x) == false$ : write too late, abort and restart T.
 
 -  $TS(T) \lt WT(x) \ and \ c(x) == true$: 根据 Thomas Write Rule，忽略 $w(x)$，继续执行 T 中其他操作。
