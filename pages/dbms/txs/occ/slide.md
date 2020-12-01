@@ -366,19 +366,19 @@ Validation 的目标：
 
 ---
 
-$VAL(U) > VAL(T)$
+$VAL(U) < VAL(T)$
 
 <img src="validation-0.png" style="max-width: 100%" alt="">
 
 ---
 
-$VAL(U) > VAL(T) \ and \ FIN(U) < START(T)$
+$VAL(U) < VAL(T) \ and \ FIN(U) < START(T)$
 
 <img src="validation-1.png" style="max-width: 100%" alt="">
 
 ---
 
-$VAL(U) > VAL(T) \ and \ FIN(U) > START(T)$
+$VAL(U) < VAL(T) \ and \ FIN(U) > START(T)$
 
 <img src="validation-2.png" style="max-width: 100%" alt="">
 
