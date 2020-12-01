@@ -376,6 +376,10 @@ $VAL(U) < VAL(T) \ and \ FIN(U) < START(T)$
 
 <img src="validation-1.png" style="max-width: 100%" alt="">
 
+--
+
+.center.red[No conflicts!]
+
 ---
 
 $VAL(U) < VAL(T) \ and \ FIN(U) > START(T)$
@@ -397,7 +401,7 @@ $VAL(U) < VAL(T) \ and \ FIN(U) > VAL(T)$
 --
 
 .red[
-$$WS(U) \cap RS(T) = \emptyset \ and \ WS(U) \cap WS(T) = \emptyset $$
+$$WS(U) \cap RS(T) = \emptyset \ and \ WS(U) \cap WS(T) = \emptyset$$
 ]
 
 ---
