@@ -390,7 +390,7 @@ $$WS(U) \cap RS(T) = \emptyset$$
 
 ---
 
-$VAL(U) > VAL(T) \ and \ FIN(U) > VAL(T)$
+$VAL(U) < VAL(T) \ and \ FIN(U) > VAL(T)$
 
 <img src="validation-3.png" style="max-width: 100%" alt="">
 
