@@ -42,7 +42,7 @@ class: center, middle, inverse
 
 
 | levels           | Dirty reads | Lost updates | Non-repeatable reads | Phantoms |
-| ---------------- | ----------- | ------------ | -------------------- | -------- |
+| ---------------- |:-----------:|:------------:| -------------------- | -------- |
 | Read Uncommitted | -           | -            | -                    | -        |
 | Read Committed   | +           | -            | -                    | -        |
 | Repeatable Read  | +           | +            | +                    | -        |
@@ -184,6 +184,8 @@ A schedule is serializable iff there is no cycle in its serialization Graph.
 ???
 Serialization Graph 中，每个冲突是个单向的边，从先执行冲突项的事务指向后指向的事务。
 如果 Serialization Graph 有环表示这个调度不是 Serializable 的。
+
+一条边从t1指向t2表明，调度应该等效于t1在t2之前执行。这就构成了一种依赖关系。
 ???
 
 ---
@@ -210,7 +212,9 @@ t1 commits before t2 starts
 
 --
 
-
+???
+这两个依赖的事务在时间上满足依赖要求的先后顺序。
+???
 
 ---
 
@@ -229,6 +233,10 @@ t1 commits before t2 starts
 t1 and t2 are concurrent (.red[rw-anti-dependency])
 ]
 
+???
+anti-dependency 可能是逆时间顺序的，必须是并发的两个事务才有这种依赖。
+???
+
 ---
 
 - In SI, if there is some $T_m \rightarrow T_n$ dependency,
@@ -241,6 +249,13 @@ and that $T_m$ and $T_n$ are concurrent, we can conclude that $T_n  \stackrel{rw
 ]
 --
 
+???
+普通的dependency 不会导致环，因为它们是按照时间有序的，只会一直指向时间往后的方向。
+要形成环，需要“往回指”，只有 rw-anti 才能往回指。
+
+而且一个 rw-anti 是不够的
+???
+
 In every cycle there are three consecutive txns $T_1, T_2, T_3$
 (where it is possible that $T_1$ and $T_2$ are the same txn)
 such that $T_1$ and $T_3$ are concurrent, with an edge $T_3 \rightarrow T_1$,
@@ -251,17 +266,19 @@ and $T_2$ and $T_3$ are concurrent with an edge $T_2 \rightarrow T_3$.
 那么必定至少有两个连续的anti-dependency
 ???
 
-
 ---
 
 - For SI, any cycle must have at least two consecutive rw-anti-dependency edges.
-
 
 .center[
 <img src="dangerous_structure.png" style="max-width: 60%;"></img>
 
 Generalized dangerous structure
 ]
+
+???
+只有有了这个dangerous structure才会可能出现环。
+???
 
 --
 
@@ -282,13 +299,12 @@ layout: true
 ---
 Avoid the necessary condition for cycles in SG
 
-- detect two rw-dependency edges that occur consecutively
-- abort one of the involved edges
+- detect two rw-anti-dependency edges that occur consecutively
+- abort one of the involved txn
 - .red[some txns can be aborted even if they are not in a cycle]
 
 ???
 two consecutive rw-dependency 可能一定会导致环的产生，因为这是一个必要条件
-
 conservative: 可能会 abort 掉一些不会形成环的事务
 ???
 
@@ -296,8 +312,13 @@ conservative: 可能会 abort 掉一些不会形成环的事务
 
 **Txn**:
 
-  - inConflict: whether or not there is a rw-dependency from a concurrent txn to this txn
-  - outConflict: whether there is a rw-dependency from this txn to a concurrent txn
+  - inConflict: whether or not there is a rw-anti-dependency from a concurrent txn to this txn
+  - outConflict: whether there is a rw-anti-dependency from this txn to a concurrent txn
+
+???
+in: 有一个边指向该事务
+out：一个边从该事务指出
+???
 
 ---
 
@@ -334,6 +355,12 @@ read(T, x):
         T.outConflict = true
     return what T read
 ```
+
+???
+会去看有没有新的版本可能形成rw-anti
+它要去读，但是有一个新的版本（比它读的更加新的）写了，所以有一个 rw 的指出
+???
+
 --
 
 .center[
@@ -341,6 +368,11 @@ read(T, x):
 
 Aborted txn in `write`
 ]
+
+???
+t1 是 creator，当前事务是 t3，
+t1.out = true
+???
 
 ---
 
@@ -407,6 +439,12 @@ count: false
 - SSI:
   - read-only txns can be aborted and can abort write txns
   .center[<img src="ssi_read_only.png" style="max-width:100%;">]
+  
+  ???
+  如果没有 N， 0-》1
+  但是 N 只读到了 1 的结果
+  N 读到的是1执行玩之后的一个snapshot，但是1，0之间的依赖需要满足0在1之前之前执行
+  ???
 
 ---
 count: false
@@ -419,6 +457,10 @@ count: false
   - read-only txns can be aborted and can abort write txns
   .center[<img src="ssi_safe_snapshot.png" style="max-width:100%;">]
 
+???
+posgres QL 的SSI方案： safe snapshot, 让只读等待一段时间到safe的阶段才去读
+会增加一些额外的信息供检查使用。
+???
 
 ---
 layout: false
@@ -431,16 +473,21 @@ class: center, middle, inverse
 都基于 MVCC，但是检测读写冲突的时机不一样：
 
 - **SSI**：破坏 Serialization Graph 中可能形成环的条件
-  - 事务执行过程中检查冲突
+  - 事务执行整个过程中检查冲突
   - 判断冲突的信息主要在事务上
 
 - **MVTO**： 事务提交时利用数据项上的读写时间戳检测读写冲突
   - 事务提交时检查冲突
   - 判断冲突的信息主要在数据项上
 
+???
+MVTO 更加适用分布化：判断冲突的信息本身是分布化的
+???
+
   .center[<img src="rw-conflict.png" style="max-width:30%;">]
 
 ???
-MVTO 更加适用分布化：判断冲突的信息本身是分布化的
+SSI 不会abort， MVTO 会abort
+
 SSI 的 abort 可能会更少：SSI 的读对写的影响不如 MVTO 那么大
 ???
