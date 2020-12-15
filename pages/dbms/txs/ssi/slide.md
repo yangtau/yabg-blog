@@ -42,7 +42,7 @@ class: center, middle, inverse
 
 
 | levels           | Dirty reads | Lost updates | Non-repeatable reads | Phantoms |
-| ---------------- |:-----------:|:------------:| -------------------- | -------- |
+| ---------------- |:-----------:|:------------:|:--------------------:|:--------:|
 | Read Uncommitted | -           | -            | -                    | -        |
 | Read Committed   | +           | -            | -                    | -        |
 | Repeatable Read  | +           | +            | +                    | -        |
