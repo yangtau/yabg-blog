@@ -440,11 +440,11 @@ count: false
   - read-only txns can be aborted and can abort write txns
   .center[<img src="ssi_read_only.png" style="max-width:100%;">]
   
-  ???
-  如果没有 N， 0-》1
-  但是 N 只读到了 1 的结果
-  N 读到的是1执行玩之后的一个snapshot，但是1，0之间的依赖需要满足0在1之前之前执行
-  ???
+???
+如果没有 N， 0-》1
+但是 N 只读到了 1 的结果
+N 读到的是1执行玩之后的一个snapshot，但是1，0之间的依赖需要满足0在1之前之前执行
+???
 
 ---
 count: false
@@ -458,7 +458,7 @@ count: false
   .center[<img src="ssi_safe_snapshot.png" style="max-width:100%;">]
 
 ???
-posgres QL 的SSI方案： safe snapshot, 让只读等待一段时间到safe的阶段才去读
+PostgreSQL 的SSI方案： safe snapshot, 让只读等待一段时间到safe的阶段才去读
 会增加一些额外的信息供检查使用。
 ???
 
@@ -475,16 +475,18 @@ class: center, middle, inverse
 - **SSI**：破坏 Serialization Graph 中可能形成环的条件
   - 事务执行整个过程中检查冲突
   - 判断冲突的信息主要在事务上
+  - 只读事务可能被阻塞
 
 - **MVTO**： 事务提交时利用数据项上的读写时间戳检测读写冲突
   - 事务提交时检查冲突
   - 判断冲突的信息主要在数据项上
+  - 只读事务不会被阻塞
 
 ???
 MVTO 更加适用分布化：判断冲突的信息本身是分布化的
 ???
 
-  .center[<img src="rw-conflict.png" style="max-width:30%;">]
+.center[<img src="rw-conflict.png" style="max-width:30%;">]
 
 ???
 SSI 不会abort， MVTO 会abort
