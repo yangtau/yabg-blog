@@ -162,7 +162,7 @@ Two actions of different txns conflict, only if
 
 **Skew write:**
 ```
-h: r1(x)r1(y)r2(x)r2(y)w1(x)w2(y)
+s: r1(x)r1(y)r2(x)r2(y)w1(x)w2(y)
 
 rw-conflict: (r2(x), w1(x)), (r1(y), w2(y))
 ```
@@ -171,7 +171,7 @@ rw-conflict: (r2(x), w1(x)), (r1(y), w2(y))
 
 **Skew write:**
 ```
-h: r1(x)r1(y)r2(x)r2(y)w1(x)w2(y)
+s: r1(x)r1(y)r2(x)r2(y)w1(x)w2(y)
 ```
 
 **Serialization Graph:**
@@ -395,40 +395,54 @@ write(T, x, v):
 Aborted txn in `read`
 ]
 
+
 ---
 ### Skew Write
 
-.center[<img src="ssi_skew_write_1.png" style="max-width:50%;"> </img>]
-
----
-count: false
-### Skew Write
-
-.center[<img src="ssi_skew_write_2.png" style="max-width:50%;"> </img>]
+.left-grid[<img src="ssi_sw_sg_0.png" style="max-width:100%;"> </img>]
+.right-grid[<img src="ssi_skew_write_0.png" style="max-width:100%;"> </img>]
 
 ---
 count: false
 ### Skew Write
 
-.center[<img src="ssi_skew_write_3.png" style="max-width:50%;"> </img>]
+.left-grid[<img src="ssi_sw_sg_0.png" style="max-width:100%;"> </img>]
+.right-grid[<img src="ssi_skew_write_1.png" style="max-width:100%;"> </img>]
 
 ---
 count: false
 ### Skew Write
 
-.center[<img src="ssi_skew_write_4.png" style="max-width:50%;"> </img>]
+.left-grid[<img src="ssi_sw_sg_0.png" style="max-width:100%;"> </img>]
+.right-grid[<img src="ssi_skew_write_2.png" style="max-width:100%;"> </img>]
 
 ---
 count: false
 ### Skew Write
 
-.center[<img src="ssi_skew_write_5.png" style="max-width:50%;"> </img>]
+.left-grid[<img src="ssi_sw_sg_1.png" style="max-width:100%;"> </img>]
+.right-grid[<img src="ssi_skew_write_3.png" style="max-width:100%;"> </img>]
 
 ---
 count: false
 ### Skew Write
 
-.center[<img src="ssi_skew_write_6.png" style="max-width:50%;"> </img>]
+.left-grid[<img src="ssi_sw_sg_2.png" style="max-width:100%;"> </img>]
+.right-grid[<img src="ssi_skew_write_4.png" style="max-width:100%;"> </img>]
+
+---
+count: false
+### Skew Write
+
+.left-grid[<img src="ssi_sw_sg_2.png" style="max-width:100%;"> </img>]
+.right-grid[<img src="ssi_skew_write_5.png" style="max-width:100%;"> </img>]
+
+---
+count: false
+### Skew Write
+
+.left-grid[<img src="ssi_sw_sg_3.png" style="max-width:100%;"> </img>]
+.right-grid[<img src="ssi_skew_write_6.png" style="max-width:100%;"> </img>]
 
 ---
 ### Read-Only Transactions
@@ -440,6 +454,7 @@ count: false
   - read-only txns can be aborted and can abort write txns
   .center[<img src="ssi_read_only.png" style="max-width:100%;">]
   
+
 ???
 如果没有 N， 0-》1
 但是 N 只读到了 1 的结果
