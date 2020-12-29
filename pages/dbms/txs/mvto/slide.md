@@ -3,6 +3,7 @@ title: Percolator + MVTO
 author: 杨韬
 template: slide
 render: false
+hide: true
 date: 2020-12-29
 ---
 
