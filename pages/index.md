@@ -12,4 +12,6 @@ hide: true
 
 - [Projects](/projects.html)
 
+<!--
 - [Posts](/posts.html)
+-->
