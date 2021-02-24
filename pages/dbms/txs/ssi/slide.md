@@ -1,5 +1,5 @@
 ---
-title: [事务处理 slides] Serializable Snapshot Isolation
+title: 『事务处理 slides』 Serializable Snapshot Isolation
 author: 杨韬
 template: slide
 render: false
@@ -88,7 +88,7 @@ Txn:
   - ~~Lost updates~~
 
 ???
-- reads are never delayed because of concurrent txns’ writes,
+- reads are never delayed because of concurrent txns' writes,
 - reads never cause delays in a writing txn.
 
 SI 不会出现 Phantom reads：
@@ -251,7 +251,7 @@ and that $T_m$ and $T_n$ are concurrent, we can conclude that $T_n  \stackrel{rw
 
 ???
 普通的dependency 不会导致环，因为它们是按照时间有序的，只会一直指向时间往后的方向。
-要形成环，需要“往回指”，只有 rw-anti 才能往回指。
+要形成环，需要『往回指』，只有 rw-anti 才能往回指。
 
 而且一个 rw-anti 是不够的
 ???
@@ -448,7 +448,7 @@ count: false
 ### Read-Only Transactions
 
 - SI:
-  - read-only txns are never delayed because of concurrent txns’ writes
+  - read-only txns are never delayed because of concurrent txns' writes
   - read-only txns never cause delays of write txns
 - SSI:
   - read-only txns can be aborted and can abort write txns
@@ -466,7 +466,7 @@ count: false
 ### Read-Only Transactions
 
 - SI:
-  - read-only txns are never delayed because of concurrent txns’ writes
+  - read-only txns are never delayed because of concurrent txns' writes
   - read-only txns never cause delays of write txns
 - SSI:
   - read-only txns can be aborted and can abort write txns

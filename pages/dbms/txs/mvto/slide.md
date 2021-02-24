@@ -1,5 +1,5 @@
 ---
-title: [事务处理 slides] SSI WSI MVTO
+title: 『事务处理 slides』 SSI WSI MVTO
 author: 杨韬
 template: slide
 render: false
@@ -72,7 +72,7 @@ SI 会保证所有的 read 读到的是一个 consistent snapshot 。
   - ~~Lost updates~~
 
 ???
-- reads are never delayed because of concurrent txns’ writes,
+- reads are never delayed because of concurrent txns' writes,
 - reads never cause delays in a writing txn.
 
 SI 不会出现 Phantom reads：
@@ -317,7 +317,7 @@ $R_w$: 事务 $txn_i$ 的读集合
 ---
 
 - 需要维护读集合；
-- 在提交过程中，检查读集合是否被更新的期间，需要“锁”住读集合。
+- 在提交过程中，检查读集合是否被更新的期间，需要『锁』住读集合。
 
 ---
 layout: false
