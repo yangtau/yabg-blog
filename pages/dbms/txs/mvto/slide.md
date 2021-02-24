@@ -1,5 +1,5 @@
 ---
-title: Percolator + MVTO
+title: [事务处理 slides] SSI WSI MVTO
 author: 杨韬
 template: slide
 render: false

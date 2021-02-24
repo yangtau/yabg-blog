@@ -1,5 +1,5 @@
 ---
-title: 乐观事务处理-slides
+title: [事务处理 slides] 乐观事务处理-slides
 author: 杨韬
 template: slide
 render: false

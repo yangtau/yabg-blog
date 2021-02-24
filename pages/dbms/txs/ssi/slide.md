@@ -1,5 +1,5 @@
 ---
-title: Serializable Snapshot Isolation-slides
+title: [事务处理 slides] Serializable Snapshot Isolation
 author: 杨韬
 template: slide
 render: false
