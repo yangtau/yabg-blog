@@ -1,11 +1,18 @@
 ---
-title: τ
-template: base
+title: Projects
+author: τ
+template: post
 hide: true
 ---
-## 项目
 
-这是我大学期间部分项目的一个简单介绍。
+## 大学期间的项目
+
+### HBS
+<a href="https://github.com/yangtau/hbs"><img style="margin:2px" src="https://gh-card.dev/repos/yangtau/hbs.svg"></a>
+HBS 是我的本科毕业设计。
+HBS 为 HBase 提供了 ACID 语义的事务支持。它使用 multi-version timestamp ordering 和 write-snapshot isolation 结合的并发控制算法，
+两阶段提交的策略。理论上，HBS 应该具有非常好的可拓展性，同时提供了最高可串行化的隔离级别。
+
 
 ### Hedgehog
 <a href="https://github.com/yangtau/hedgehog"><img style="margin:2px" src="https://gh-card.dev/repos/yangtau/hedgehog.svg"></a>
@@ -40,10 +47,4 @@ hide: true
 这个项目是一个学生管理系统的前后端的实现。由于当时正好迷恋 Dart 语言，就前后端都用了 Dart。
 个人认为一些小的 WEB 应用用 Dart 开发还是挺不错的，独特的类型系统使得它既可以有很高的开发效率，同时又能有不错的可维护性和执行效率。
 缺点是 Dart 目前主要寄生在 Flutter 身上，可用的第三方库并不多。
-在这个项目中，我在利用 Dart 的反射机制，开发了一个支持 MySQL 的 ORM 库。
-
-### UESTC 课表
-<a href="https://github.com/yangtau/uestc"><img style="margin:2px" src="https://gh-card.dev/repos/yangtau/uestc.svg"></a>
-成电课表 APP，使用 Flutter 开发，可以便捷查看课表和成绩。在安卓手机上可以用，IOS 没有测试过。
-在我开发这个 APP 的过程中，学校教务处升级了网站，增强了反爬虫机制。由于精力有限（懒），我也没有更新爬虫。
-
+在这个项目中，我利用 Dart 的反射机制，开发了一个支持 MySQL 的 ORM 库。

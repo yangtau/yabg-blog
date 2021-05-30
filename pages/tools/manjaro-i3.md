@@ -10,7 +10,7 @@ template: post-code
 
 从 Windows 转战到 Linux 后，我用过 Elementray OS，国产的 Deepin，现在又换到了 Manjaro 。前面两个虽然总体上还算稳定，但是总是有一些小瑕疵让我难以忍受。例如 Deepin 的特效和动画总是有奇怪的线条出现，而且UI设计对 MAC OS 的模仿太明显了。
 
-Manjaro 是在B站上看到有up主推荐知道的。我下载的是 xfce 的版本，然后把桌面环境换成了 i3 。 
+Manjaro 是在B站上看到有up主推荐知道的。我下载的是 xfce 的版本，然后把桌面环境换成了 i3 。
 Manjaro 最好用的应该是它的软件包管理，`pacman` 比 `apt` 方便了不少，软件比较全且新，不需要手动添加很多软件源。
 使用了大概有一周的时间，稳定性比起 Ubuntu 类的系统有过之而无不及。
 

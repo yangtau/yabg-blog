@@ -2,7 +2,7 @@
 author: τ
 title: "海边的卡夫卡：在反抗中自我救赎"
 date: 2020-03-01
-hide: false
+hide: true
 template: post
 ---
 
