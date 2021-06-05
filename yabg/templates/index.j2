@@ -1,7 +1,0 @@
-{% extends "base.j2" %}
-{% block content %}
-{{ super() }}
-{% for post in __posts|rejectattr('hide')|sort(attribute='date', reverse=True) %}
-<p>{{ post.date }} <a href={{ post.__url }}> {{ post.title }}</a></p>
-{% endfor %}
-{% endblock %}
