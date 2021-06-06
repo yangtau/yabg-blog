@@ -22,7 +22,7 @@ d = null;               // null
 s = "Hello, World!";    // string
 ```
 
-- 控制语句 
+- 控制语句
 
 ```hg
 a = 10;
@@ -34,7 +34,7 @@ if a > 10 { // `()` is not necessary.
     b = a-10;
 }
 print(b);
-// block has no local environment, 
+// block has no local environment,
 // so 'b' is a global variable.
 ```
 
@@ -99,7 +99,7 @@ if a>20 | b<10 {
 
 首先，它是一个赋值表达式，把右边的值 `1+2*3+fn()` 赋给左边的变量 `a`。而 `1+2*3+fn()` 又由加法表达式，乘法表达式，函数调用表达式构成。yacc 中编写的规则会约束表达式构建的顺序，构建过程大概是这样的：
 
-```
+```c
 a = 1 + 2 * 3 + fn()
 identifier = value + value * value + function_call // 词法分析
 identifier = value + value * value + value // function_call 约归为 value
@@ -195,7 +195,7 @@ struct ExpressionTag {
 
 ```c
 // expression.h
-void *initAssignExpression(String *id, Expression *expression) 
+void *initAssignExpression(String *id, Expression *expression)
 ```
 
 向外提供的唯一接口是 `initAssignExpression`, 也就是说所有一般的表达式在模块外引用时都会被向上转型为 `Expression`, 只有 `free` 和 `evaluate` 两个方法。

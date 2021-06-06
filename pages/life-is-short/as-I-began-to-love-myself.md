@@ -18,7 +18,7 @@ template: post
 
 <div class="poem">
 
-<p>As I began to love myself I found that anguish and emotional suffering are only warning signs that I was living against my own truth. 
+<p>As I began to love myself I found that anguish and emotional suffering are only warning signs that I was living against my own truth.
 Today, I know, this is "AUTHENTICITY".
 </p>
 

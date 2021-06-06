@@ -29,7 +29,7 @@ HBS 为 HBase 提供了 ACID 语义的事务支持。它使用 multi-version tim
 用 B+ 树实现的 MySQL 存储引擎。
 
 ### YABG
-<a href="https://github.com/yangtau/yabg"><img style="margin:2px" src="https://gh-card.dev/repos/yangtau/yabg.svg"></a> 
+<a href="https://github.com/yangtau/yabg"><img style="margin:2px" src="https://gh-card.dev/repos/yangtau/yabg.svg"></a>
 一个静态博客网页生成器。相比与 Hexo 之类的应用，YABG 非常迷你，大概只有 200 行代码。
 但是 YABG 使用 Jinja2 配置页面模板，这使得它的拓展能力非常强大。
 现在流行的博客生成器都太复杂了，我不能便捷地根据自己的需求修改，所以只好自己写一个。

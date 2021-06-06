@@ -36,11 +36,11 @@ assert(block.fn{x=>2; y=>100} == 199)
 ```lua
 {
   **{"age" => 21; "name" => "yangtau"}  # unpack
-  
+
   "handsome" => true if .age <= 24 else false # `.age` refers to `age` in the same block
 
   "gf-$i" => gf for i, gf in enumerate ["qi", "rui"]
-  
+
 }
 ```
 

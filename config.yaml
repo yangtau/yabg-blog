@@ -1,10 +1,10 @@
 # dir path should be the relative path of this file
 template_dir: yabg/templates
 page_dir: pages
-output_dir: public 
+output_dir: public
 style_dir: yabg/style
 
 sitemap: sitemap.txt
 user_name: τ
 domain: https://yangtau.me
- 
+

@@ -8,9 +8,9 @@ template: post-code
 
 ![](/pictures/manjaro-i3.jpg)
 
-从 Windows 转战到 Linux 后，我用过 Elementray OS，国产的 Deepin，现在又换到了 Manjaro 。前面两个虽然总体上还算稳定，但是总是有一些小瑕疵让我难以忍受。例如 Deepin 的特效和动画总是有奇怪的线条出现，而且UI设计对 MAC OS 的模仿太明显了。
+从 Windows 转战到 Linux 后，我用过 Elementray OS，国产的 Deepin，现在又换到了 Manjaro 。前面两个虽然总体上还算稳定，但是总是有一些小瑕疵让我难以忍受。例如 Deepin 的特效和动画总是有奇怪的线条出现，而且 UI 设计对 MAC OS 的模仿太明显了。
 
-Manjaro 是在B站上看到有up主推荐知道的。我下载的是 xfce 的版本，然后把桌面环境换成了 i3 。
+Manjaro 是在 B 站上看到有 up 主推荐知道的。我下载的是 xfce 的版本，然后把桌面环境换成了 i3 。
 Manjaro 最好用的应该是它的软件包管理，`pacman` 比 `apt` 方便了不少，软件比较全且新，不需要手动添加很多软件源。
 使用了大概有一周的时间，稳定性比起 Ubuntu 类的系统有过之而无不及。
 
@@ -32,13 +32,13 @@ Manjaro 最好用的应该是它的软件包管理，`pacman` 比 `apt` 方便�
 
 ## i3
 
-i3 是一个平铺式的窗口管理器，所有的操作都可以用键盘直接完成。熟练了 i3 的快捷键后可以极大地提高工作的效率。 
+i3 是一个平铺式的窗口管理器，所有的操作都可以用键盘直接完成。熟练了 i3 的快捷键后可以极大地提高工作的效率。
 我的 i3 配置比较简单，只是添加了几个启动项，把默认的方向快捷键 `jkl;` 改成 vim 默认的 `hjkl`，还去掉了不太漂亮的边框。
 想要自己增加一些快捷键，可以用 `xmodmap` 查看一下按键的名称。
 
 ### xrandr 配置多显示器
 
-i3 是不会像别的桌面环境自动检测多显示器，需要自己配置外接的显示器。 
+i3 是不会像别的桌面环境自动检测多显示器，需要自己配置外接的显示器。
 
 我这里使用的工具是 `xrandr`。直接输入这个命令会输出你所用显示器的信息。
 我的主显示器是 `eDP1`，副显示器是 `HDMI1`。主显示器会自动开启，副显示器不会默认打开。
@@ -67,7 +67,7 @@ i3lock 是锁屏软件。
 它比原版增加了颜色的设置。
 
 下面是我的启动脚步，用到了截图软件 `scrot`：
-```
+```bash
 #!/bin/bash
 TMPBG=/tmp/screen.png
 scrot $TMPBG && convert $TMPBG -scale 5% -scale 2000%  $TMPBG
@@ -89,16 +89,16 @@ i3lock \
   --datecolor=ffffff00 \
   --layoutcolor=ffffff00
 
-rm $TMPBG 
+rm $TMPBG
 ```
 
 锁屏界面：
 ![](/pictures/manjaro-i3-lock.jpg)
 
 ---
-i3 的具体的配置可以看看我的[i3配置](https://github.com/yangtau/dotfiles/tree/master/i3).
+i3 的具体的配置可以看看我的[i3 配置](https://github.com/yangtau/dotfiles/tree/master/i3).
 
-## polybar 
+## polybar
 
 ![](/pictures/manjaro-i3-bar.jpg)
 
@@ -106,7 +106,7 @@ i3 也有一个 bar 叫 i3-status, 简单的显示足够了，想要更丰富的
 
 polybar 的配置最麻烦了。要想得到比较好看的效果最好在别人的基础上修改。
 我的配置文件是在 [polybar-theme](https://github.com/adi1090x/polybar-themes) 的基础上修改而来的，增加了一些 module 和多显示器的支持。
-配置文件需要根据自己的硬件修改，官方的[文档](https://github.com/polybar/polybar/wiki)有详尽的说明。 
+配置文件需要根据自己的硬件修改，官方的[文档](https://github.com/polybar/polybar/wiki)有详尽的说明。
 
 ## Alacritty
 
@@ -117,9 +117,8 @@ polybar 的配置最麻烦了。要想得到比较好看的效果最好在别人
 多显示器下，它不会自动根据显示器的 DPI 缩放内容，所以在不同的屏幕上文字的大小不一样。
 这个问题这样通过在配置文件中添加 `WINIT_HIDPI_FACTOR` 环境变量解决，具体可以看看 github 上相关 [Issues](https://github.com/jwilm/alacritty/issues/1339)。
 
-```
+```yaml
 env:
-
 	WINIT_HIDPI_FACTOR: '1.6'
 ...
 ```
@@ -128,7 +127,7 @@ env:
 ## 其他软件
 
  - [rofi](https://github.com/davatorium/rofi) 可以作为一个启动器使用，功能很强大。
- - [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) 我的shell是 zsh ，当然要用 oh my zsh。
+ - [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) 我的 shell 是 zsh ，当然要用 oh my zsh。
  - ~~[compton](https://github.com/tryone144/compton.git) 这个是一个原版的 fork ，可以实现毛玻璃效果。~~
  - [compton](https://github.com/yshui/compton) 切换回了 Archlinux 库中的版本，上面的版本在浏览器渲染的时候 CPU 占用率很高。
  - [nvim](https://neovim.io/) 从 vim 切换到了 nvim。无痛切换，因为我才入坑 vim 不久 :) 。
@@ -146,7 +145,7 @@ i3 不像其他完整的桌面环境提供所以设置的图形界面，所以�
 触控板默认的滑动方向我不是很习惯，而且不能轻触点击。我添加了配置改变触控板的默认设置，具体的文档可以参考 [libinput](https://wiki.archlinux.org/index.php/Libinput)。
 
 下面是我的配置，配置文件需要放在 `/usr/share/X11/xorg.conf.d/` 目录下。
-```
+```conf
 Section "InputClass"
     Identifier "touchpad"
     Driver "libinput"

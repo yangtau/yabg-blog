@@ -84,7 +84,7 @@ Txn:
 --
 
 - *First-Committer-Wins*: a txn cannot modify an item if a concurrent txn has already modified it.
-  
+
   - ~~Lost updates~~
 
 ???
@@ -453,7 +453,7 @@ count: false
 - SSI:
   - read-only txns can be aborted and can abort write txns
   .center[<img src="ssi_read_only.png" style="max-width:100%;">]
-  
+
 
 ???
 如果没有 N， 0-》1

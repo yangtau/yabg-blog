@@ -36,7 +36,7 @@ class: center, middle, inverse
 | Repeatable Read  |      +      |      +       |          +           |    -     |
 | Serializable     |      +      |      +       |          +           |    +     |
 
-```
+```a
 '+': not possible
 '-': possible
 ```
@@ -68,7 +68,7 @@ SI 会保证所有的 read 读到的是一个 consistent snapshot 。
 --
 
 - *First-Committer-Wins*: 如果两个并发事务的写集合冲突，只有先提交的事务才能提交成功
-  
+
   - ~~Lost updates~~
 
 ???
@@ -77,7 +77,7 @@ SI 会保证所有的 read 读到的是一个 consistent snapshot 。
 
 SI 不会出现 Phantom reads：
 - 新插入的数据项的时间戳会比已经读过该数据项的事务的时间戳大，所以按条件重复读不会读到新的数据项
-- 被删除的数据项在事务的Snapshot中有备份，所以按条件重复读依然能读到
+- 被删除的数据项在事务的 Snapshot 中有备份，所以按条件重复读依然能读到
 ???
 
 ---
@@ -97,7 +97,7 @@ layout: false
 
 ### Skew Write
 .left-grid[
-```
+```python
 x = 1, y = 1
 
 t1:
@@ -108,7 +108,7 @@ t2:
 t1: r(x)r(y)w(x)
 t2: r(x)r(y)w(y)
 ```
-```
+```a
 Serial:
 1) t1, t2 -> x = 0, y = 1
 2) t2, t1 -> x = 1, y = 0
@@ -117,7 +117,7 @@ Serial:
 --
 
 .right-grid[
-```
+```a
 SI:
 r1(x)r1(y)r2(x)r2(y)w1(x)w2(y)
   -> x = 0, y = 0

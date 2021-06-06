@@ -71,11 +71,9 @@ make
 
 之后在 src 目录下会生成名为 hg 的可执行文件，它接受一个文件名字符串作为输入，然后执行该文件。
 
-```
+```bash
 ./src/hg examples/test.hg
 ```
-
-examples 目录下有一些 Hedgehog 程序文件，可以使用编译出的 hg 文件去执行测试。
 
 ## 设计
 
@@ -142,7 +140,7 @@ for (var j=0; j < 3; j++) {
   for (var i=0; i < 20; i++) {
     if (i == 10) {
       console.log('i=10')
-      break 
+      break
       label
     }
   }

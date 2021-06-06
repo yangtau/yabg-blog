@@ -54,6 +54,6 @@ template: post
 
 最后引用《了不起的盖茨比》结尾吧：
 
->It eluded us then, but that's no matter—tomorrow we will run faster, stretch out our arms farther... And one fine morning— 
+>It eluded us then, but that's no matter—tomorrow we will run faster, stretch out our arms farther... And one fine morning—
 >
 >So we beat on, boats against the current, borne back ceaselessly into the past.
