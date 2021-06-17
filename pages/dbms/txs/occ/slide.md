@@ -4,6 +4,7 @@ author: 杨韬
 template: slide
 render: false
 date: 2020-11-20
+hide: true
 ---
 
 class: middle, center
@@ -270,41 +271,6 @@ $U=r(y)w(x)$
 -  $TS(T) \lt WT(x) \ and \ c(x) == true$: 根据 Thomas Write Rule，忽略 $w(x)$，继续执行 T 中其他操作。
 
 -  otherwise: 执行 $w(x)$，$WT(x) = TS(T)$, $c(x)=false$
-
-???
-增加例子
-???
-
---
-
-.center.red[Thomas Write Rule 违背了 Conflict-Serializability]
-
----
-
-### Thomas Write Rule
-
-**为什么在 $TS(T) \lt WT(x)$ 并且 $c(x) == false$ 不等待？**
-
---
-
-<img src="to-dead-lock.png" style="max-width: 100%" alt="">
-
---
-
-.center.red[
-循环等待 → deadlock
-]
-
----
-
-**为什么读的情况等待不会出现死锁？**
-
-读需要满足 $TS(T) \ge WT(x)$，T 等待的总是一个时间戳更小（比 T 早）的事务。
-也就是说，如果 T 在等待 U，那么 $TS(T) \gt TS(U)$。时间戳的大小保证了不可能出现循环等待的情况。
-
-但是写的时候如果允许等待，出现了时间戳小的事务等待时间戳大的事务的情况。
-
-所以，要么只允许读的时候等待，要么只允许写的时候等待。
 
 ---
 
