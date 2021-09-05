@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapp</title>
+<link rel="stylesheet" href="/whitey.css">
+<link rel="icon" href="/favicon.svg">
+
+<link href="/prism.css" rel="stylesheet"/>
+
+<head>
+
+<body>
+
+<div class="content">
+
+<h1>Mapp</h1>
+<div class="light">作者：τ</div>
+<div class="light">日期：2020-08-31</div>
+
+<pre><code class="language-lua">block =&gt; {
+  a =&gt; 2020
+  b =&gt; &quot;hello&quot;
+  c =&gt; {&quot;world&quot;}
+}
+
+assert(block.a == 2020)
+assert(block[&quot;b&quot;] == &quot;hello&quot;)
+assert(block.c{} == &quot;world&quot;)
+
+assert(this.block == block)
+assert(block{} == nil)
+</code></pre>
+<pre><code class="language-lua">block =&gt; {
+  fn =&gt; {|x, y|
+    a = 100
+    x*a - y/a
+  }
+}
+
+assert(block.fn.a == nil)
+assert(block.fn{x=&gt;2; y=&gt;100} == 199)
+</code></pre>
+<pre><code class="language-lua">{
+  **{&quot;age&quot; =&gt; 21; &quot;name&quot; =&gt; &quot;yangtau&quot;}  # unpack
+
+  &quot;handsome&quot; =&gt; true if .age &lt;= 24 else false # `.age` refers to `age` in the same block
+
+  &quot;gf-$i&quot; =&gt; gf for i, gf in enumerate [&quot;qi&quot;, &quot;rui&quot;]
+
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>header</th>
+<th>hello</th>
+<th>你好</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abc</td>
+<td>edff</td>
+<td>世界</td>
+</tr>
+<tr>
+<td>341</td>
+<td></td>
+<td>243</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+
+</body>
+
+
+
+
+<script src="/prism.js"></script>
+
+</html>

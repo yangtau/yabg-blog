@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>try-catch-finally 异常处理的实现</title>
+<link rel="stylesheet" href="/whitey.css">
+<link rel="icon" href="/favicon.svg">
+
+<link href="/prism.css" rel="stylesheet"/>
+
+<head>
+
+<body>
+
+<div class="content">
+
+<h1>try-catch-finally 异常处理的实现</h1>
+<div class="light">作者：τ</div>
+<div class="light">日期：2020-06-18</div>
+
+<p><em>try-catch-finally</em> 是一种常见的异常处理范式，在众多常见编程语言中被采用，如 Java，JavaScript 等。本文会简单探讨其实现机制。</p>
+<div class="toc">
+<ul>
+<li><a href="#_1">语义</a></li>
+<li><a href="#_2">实现</a><ul>
+<li><a href="#try-catch-finally">try-catch-finally 语句的翻译</a></li>
+<li><a href="#_3">特殊情况</a><ul>
+<li><a href="#breakcontinue">break，continue 语句</a></li>
+<li><a href="#return">return</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="_1">语义</h2>
+<p>要讲清楚 try-catch-finally 的实现，就必须先明确它的语义。</p>
+<h2 id="_2">实现</h2>
+<ul>
+<li>E: 异常栈</li>
+<li>push_e: 设置异常处理程序</li>
+<li>pop_e: 清楚异常处理程序</li>
+</ul>
+<p>某段代码产生异常则会从 E 栈顶取出异常处理程序执行。如果 E 为空，则异常没有被捕获，输出异常信息，退出程序。</p>
+<h3 id="try-catch-finally">try-catch-finally 语句的翻译</h3>
+<pre><code>    jump try
+catch_entry:
+    #if has_catch
+    reset_e
+    push_e(finally)
+    +-------------+
+    | catch-block |
+    +-------------+
+    pop_e
+    #endif // has_catch
+    jump finally
+try:
+    push_e(catch_entry)
+    +-------------+
+    |  try-block  |
+    +-------------+
+    pop_e
+finally:
+    +-------------+
+    |finally-block|
+    +-------------+
+    test_e
+</code></pre>
+<h3 id="_3">特殊情况</h3>
+<h4 id="breakcontinue">break，continue 语句</h4>
+<p>先在 break 或 continue 之前冗余 finally 语句。需要注意的是嵌套异常处理中，外层的 finally 也可能被冗余进来。当前层的 finally 应该被外层异常处理程序处理，所以每次冗余 finally 之前都应该 pop_e。</p>
+<pre><code class="language-javascript">for (var i = 0; i &lt; 2; i++) {
+    try {
+        console.log(i);
+        throw 1; // enable catch
+    } catch (e) {
+        try {
+            try {
+                /*
+                pop_e # the catch_entry is finally1
+                finally1
+                pop_e
+                finally2
+                pop_e
+                finally3
+                 */
+                break;
+            } finally { // finally1
+                throw 'error1';
+            }
+        } finally { // finally2
+            console.log(1);
+            throw 'error2';
+        }
+    } finally { // finally3
+        continue;
+    }
+}
+</code></pre>
+<pre><code class="language-js">for (var i = 0; i &lt; 2; i++) {
+    try {
+        console.log(i);
+    } catch (e) {
+    } finally { // finally3
+        try {
+            try {
+                /*
+                pop_e # the catch_entry is finally1
+                finally1
+                pop_e
+                finally2
+                # finally3 is not in the finalizer_stack
+                 */
+                break;
+            } finally { // finally1
+                throw 'error1';
+            }
+        } finally { // finally2
+            console.log(1);
+            throw 'error2';
+        }
+        continue;
+    }
+}
+</code></pre>
+<pre><code class="language-js">for (var i = 0; i &lt; 2; i++) {
+    try {
+        console.log(i);
+    } catch (e) {
+        try {
+            try {
+                /*
+                pop_e # the catch_entry is catch
+                # finally1 is null
+                pop_e
+                finally2
+                pop_e
+                finally3
+                 */
+                break;
+            } catch(e) {
+                console.log('oooops');
+            }
+        } finally { // finally2
+            console.log(1);
+            throw 'error2';
+        }
+    } finally { // finally3
+        continue;
+    }
+}
+</code></pre>
+<p>finally 语句中的 break， continue，return 会 reset_e</p>
+<h4 id="return">return</h4>
+<p>try 语句中的 return 应该冗余所有外层 finally。</p>
+
+
+</div>
+
+</body>
+
+
+
+
+<script src="/prism.js"></script>
+
+</html>

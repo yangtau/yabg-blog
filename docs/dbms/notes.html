@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数据库学习笔记</title>
+<link rel="stylesheet" href="/whitey.css">
+<link rel="icon" href="/favicon.svg">
+
+<link href="/prism.css" rel="stylesheet"/>
+
+
+<head>
+
+<body>
+
+<div class="content">
+
+<h1>数据库学习笔记</h1>
+<div class="light">作者：τ</div>
+<div class="light">日期：2020-11-26</div>
+
+<h2 id="data-models">Data Models</h2>
+<p>A <u>data model</u> is collection of concepts for describing the data in a database.</p>
+<p>A <u>schema</u> is a description of a particular collection of data, using a given data model.</p>
+<p><strong>Data Models:</strong></p>
+<ul>
+<li>Relational</li>
+<li>Key/Value</li>
+<li>Graph</li>
+<li>Document</li>
+<li>Column-family</li>
+<li>Hierarchical</li>
+<li>Network</li>
+<li>Multi-Value</li>
+</ul>
+<h3 id="relational-model">Relational Model</h3>
+<p>A <u>relation</u> is unordered set that contain the relationship of attributes that represent entities.</p>
+<p>A <u>tuple</u> is a set of attribute values in the relation.</p>
+<h4 id="keys">Keys</h4>
+<p>A relation's <u>primary key</u> uniquely identifiers a single tuple.</p>
+<p>A <u>foreign key</u> specifies that an attribute from one relation has to map to a tuple in another relation.</p>
+<h4 id="relational-algebra">Relational Algebra</h4>
+<ul>
+<li><strong>Select</strong>: Choose a subset of the tuples from a relation that satisfies a selection predicate.</li>
+</ul>
+<p>$$\sigma_{predicate}(R)$$</p>
+<ul>
+<li><strong>Projection</strong>: Generate a relation with tuples that contains only the specified attributes.</li>
+</ul>
+<p>$$\pi_{A_1, A_2, ..., A_n}(R)$$</p>
+<ul>
+<li><strong>Union</strong>:</li>
+</ul>
+<p>$$R \cup S$$</p>
+<ul>
+<li><strong>Intersection</strong>:</li>
+</ul>
+<p>$$R \cap S$$</p>
+<ul>
+<li><strong>Diffrence</strong>: Generate a relation that contains only the tuples that appear in the first and not the second of the input relations.</li>
+</ul>
+<p>$$R-S$$</p>
+<ul>
+<li><strong>Product</strong>: Generate a relation that contains all possible combinations of tuples from the input relations.</li>
+</ul>
+<p>$$R \times S$$</p>
+<ul>
+<li><strong>Join</strong>: Generate a relation  that contains all tuples that are a combination of two tuples with a common value(s) for one or more attributes.</li>
+</ul>
+<p>$$R\bowtie S$$</p>
+<ul>
+<li><strong>Rename</strong>:</li>
+</ul>
+<p>$$\rho$$</p>
+<ul>
+<li><strong>Assignment</strong>:</li>
+</ul>
+<p>$$R \leftarrow S$$</p>
+<ul>
+<li><strong>Duplicate Elimination</strong>:</li>
+</ul>
+<p>$$\delta (R)$$</p>
+<ul>
+<li><strong>Aggregation</strong>:</li>
+</ul>
+<p>$$\gamma$$</p>
+<ul>
+<li><strong>Sorting</strong>:</li>
+</ul>
+<p>$$\tau$$</p>
+<ul>
+<li><strong>Division</strong>:</li>
+</ul>
+<p>$$R \div S$$</p>
+<h2 id="sql">SQL</h2>
+
+
+</div>
+
+</body>
+
+
+
+
+
+<script src="/prism.js"></script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      extensions: ["tex2jax.js"],
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+      },
+      "HTML-CSS": { availableFonts: ["TeX"] }
+    });
+</script>
+
+</html>
