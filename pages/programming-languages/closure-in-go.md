@@ -26,6 +26,13 @@ func NewCounter(init int) func() int {
 // _ = c()
 ```
 
+这里的函数内的局部变量 `a` 在 `NewCounter` 函数执行结束后并没有消失，我们可以调用返回的 closure `c` 来继续修改 `a`。这就是 closure 特殊的本领。
+
+我们可以自然地想到两个问题：
+
+1. 被 closure 用到的变量内存是怎么分配的（显然不能简单地应用局部变量就分配在栈上的简单规则了）？
+2. closure 是怎么被调用的，它使用的外部的变量（上例中的 `a`）是怎么传递给它的？
+
 如果 `NewCounter` 中没有 closure，那么变量 `a` 的生命周期在函数执行到 return 的时候就结束了。因为 closure 的存在，编译器会特殊处理 `a`，让它在 `NewCounter` 结束后还继续存活。这样的局部变量就到堆上分配内存空间，以便在声明它的函数执行结束之后，外部还能够访问到它。
 
 但是并非所有被 closure 引用的变量生命周期都会拓展、都需要在堆上分配内存。例如下面的例子，`res` 被 `add4` 使用了，但是 `res` 就只会分配在栈上。这是因为在 `Foo` 执行结束后，程序就不可能用别的（正常的）方式访问到变量 `res` 了。
@@ -50,9 +57,9 @@ func Bar(n int) int {
 - 占用内存大小小于 128 bytes
 - 被捕获后不会被重新赋值
 
-逃逸分析就更加复杂了，需要对 AST 应用[数据流分析](https://en.wikipedia.org/wiki/Data-flow_analysis)。
+逃逸分析就更加复杂了，需要对 AST 应用[数据流分析](https://en.wikipedia.org/wiki/Data-flow_analysis)，这里不详细展开细节了。
 
-go 语言提供了一些编译时的参数，可以输出逃逸分析和捕获变量的信息。我们可以使用命令 `go tool compile -l -m -m [filename]` 来输出相关信息。
+go 编译器自带了一些非常实用的功能，我们即使不了解具体规则也能知道变量的捕获方式和是否逃逸到堆上。我们可以使用命令 `go tool compile -l -m -m [filename]` 来输出相关信息。
 
 例如对于上面第一个代码片段，我们可以得到下面的输出：
 
@@ -71,9 +78,9 @@ foo.go:4:6: moved to heap: a
 foo.go:5:9: func literal escapes to heap
 ```
 
-我们可以看到 `a` 变量逃逸到堆上。返回的 closure 也在堆上分配空间，但是这里并非指 closure 代码被放在堆上。
+我们可以看到 `a` 变量是 captured by reference，并且逃逸到堆上。返回的 closure 也在堆上分配空间，但是这里为 closure 分配的内存空间并非是用来放 closure代码的。
 
-要搞清楚 closure 在堆上存了些什么信息，我们可以去看看编译出的汇编代码。
+要搞清楚 closure 在堆上存了些什么信息，我们可以去看看编译后的汇编代码。
 
 ```assembly
 "".NewCounter STEXT size=157 args=0x10 locals=0x20 funcid=0x0
@@ -189,11 +196,11 @@ func Bar() {
 
 至此，我们可以大致总结 closure 在汇编层面的实现如下：
 
-1. 编译器为 closure 生成特别的对象（`struct {F intptr; closed variables...}`）来保存函数指针和 closed variable；
+1. 编译器为 closure 生成特别的结构（`struct {F intptr; closed variables...}`）来保存函数指针和 closed variable；
 2. closure 函数的汇编中 DX 寄存器的值是这个 closure 对象的指针，通过 DX 可以访问到这个 closure 的 closed variable；
 3. 调用 closure 前需要先设置 DX 寄存器的值为 closure 对象的指针。
 
-那么调用函数的地方如何区分这个函数是普通的函数还是一个 closure？对于一部分函数调用，我们可以静态地分析出来被调用的具体的函数，由此我们可以直接确定调用的方式。其他部分都按照 closure 调用处理，把“函数指针”（对普通函数来说这是一个函数指针，对于 closure 来说这是 closure 对象）赋值给 DX 寄存器——如果被调用的函数是个普通函数，它直接忽略这个 DX 寄存器即可；closure 则能通过 DX 访问 closed variable。读者可以自行用下面的代码验证一下：
+那么调用函数的地方如何区分这个函数是普通的函数还是一个 closure？对于一部分函数调用，我们可以静态地分析出来被调用的具体的函数，由此可以直接确定调用的方式。其他部分都按照 closure 调用处理，把“函数指针”（对普通函数来说这是一个函数指针，对于 closure 来说这是 closure 对象）赋值给 DX 寄存器——如果被调用的函数是个普通函数，它直接忽略这个 DX 寄存器即可；closure 则能通过 DX 访问 closed variable。读者可以自行用下面的代码验证一下：
 
 ```go
 func Call(v int, fn func(i int)) {
@@ -201,7 +208,7 @@ func Call(v int, fn func(i int)) {
 }
 ```
 
-另外这里 closed variable 并非全是指针，也有一部分是非指针类型。是否是指针是由 captured by value 或者 captured by reference 决定的，例如下面的代码 closure 对象的类型就是 `struct { F uintptr; i int }`
+另外这里 closed variable 并非全是指针，也有一部分是非指针类型。是否是指针是由 captured by value 或者 captured by reference 决定的。例如下面的代码 closure 对象的类型就是 `struct { F uintptr; i int }`，因为这个 closure 中变量以 reference 的方式被捕获了（满足上面的 captured by value 的条件）。
 
 ```go
 package closures
