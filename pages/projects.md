@@ -11,7 +11,7 @@ hide: true
 <a href="https://github.com/yangtau/hbs"><img style="margin:2px" src="https://gh-card.dev/repos/yangtau/hbs.svg"></a>
 HBS 是我的本科毕业设计。
 HBS 为 HBase 提供了 ACID 语义的事务支持。它使用 multi-version timestamp ordering 和 write-snapshot isolation 结合的并发控制算法，
-两阶段提交的策略。理论上，HBS 应该具有非常好的可拓展性，同时提供了最高可串行化的隔离级别。
+两阶段提交的策略。理论上，HBS 应该具有非常好的可拓展性，同时提供了最高可串行化的隔离级别。论文：https://yangtau.me/achieved/undergraduate_thesis.pdf
 
 
 ### Hedgehog
