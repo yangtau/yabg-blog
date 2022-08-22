@@ -1,0 +1,48 @@
+name: deploy
+
+on:
+  push:
+    # branches: [ main ]
+
+jobs:
+  build-site:
+    runs-on: ubuntu-latest # or macOS-latest, or windows-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/cache@v3
+        id: cache-site
+        with:
+          path: |
+            _site
+            _cache
+            dist
+            dist-newstyle
+            ~/.cabal
+          key: ${{ runner.os }}-site
+
+      - uses: haskell/actions/setup@v2
+        with:
+          ghc-version: '8.8' # Resolves to the latest point release of GHC 8.8
+          cabal-version: '3.0.0.0' # Exact version of Cabal
+
+      - name: Build
+        run: cabal run -j8 site build
+
+      - name: Commit files
+        run: |
+          git config --local user.email "32403743+yangtau@users.noreply.github.com"
+          git config --local user.name "github-actions"
+          rm -rf docs && mv _site docs
+          touch docs/CNAME && echo "yangtau.me" > docs/CNAME
+          git add docs/
+          git commit -m "Add changes"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-page
+          force: true
