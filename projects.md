@@ -11,14 +11,13 @@ hide: true
 <a href="https://github.com/yangtau/hbs"><img style="margin:2px" src="https://gh-card.dev/repos/yangtau/hbs.svg"></a>
 HBS 是我的本科毕业设计。
 HBS 为 HBase 提供了 ACID 语义的事务支持。它使用 multi-version timestamp ordering 和 write-snapshot isolation 结合的并发控制算法，
-两阶段提交的策略。理论上，HBS 应该具有非常好的可拓展性，同时提供了最高可串行化的隔离级别。论文：https://yangtau.me/achieved/undergraduate_thesis.pdf
-
+两阶段提交的策略。理论上，HBS 应该具有非常好的可拓展性，同时提供了最高可串行化的隔离级别，参观[论文](/images/undergraduate_thesis.pdf)
 
 ### Hedgehog
 <a href="https://github.com/yangtau/hedgehog"><img style="margin:2px" src="https://gh-card.dev/repos/yangtau/hedgehog.svg"></a>
 一门简单的脚本语言，是我为了学习编译相关知识而写的。我希望它有以下特性：简洁的语法，限制较为宽松的函数式编程范式，不错的性能，极高的编程效率。
 目前仅仅实现了基础的功能，我将来会持续完善它。
-这里有一篇博客介绍它的设计和实现的博客：[Hedgehog 的设计与实现](https://yangtau.me/programming-languages/design-and-implementation-of-hedgehog.html)。
+这里有一篇博客介绍它的设计和实现的博客：[Hedgehog 的设计与实现](/posts/2020-07-04-design-and-implementation-of-hedgehog.html)。
 
 ### 单周期 MIPS CPU
 <a href="https://github.com/yangtau/mips-cpu"><img style="margin:2px" src="https://gh-card.dev/repos/yangtau/mips-cpu.svg"></a>
