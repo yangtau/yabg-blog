@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>τ's Blog - Hedgehog: 写一个简单的编程语言解释器</title>
+        <link rel="stylesheet" href="../css/default.css" />
+        <link href="../css/prism.css" rel="stylesheet" />
+        <link rel="icon" href="../favicon.svg">
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <a href="../">τ's Blog</a>
+            </div>
+            <nav>
+                <a href="../">Home</a>
+                <a href="../archive.html">Archive</a>
+            </nav>
+        </header>
+
+        <main role="main">
+            <h1>Hedgehog: 写一个简单的编程语言解释器</h1>
+            <article>
+    <div class="light">
+        Posted on February 18, 2019
+        
+            by τ
+        
+    </div>
+    <section>
+        <blockquote>
+<p>2022-8-22: 大二时写的幼稚的东西，现在 Hedgehog 又迭代了很多此，下文中的内容参考代码 <a href="https://github.com/yangtau/hedgehog/tree/v0.0.0">hedegehog v0.0.0</a></p>
+</blockquote>
+<p>我用 C 语言写了一个简单的动态语言解释器，代码放在了 github 上面：<a href="https://github.com/yangtau/hedgehog">hedegehog</a>。</p>
+<p>先简单介绍下这门语言。hedgehog 的多数设计和 python 比较相似，无需声明变量类型，<code>if</code>,<code>for</code> 等语句没有块级作用域。 语法上又有点像 go 语言： <code>if</code>, <code>for</code> 不需要 <code>()</code>, 但是后面的代码块都必须加 <code>{}</code>； 没有 <code>while</code>, 不过有 <code>for condition {}</code> 来替代。不过行尾必须加 <code>;</code> 这点和 go 不同。大多数设计都是为了简化实现方式，比如必须加 <code>{}</code>, <code>;</code> 是为了简化语法的解析。</p>
+<p>[TOC]</p>
+<h2 id="已实现的功能">已实现的功能</h2>
+<ul>
+<li>数据类型</li>
+</ul>
+<pre class="hg"><code>a = 10;                 // int
+b = 3.14;               // float
+c = true;               // boolean
+d = null;               // null
+s = &quot;Hello, World!&quot;;    // string</code></pre>
+<ul>
+<li>控制语句</li>
+</ul>
+<pre class="hg"><code>a = 10;
+if a &gt; 10 { // `()` is not necessary.
+    b = a+20;
+} elsif a==10 {
+    b = a+10;
+} else {
+    b = a-10;
+}
+print(b);
+// block has no local environment,
+// so 'b' is a global variable.</code></pre>
+<ul>
+<li>循环</li>
+</ul>
+<pre class="hg"><code>for i=0; i&lt;10; i=i+1 {
+    print(i);
+    if i&gt;=4 {break;}
+}
+i = 0;
+for i&lt;10 {
+    if i&lt;5 {continue;}
+    print(i);
+}</code></pre>
+<ul>
+<li>函数
+function 也被看作一种值 ( 基本数据类型 ), 不过目前还没有对它实现垃圾回收，所以直接以函数赋值或者其他操作会出现内存错误。</li>
+</ul>
+<pre class="hg"><code>// 模仿 python 首页的函数：)
+func fbi(n) {
+    a, b = 0, 1;
+    for a&lt;n {
+        print(a);
+        a, b = b, a+b;// 支持这种赋值方式
+    }
+}
+fbi(100);</code></pre>
+<pre class="hg"><code>func factorial(n) {
+    if n==0 {return 1;}
+    return n*factorial(n-1);
+}
+print(factorial(5));</code></pre>
+<p>目前只实现了一个原生函数 <code>print</code>。<code>print</code> 接收一个基本数据类型作为参数，输出并换行，或者无参数，直接换行。</p>
+<ul>
+<li>运算符
+大多数与 c 保持一致，除了 <code>&amp;</code>, <code>|</code>。因为没有提供位运算的功能，所以直接用这两个符号表示逻辑与和逻辑或。</li>
+</ul>
+<pre class="hg"><code>b = 2;
+a = 10;
+if a&gt;20 &amp; b&lt;10 {
+    print(&quot;`b` is less than 10 and `a` is greater than 20&quot;);
+}
+if a&gt;20 | b&lt;10 {
+    print(&quot;`b` is less than 10 or `a` is greater than 20&quot;);
+}</code></pre>
+<h2 id="概述">概述</h2>
+<p><img src="../images/interpreter-process.webp" /></p>
+<p>首先词法分析和语法分析，构建分析树。这里以 <code>a=1+2*3+fn();</code> 为例，介绍一下表达式分析树的构建。</p>
+<p>首先，它是一个赋值表达式，把右边的值 <code>1+2*3+fn()</code> 赋给左边的变量 <code>a</code>。而 <code>1+2*3+fn()</code> 又由加法表达式，乘法表达式，函数调用表达式构成。yacc 中编写的规则会约束表达式构建的顺序，构建过程大概是这样的：</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> <span class="dv">3</span> <span class="op">+</span> fn<span class="op">()</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>identifier <span class="op">=</span> value <span class="op">+</span> value <span class="op">*</span> value <span class="op">+</span> function_call <span class="co">// 词法分析</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>identifier <span class="op">=</span> value <span class="op">+</span> value <span class="op">*</span> value <span class="op">+</span> value <span class="co">// function_call 约归为 value</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>identifier <span class="op">=</span> value <span class="op">+</span> multiply_expression <span class="op">+</span> value <span class="co">// 根据规则，先生成乘法表达式</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>identifier <span class="op">=</span> add_expression <span class="op">+</span> value <span class="co">// 把前两项归约为加法表达式</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>identifier <span class="op">=</span> add_expression <span class="co">// 继续归约 ( 加法运算遵循从左到右 )</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>identifier <span class="op">=</span> expression <span class="co">// 归约为更一般的普通表达式</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>assgin_expression <span class="co">// 匹配到赋值表达式的规则，归jj为赋值表达式</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>expression <span class="co">// 赋值表达式归约为一般表达式</span></span></code></pre></div>
+<p>然后就可以构建了下面的分析树了：</p>
+<p><img src="../images/interpreter-parse-tree.webp" /></p>
+<p>求值的时候从最底层依次往上求值，就能得到表达式的值。</p>
+<h2 id="语法与词法分析">语法与词法分析</h2>
+<p>这部分直接使用 lex 做词法分析，yacc 做语法分析。这两个工具在大多数 UNIX 上都有预装，GUN 提供的版本分别叫 bison, flex。直接用 bison 生成的文件可能和 yacc 有些区别 ( 需要修改生成文件的的文件名，或者改 c 语言文件中包含的头文件名 ), 不过在 Linux 下安装了 bison 可以直接使用 yacc 命令。flex 与 lex 生成文件没有区别。</p>
+<p>yacc 与 lex 网上有大量的资料，而且使用比较简单，这里就仅作简单的介绍。</p>
+<p>lex 可以使用正则表达式做匹配：</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode flex"><code class="sourceCode lex"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>&quot;func&quot; return FUNCTION;//func 函数定义关键字</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>[A-Za-z_][A-Za-z0-9_]* {</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>	<span class="co">// 辨识符匹配</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    yylval<span class="op">.</span>identifier <span class="op">=</span> initString<span class="op">(</span>yytext<span class="op">);</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> IDENTIFIER<span class="op">;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>这里的 <code>FUNCTION</code> 和 <code>IDENTIFIER</code> 被称为 token, 一般在 yacc 的文件中定义。在生成的 C 语言文件中 token 用枚举变量表示。</p>
+<p>lex 词法分析的结果会交给 yacc 处理。yacc 使用类似 BNF 的规范来编写规则。</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode yacc"><code class="sourceCode yacc"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 加法表达式由乘法表达式归约，这样可以限制乘法 ( 除法，取模 ) 优先于</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">// 加法 ( 减法 ) 运算</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>ADD_EXPRESSION:</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    MUL_EXPRESSION</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    |</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    ADD_EXPRESSION ADD MUL_EXPRESSION {</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        $$ = initBinaryExpression(ADD_OPERATOR, $1, $3);</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    |</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    ADD_EXPRESSION SUB MUL_EXPRESSION {</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        $$ = initBinaryExpression(SUB_OPERATOR, $1, $3);</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    ;</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>MUL_EXPRESSION:</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    UNARY_EXPRESSION<span class="co">// 单个单目运算表达式直接归约到乘法表达式</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    |</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    MUL_EXPRESSION MUL UNARY_EXPRESSION {</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>        $$ = initBinaryExpression(MUL_OPERATOR, $1, $3);</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    |</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    MUL_EXPRESSION DIV UNARY_EXPRESSION {</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>        $$ = initBinaryExpression(DIV_OPERATOR, $1, $3);</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    |</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    MUL_EXPRESSION MOD UNARY_EXPRESSION {</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>        $$ = initBinaryExpression(MOD_OPERATOR, $1, $3);</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    ;</span></code></pre></div>
+<p>词法分析和语法分析属于解释器的前端，这部分没有自己编写，主要把精力放在了后端。</p>
+<h2 id="表达式与语句">表达式与语句</h2>
+<p>表达式与语句是整个后端最重要的两个模块，大部分的逻辑都在两者中实现。这里主要介绍一下表达式，语句与之类似。</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// expression.h</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> ExpressionTag <span class="op">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> <span class="op">(*</span>free<span class="op">)(</span>Expression <span class="op">*</span>self<span class="op">);</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    Value <span class="op">(*</span>evaluate<span class="op">)(</span>Expression <span class="op">*</span>self<span class="op">,</span> Environment <span class="op">*</span>env<span class="op">);</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    Expression <span class="op">*</span>pre<span class="op">;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>这是表达式接口的结构体，<code>free</code> 和 <code>evaluate</code> 是 C 语言中的函数指针，定义了所有表达式都应该具备的方法。这个 <code>pre</code> 看起来有些突兀，它其实是为了函数传参和多变量同时赋值时链接表达式使用的。比如 <code>a, b = 1, 2;</code>, <code>1, 2</code> 会分别解析为两个表达式，通过 <code>pre</code> 链接。这样的设计可能不符合面向对象，不过为了实现链表更加简单，就暂时这样写了。</p>
+<p>所有需要释放内存的结构体都有 <code>free</code> 函数指针，所以可以定义一个简单的宏 <code>#define del(x) x-&gt;free(x)</code>, 使用 <code>del(obj)</code> 就可以释放内存了。</p>
+<p>下面以赋值表达式介绍一下赋值表达式的实现过程。</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// expression.h</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>initAssignExpression<span class="op">(</span>String <span class="op">*</span>id<span class="op">,</span> Expression <span class="op">*</span>expression<span class="op">)</span></span></code></pre></div>
+<p>向外提供的唯一接口是 <code>initAssignExpression</code>, 也就是说所有一般的表达式在模块外引用时都会被向上转型为 <code>Expression</code>, 只有 <code>free</code> 和 <code>evaluate</code> 两个方法。</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">// expression.c</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    Expression base<span class="op">;</span><span class="co">//base 必须放在第一个，保证类型转换时的正确性</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    String <span class="op">*</span>id<span class="op">;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    Expression <span class="op">*</span>expression<span class="op">;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> AssignExpression<span class="op">;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> Value evaluateAssignExpression<span class="op">(</span>Expression <span class="op">*</span>_self<span class="op">,</span> Environment <span class="op">*</span>env<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    AssignExpression <span class="op">*</span>self <span class="op">=</span> <span class="op">(</span>AssignExpression <span class="op">*)</span> _self<span class="op">;</span><span class="co">// 向下转型为 `AssignExpression`</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    Value value <span class="op">=</span> self<span class="op">-&gt;</span>expression<span class="op">-&gt;</span>evaluate<span class="op">(</span>self<span class="op">-&gt;</span>expression<span class="op">,</span> env<span class="op">);</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 字符串采用引用计数</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    on_self<span class="op">(</span>self<span class="op">-&gt;</span>id<span class="op">,</span> refer<span class="op">);</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 把变量加到 environment, 后文会介绍</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    env<span class="op">-&gt;</span>addVariable<span class="op">(</span>env<span class="op">,</span> initVariable<span class="op">(</span>self<span class="op">-&gt;</span>id<span class="op">,</span> value<span class="op">));</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> value<span class="op">;</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">void</span> freeAssignExpression<span class="op">(</span>Expression <span class="op">*</span>_self<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    AssignExpression <span class="op">*</span>self <span class="op">=</span> <span class="op">(</span>AssignExpression <span class="op">*)</span> _self<span class="op">;</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    del<span class="op">(</span>self<span class="op">-&gt;</span>expression<span class="op">);</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    on_self<span class="op">(</span>self<span class="op">-&gt;</span>id<span class="op">,</span> release<span class="op">);</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    free<span class="op">(</span>self<span class="op">);</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="co">// 绑定函数</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">static</span> Expression AssignExpressionBase <span class="op">=</span> <span class="op">{</span>freeAssignExpression<span class="op">,</span>evaluateAssignExpression<span class="op">};</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>initAssignExpression<span class="op">(</span>String <span class="op">*</span>id<span class="op">,</span> Expression <span class="op">*</span>expression<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    AssignExpression <span class="op">*</span>exp <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span>AssignExpression<span class="op">));</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    exp<span class="op">-&gt;</span>expression <span class="op">=</span> expression<span class="op">;</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 给 base 赋值，函数的绑定在 new 的时候完成</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>    exp<span class="op">-&gt;</span>base <span class="op">=</span> AssignExpressionBase<span class="op">;</span></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>    exp<span class="op">-&gt;</span>id <span class="op">=</span> id<span class="op">;</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> exp<span class="op">;</span></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>AssignExpression</code> 的结构体和除 <code>init</code> 外方法都在 .c 文件中实现，并且标记为 <code>static</code>, 从而就实现了封装。在 <code>init</code> 中实现函数的绑定，以 <code>Expression</code> 引用的时候就能调用相应的方法，这就实现了多态。</p>
+<p>其他的表达式根据具体的功能如法炮制。</p>
+<p>语句的实现也是类似：</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> StatementTag <span class="op">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    StatementResult <span class="op">(*</span>execute<span class="op">)(</span>Statement <span class="op">*</span>self<span class="op">,</span> Environment <span class="op">*</span>env<span class="op">);</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> <span class="op">(*</span>free<span class="op">)(</span>Statement <span class="op">*</span>self<span class="op">);</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    Statement <span class="op">*</span>next<span class="op">;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<h2 id="解释器与运行环境">解释器与运行环境</h2>
+<h3 id="environment">Environment</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> EnvironmentTag <span class="op">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> <span class="op">(*</span>addVariable<span class="op">)(</span>Environment <span class="op">*</span>self<span class="op">,</span> Variable <span class="op">*</span>var<span class="op">);</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    Variable <span class="op">*(*</span>findVariable<span class="op">)(</span>Environment <span class="op">*</span>self<span class="op">,</span> String <span class="op">*</span>id<span class="op">);</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> <span class="op">(*</span>free<span class="op">)(</span>Environment <span class="op">*</span>self<span class="op">);</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    VariableTrie <span class="op">*</span>trie<span class="op">;</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>initEnvironment<span class="op">();</span></span></code></pre></div>
+<p>运行环境主要负责变量和函数的保存，查找。Global environment 保存所有的全局变量和函数。函数有独立于 global environment 的 local environment。<code>for</code>, <code>if</code> 等语句块没有 environment, 它们使用所在函数或者全局的 environment。</p>
+<p>Environment 中的 <code>trie</code> 是字典树，负责记录变量名和函数名。</p>
+<h3 id="interpreter">Interpreter</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> InterpreterTag <span class="op">{</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    Environment <span class="op">*</span>globalEnv<span class="op">;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    StatementList <span class="op">*</span>list<span class="op">;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> <span class="op">(*</span>free<span class="op">)(</span><span class="kw">struct</span> InterpreterTag <span class="op">*);</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> <span class="op">(*</span>compile<span class="op">)(</span><span class="kw">struct</span> InterpreterTag <span class="op">*,</span> <span class="dt">FILE</span> <span class="op">*);</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> <span class="op">(*</span>interpret<span class="op">)(</span><span class="kw">struct</span> InterpreterTag <span class="op">*);</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> Interpreter<span class="op">;</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>Interpreter <span class="op">*</span>initInterpreter<span class="op">();</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>Interpreter <span class="op">*</span>getCurrentInterpreter<span class="op">();</span></span></code></pre></div>
+<p>Interpreter 中 <code>compile</code> 实现分析树的构建，<code>interpret</code> 实现语句的执行。因为全局只需要一个 interpreter, 所以别的地方可以通过 <code>getCurrentInterpreter</code> 获取当前 interpreter。</p>
+<h2 id="总结">总结</h2>
+<p>整个解释器的大概构成就是这样。目前只实现了一些简单的功能，数组，字典，垃圾回收 ( 目前只对字符串做了引用计数回收 ), 文件 IO 等特性都还没有写。而且完全没有优化，运行效率极低。不过写这个解释器的时候还是收获不少： 深入学习了 C 语言，对编译原理有了大概的了解, 更加深刻地理解了面向对象。</p>
+    </section>
+</article>
+
+        </main>
+
+        <footer>
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </footer>
+    </body>
+
+    <script src="../js/prism.js"></script>
+
+</html>

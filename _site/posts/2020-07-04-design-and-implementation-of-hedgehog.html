@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>τ's Blog - Hedgehog 的设计与实现</title>
+        <link rel="stylesheet" href="../css/default.css" />
+        <link href="../css/prism.css" rel="stylesheet" />
+        <link rel="icon" href="../favicon.svg">
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <a href="../">τ's Blog</a>
+            </div>
+            <nav>
+                <a href="../">Home</a>
+                <a href="../archive.html">Archive</a>
+            </nav>
+        </header>
+
+        <main role="main">
+            <h1>Hedgehog 的设计与实现</h1>
+            <article>
+    <div class="light">
+        Posted on July  4, 2020
+        
+            by τ
+        
+    </div>
+    <section>
+        <p>Hedgehog 是我在编译课上完成的一门编程语言, 其目的是学习编译原理相关知识。它语法简洁，动态类型，内置 List，Map 等常用数据结构，运行在栈式虚拟机上。本文将简单介绍这门玩具式的编程语言，以及我在设计实现它的过程中的一些思考。它的源码开源在了 Github 上： <a href="https://github.com/yangtau/hedgehog">hedgehog</a>，欢迎 star、fork 和提 issue。</p>
+<p>[TOC]</p>
+<h2 id="前言">前言</h2>
+<p>Hedgehog 的设计目标是一门像 Python，Ruby 那样容易上手，语法简单，编程效率高，功能足够强大的脚步语言。
+首先它的定位是一门脚步语言，目的是能够快速编写帮助程序员处理琐事的代码。
+这意味着它要有足够强的表达能力，能用一句简单的话就能表达复杂的语义。
+其次它应该是动态类型的，让用户在编写逻辑功能的时候不会受限于具体的类型。
+它还应是高效的，高效指的是代码编写的效率而非代码执行的效率。
+过去（现在也是），我们常常将目光局限于运行的高效，编写代码的效率常常被忽视。
+然而，如果一门语言能够在编写代码上做到高效，意味着程序员能够将部分繁琐的工作快速地表示成为代码，也能够高效为已有系统添加新的功能。
+这也是为什么 Python 这门执行效率并不高的语言能够如此受欢迎的原因。</p>
+<p>但是 Python 在设计上的遗憾。例如 Python 虽然号称支持多范式编程，但是它对函数式编程的支持相当鸡肋。
+例如这样的代码 <code>list(map(lambda x: x*x, [1, 2, 3]))</code>, 由于语法的限制，Python 的匿名函数只能写在一行，不能过于复杂。
+同时像 <code>map</code>，<code>reduce</code> 这些高阶函数在 Python 的实现中少了函数式本身的优雅，更像是将函数式编程强行加在了面向对象的语言中。
+上面那行代码在 Python 中更加常见的写法是 <code>[x*x for x in [1, 2, 3]]</code>，看起来优雅了不少，但是表达能力上也弱了很多。
+而 Ruby 在这方面显然做得更加出色，在 Ruby 中我们会这样写 <code>[1, 2, 3].map {|x| x*x}</code>。
+这个例子相对简单，三个写法看起来没有特别大的差别。但是处理更加复杂的逻辑的时候，Ruby 会更加游刃有余。</p>
+<p>Ruby 在我心中已经相当出色了。但是它最大的问题是执行效率非常低，这也使得它没能被更加广泛地应用。
+它最初的执行方式是直接执行语法树，在后面的版本中改进为了在栈式虚拟机上执行。不过，这并没有根本性地改变现状。
+Ruby 复杂的语法设计（用 YACC 描述的语法文件有上万行），还有复杂的语义，让 Ruby 拥有极强表达能力的同时也为性能优化埋下了祸根。</p>
+<p>Hedgehog 在设计实现中，会尽量多地去吸收 Python 和 Ruby 的优点，同时避免两者设计上的缺憾。目前 Hedgehog 仍然处于初级阶段，还在实现一些最最基础的功能。之后我会继续探索如何去完成我的设计目标。</p>
+<h3 id="已实现的功能">已实现的功能</h3>
+<ul>
+<li>类型：整数，浮点数，字符串，数组，字典（hash 表）</li>
+<li>控制结构：<em>ifs</em> &amp; <em>whiles</em></li>
+<li>函数</li>
+</ul>
+<h3 id="计划之中的功能">计划之中的功能</h3>
+<ul class="task-list">
+<li><input type="checkbox" disabled />闭包</li>
+<li><input type="checkbox" disabled checked />垃圾回收</li>
+<li><input type="checkbox" disabled />高阶函数 (map, reduce, filter 等)</li>
+<li><input type="checkbox" disabled />用户自定义类型</li>
+<li><input type="checkbox" disabled />标准库（内置数据结构相关库，文件读写库，网络库）</li>
+</ul>
+<h2 id="使用">使用</h2>
+<p>下面简单说明如何编译、使用 Hedgehog。</p>
+<p><strong>环境要求：</strong></p>
+<ul>
+<li>GCC</li>
+<li>bison &amp; flex</li>
+</ul>
+<p><strong>编译：</strong></p>
+<p>首先从 Github 上下载或者克隆项目，然后编译。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/yangtau/hedgehog.git</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> hedgehog</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div>
+<p><strong>运行：</strong></p>
+<p>之后在 src 目录下会生成名为 hg 的可执行文件，它接受一个文件名字符串作为输入，然后执行该文件。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./src/hg</span> examples/test.hg</span></code></pre></div>
+<h2 id="设计">设计</h2>
+<h3 id="语法设计">语法设计</h3>
+<p>一门编程语言的语法（我这里说的语法包含了它的词法），很大程度上决定了它的使用体验。
+在设计 Hedgehog 的语法的时候，我参考了很多 Rust、Ruby 的设计，同时也按照自己的想法做出了改进。
+具体的语法细节可以在 <code>src/parse.y</code> 文件中查看，我这里更想谈两个设计上的小细节上。</p>
+<h4 id="表达式分割符">表达式分割符</h4>
+<p>在很多编程语言中，表达式结束符一般是 <code>;</code>。例如 C 语言每条语句后必须加 <code>;</code>。
+为了让语法更加简洁，我选择了 Python、Ruby 的方案，即用换行符来分割表达式。
+但是这一设计带来了很多的问题。例如下面这个例子：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>let a <span class="kw">=</span> c <span class="kw">+</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>        b</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">puts</span>(a)</span></code></pre></div>
+<p>如果粗暴地使用换行符来分割语句，那么上述代码在语法解析过程中就应该报错。
+但是这样的写法应当是符合人们的习惯的，在一条语句过长的时候，我们也常常会分割成两行来写。
+解决这个问题的方法是在词法解析的时候忽略 <code>+</code> 后面的换行符，用 LEX 实现如下：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode lex"><code class="sourceCode lex"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">TRAIL  </span><span class="st">([\t \n]|&quot;#&quot;[^\n]*&quot;\n&quot;)*</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bn">%%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;+&quot;{TRAIL}</span>                      LEX_RETURN<span class="op">(</span>op_add<span class="op">);</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">...</span></span></code></pre></div>
+<p>不过这需要相当谨慎，不是所有的符号都会忽略其后的换行符，在忽略换行符的时候要非常谨慎。</p>
+<p>例如下面的代码：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> d <span class="op">=</span> a</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>		<span class="op">+</span> c</span></code></pre></div>
+<p>这到底是两条语句，还是一条呢？一个变量在行尾不应该忽略其后的换行符，所以应当是两条语句。
+但是，第二行的 <code>+</code> 没有语义上的意义，容许这样的写法容易产生歧义，让代码更加不可读。
+出现这样的写法多半是程序员的失误。</p>
+<p>还有其他一些小细节值得考虑，例如多个连在一起的换行符。显然不是每一个换行都对应着一条语句。可能是多对一的情况。还有一种可能在文件结尾根本就没有换行符，但是最后一条语句还是应当被解析。</p>
+<p>关于这个问题，JS 的处理非常有趣。JS 中表示语句结束的 <code>;</code> 是可选的，它会在预处理的过程中在每行代码的末尾自动加上 <code>;</code>。
+这样的做法容易导致 bug 了，举个例子:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>label<span class="op">:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">var</span> j<span class="op">=</span><span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> j<span class="op">++</span>) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">var</span> i<span class="op">=</span><span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">20</span><span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (i <span class="op">==</span> <span class="dv">10</span>) {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'i=10'</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span> label</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>label<span class="op">:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">var</span> j<span class="op">=</span><span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> j<span class="op">++</span>) {</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">var</span> i<span class="op">=</span><span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">20</span><span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (i <span class="op">==</span> <span class="dv">10</span>) {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'i=10'</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>      label</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>第一段代码会输出一行，而第二段代码输出会三行。原因是第二段代码中 <code>break</code> 语句末尾自动加上 <code>;</code> 而忽略了其后的 <code>label</code>。
+所以一般 JS 的代码规范中都会要求语句结束写 <code>;</code>。</p>
+<p>动态类型的语言在语义上的检查已经很宽松了，如果在语法上也放松要求、容许一些程序员显然的错误，就变成了 bug 的温床。
+JS 这样的设计真是得不偿失啊。</p>
+<p>总之，想要完美地去掉 <code>;</code> 真不是一件容易的事啊。我目前的想法是：<code>+</code> 这种二元操作符显然不能作为语句的结束，就忽略其后的换行符。
+而对于 <code>+</code> 写在语句开头这种情况就输出警告信息提醒程序员(因为这种写法虽然没有意义，但是在语法层面上是没有问题的)。</p>
+<h4 id="没有括号的函数调用">没有括号的函数调用</h4>
+<p>在很多纯函数式编程语言中函数调用不需要使用括号，例如 Haskell：</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Prelude</span><span class="op">&gt;</span> <span class="kw">let</span> add x y <span class="ot">=</span> x<span class="op">+</span>y</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Prelude</span><span class="op">&gt;</span> add <span class="dv">3</span> <span class="dv">4</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="dv">7</span></span></code></pre></div>
+<p><code>add</code> 函数在定义和调用过程中都没有用到括号。</p>
+<p>首先说说这样做的好处：</p>
+<ol type="1">
+<li>统一函数和普通数据。事实上，在 Haskell 中几乎一切都是函数: 变量 <code>x</code> 可以视为调用一个名为 <code>x</code> 的函数(它没有参数)，它会返回某个固定的值。
+常量 <code>3</code> 可以视为调用一个没有参数返回值为 3 的函数。这样的设计让编程语言在抽象层面可以做得更加纯粹。</li>
+<li>语法更加简洁。省略了括号、分割参数使用的逗号。</li>
+</ol>
+<p>坏处也是很明显的：</p>
+<ol type="1">
+<li>代码可读性降低。省略了括号使得函数调用更加不那么明显。</li>
+<li>语义上的歧义。在有的情况下很难分清到底是取值还是函数调用，需要对语法做出更加多的限制。
+例如 <code>fn -1</code>， 到底是 <code>fn</code> 减去 <code>1</code>，还是 <code>fn(-1)</code> 呢？在 Haskell 中是前者， 因为 <code>-</code> 的优先级要高于函数调用。
+而要表代后者的语义，需要写成 <code>fn (-1)</code>。还有的语言是通过 <code>-</code> 号后是否有空格来区分的，例如 F# 和 Ruby。</li>
+<li>语法分析的实现更加困难复杂。</li>
+</ol>
+<p>各种优劣权衡之下，我还是放弃了这个设计。</p>
+<h3 id="类型">类型</h3>
+<p>目前 Hedgehog 内置整数，浮点数，布尔值，空值，字符串，列表（List），字典 （Map）类型。
+后续会加入对用户自定义类型的支持，目前的想法是用户自定义类型就是一个字典类型的语法糖，类似于 JS 那样。</p>
+<p>整数直接使用 <code>int64_t</code> 实现，后期会考虑 Python 那种不限制大小的整数实现。</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 整数</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>let a <span class="kw">=</span> <span class="dv">100</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">puts</span>(a)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 浮点数</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>let b <span class="kw">=</span> <span class="fl">10.98737</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">puts</span>(b)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># boolean</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>let c, d <span class="kw">=</span> <span class="dv">true</span>, <span class="dv">false</span> <span class="co"># true, false</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">puts</span>(c, d)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># nothing</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>let <span class="dv">nil</span> <span class="kw">=</span> () <span class="co"># 相当于别的语言中的 NULL，Nil 或者 None，受启发自 Rust</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">puts</span>(<span class="dv">nil</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># list, 一个 list 中可以存不同类型的数据</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>let xs <span class="kw">=</span> <span class="kw">[</span>a, b, c, d, <span class="dv">nil</span><span class="kw">]</span> <span class="co"># 使用 [] 语法糖创建 List</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>let ys <span class="kw">=</span> <span class="dt">List</span>(<span class="dv">nil</span>, d, c, b, a) <span class="co"># 使用函数创建 List（注意：List 只是一个内置函数，而非 class 或者 type）</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="fu">puts</span>(<span class="st">&quot;xs =&quot;</span>, xs)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="fu">puts</span>(<span class="st">&quot;ys =&quot;</span>, ys)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># dict</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>let dict <span class="kw">=</span> <span class="kw">{</span><span class="st">&quot;age&quot;</span>: <span class="dv">22</span>,</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;name&quot;</span>: <span class="st">&quot;yangtau&quot;</span>,</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;email&quot;</span>: <span class="st">&quot;yangtau@mail.com&quot;</span>,</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;height&quot;</span>: <span class="fl">199.99</span>,</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;handsome&quot;</span>: <span class="dv">true</span>,</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>           <span class="kw">}</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="fu">puts</span>(dict)</span></code></pre></div>
+<h3 id="程序控制结构">程序控制结构</h3>
+<p>目前支持 <em>if-else</em>, <em>while</em> 两种基本的控制结构。后续会使用 map，reduce，filter 等高阶函数，还有模式匹配来替代传统的控制结构。
+<em>if-else</em>, <em>while</em> 的语法和 Rust 语言很相似，条件语句不需要加括号，程序块必须被包围在花括号内部。
+这里之所以没有引入 <em>for</em> 语句，是因为 <em>while</em> 完全足以代替它。
+而且后期引入了函数式的高阶函数，就更加希望它的使用者能够直接用 <code>map</code>, <code>reduce</code> 之类的操作。</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># if-else</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>let a <span class="kw">=</span> <span class="dv">100</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> a <span class="kw">&gt;=</span> <span class="dv">10</span><span class="kw">*</span><span class="dv">10</span> <span class="kw">{</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>	<span class="fu">puts</span>(<span class="st">&quot;a &gt;= 10*10&quot;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span> <span class="cf">else</span> <span class="cf">if</span> a <span class="kw">&lt;</span> <span class="dv">1000</span> <span class="kw">{</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>	<span class="fu">puts</span>(<span class="st">&quot;a &lt; 1000&quot;</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span> <span class="cf">else</span> <span class="kw">{</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>	<span class="fu">puts</span>(<span class="st">&quot;no idea&quot;</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># while</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>let i <span class="kw">=</span> <span class="dv">0</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> i <span class="kw">&lt;</span> <span class="dv">10</span> <span class="kw">{</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">puts</span>(i<span class="kw">*</span>i<span class="kw">+</span>i)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">=</span> i<span class="kw">+</span><span class="dv">1</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co"># sort</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> sort(ys, len) <span class="kw">{</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  let i <span class="kw">=</span> <span class="dv">0</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len <span class="kw">{</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    let j <span class="kw">=</span> <span class="dv">0</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> j <span class="kw">&lt;</span> len<span class="kw">-</span>i<span class="dv">-1</span> <span class="kw">{</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> ys<span class="kw">[</span>j<span class="kw">]</span> <span class="kw">&gt;</span> ys<span class="kw">[</span>j<span class="kw">+</span><span class="dv">1</span><span class="kw">]</span> <span class="kw">{</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>        ys<span class="kw">[</span>j<span class="kw">]</span>, ys<span class="kw">[</span>j<span class="kw">+</span><span class="dv">1</span><span class="kw">]</span> <span class="kw">=</span> ys<span class="kw">[</span>j<span class="kw">+</span><span class="dv">1</span><span class="kw">]</span>, ys<span class="kw">[</span>j<span class="kw">]</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>      j <span class="kw">=</span> j<span class="kw">+</span><span class="dv">1</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">=</span> i<span class="kw">+</span><span class="dv">1</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="kw">}</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>let ys  <span class="kw">=</span> <span class="kw">[</span><span class="dv">100</span>, <span class="dv">102</span>, <span class="dv">30</span>, <span class="dv">50</span>, <span class="dv">900</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">4</span>, <span class="dv">2</span><span class="kw">]</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="fu">puts</span>(<span class="st">&quot;before sort, ys =&quot;</span>, ys)</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>sort(ys, <span class="dv">10</span>)</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="fu">puts</span>(<span class="st">&quot;after sort, ys =&quot;</span>, ys)</span></code></pre></div>
+<h3 id="函数">函数</h3>
+<p>使用 <code>def</code> 关键词可以定义函数，函数名后是参数列表。后续将考虑修改函数的语法，使用 let 关键字定义函数，并加入对闭包、匿名函数的支持。</p>
+<p>下面是一段用递归的方式求值斐波拉契数列的程序。</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> fib(x) <span class="kw">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> x <span class="kw">==</span> <span class="dv">0</span> <span class="kw">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span> <span class="cf">else</span> <span class="cf">if</span> x <span class="kw">==</span> <span class="dv">1</span> <span class="kw">{</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span> <span class="cf">else</span> <span class="kw">{</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fib(x<span class="dv">-1</span>)<span class="kw">+</span>fib(x<span class="dv">-2</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>let i <span class="kw">=</span> <span class="dv">0</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> i <span class="kw">&lt;</span> <span class="dv">20</span> <span class="kw">{</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">puts</span>(fib(i))</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">=</span> i<span class="kw">+</span><span class="dv">1</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code></pre></div>
+<h2 id="实现">实现</h2>
+<h3 id="虚拟机的实现">虚拟机的实现</h3>
+<p>Hedgehog 目前的虚拟机是栈式的，它没有真实世界中 CPU 的寄存器。
+运算所需的数据和产生的数据都保存在了一个栈上。
+栈式虚拟机最大的好处是便于代码编译，坏处是性能可能不如寄存器式虚拟机。</p>
+<p>虚拟机目前支持下面这些指令：</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> opcode <span class="op">{</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 特殊常量:</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    OP_NIL<span class="op">,</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    OP_TRUE<span class="op">,</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    OP_FALSE<span class="op">,</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 运算:</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    OP_EQUAL<span class="op">,</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    OP_GREATER<span class="op">,</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    OP_LESS<span class="op">,</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    OP_GREATER_EQUAL<span class="op">,</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    OP_LESS_EQUAL<span class="op">,</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    OP_ADD<span class="op">,</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    OP_SUBTRACT<span class="op">,</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    OP_MULTIPLY<span class="op">,</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    OP_DIVIDE<span class="op">,</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    OP_MODULO<span class="op">,</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    OP_NOT<span class="op">,</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    OP_NEGATE<span class="op">,</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// VM 相关:</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    OP_QUIT<span class="op">,</span> <span class="co">// normally quit the VM</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    OP_NOP<span class="op">,</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    OP_POP<span class="op">,</span> <span class="co">// pop 求值栈</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 数据相关:</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    OP_GET_CONST<span class="op">,</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    OP_SET_STATIC<span class="op">,</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    OP_GET_STATIC<span class="op">,</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>    OP_GET_LOCAL<span class="op">,</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    OP_SET_LOCAL<span class="op">,</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 跳转:</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    OP_JUMP<span class="op">,</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>    OP_JUMP_IF_FALSE<span class="op">,</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>    OP_JUMP_BACK<span class="op">,</span></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 函数：</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>    OP_CALL<span class="op">,</span></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>    OP_RET<span class="op">,</span></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>    OP_RETV<span class="op">,</span></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>可以看到，除了运算相关的指令，其他指令是相当少的。较少的指令数目使得 VM 的实现变得比较简单。</p>
+<h3 id="数据分区">数据分区</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> chunk <span class="op">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> value_array statics<span class="op">;</span> <span class="co">// global variables area</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> value_array consts<span class="op">;</span>  <span class="co">// constants area</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">size_t</span> len<span class="op">;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">size_t</span> capacity<span class="op">;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">struct</span> hg_function<span class="op">*</span> funcs<span class="op">;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> funcs<span class="op">;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint8_t</span><span class="op">*</span> code<span class="op">;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span> len<span class="op">;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span> capacity<span class="op">;</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><em>chunk</em> 是保存编译结果的数据结构，可以看到上面有两个 <code>value_array</code> 用以存放数据， <code>code</code> 用以存放代码。</p>
+<p>程序数据被分为 <em>static</em> , <em>const</em>, <em>local</em> 三种，对应执行中相关的 <code>SET</code>，<code>GET</code> 指令可以操作不同数据区的数据。</p>
+<ul>
+<li><em>const</em> 是常量数据，只能读不能写。如 <code>let a =  3 + 100</code> 中 3 和 100 就存在常量数据区。</li>
+<li><em>static</em> 是静态数据，可以读写，用以存放全局变量。</li>
+<li><em>local</em> 是局部数据，可以读写，存放在栈中。</li>
+</ul>
+<p><code>static</code> 算是我前期实现上的一个缺陷，其实它完全可以用最低一层的 <em>local</em> 去代替。
+在命令行执行的模式下，维护一个哈希表记录全局变量和它在栈中对应位置即可。
+在后期的改进中，我会考虑去掉 <code>statics</code>。同时，函数被当做一种数据的时候， 对函数的引用也应该是运行时创建的，并且存在数据区。</p>
+<h3 id="数据的表示">数据的表示</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> hg_value <span class="op">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">enum</span> hg_value_type type<span class="op">;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">union</span> <span class="op">{</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">bool</span> _bool<span class="op">;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int64_t</span> _int<span class="op">;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> _float<span class="op">;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">struct</span> hg_object<span class="op">*</span> _obj<span class="op">;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> as<span class="op">;</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Hedgehog 中所有数据都表示为这样一个结构体，通过 type 字段判定类型，然后再用 <code>as.__</code> 去访问。
+当对数组做操作的时候，会通过 <em>switch</em> 或者 <em>if-else</em> 语句去区分不同的类型。
+对于动态语言来说，这样的类型判定似乎是很难避免的。
+我也有考虑过实现像 Haskell 那样强大的类型推断的功能。
+不过考虑到类型推断让编译阶段的复杂度和编译时间大大增加就放弃了。</p>
+<p>另外一个问题是 <em>hg_value</em> 这个结构体一般会占用 16 bytes 的内存空间，而表示数据本身其实最多只需要 8 bytes。
+需要专门用 8 bytes 来存类型实在是太浪费了。可以采用的一个优化方案是 NaN Boxing。
+在计算机中 64 位的浮点数分成符号位（1位），指数（11位），和尾数（52位）。
+当指数部分全为 1，而尾数部分不全为 1 时表示 NaN (Not a Number)。
+NaN 事实上有很多种可能（2<sup>52</sup>-1 种，实在是浪费），我们可以利用尾数的前 4 位表示类型，后面的 48 位表示各种数据。
+之所以后面剩余 48 位，是因为 64 位 Linux 下指针有效的位数为 后 48 位。
+但是这样做的可移植性可能不太好，因为其他系统中也只用 48 位表示地址吗？显然不一定。</p>
+<h3 id="控制结构的翻译">控制结构的翻译</h3>
+<p><em>if</em>，<em>while</em> 语句的编译是稍微有难度一点的部分。其中 <em>if-else</em> 的翻译如下:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="pp">IF</span><span class="op">-</span>ELSE<span class="op">-</span>IF<span class="op">-</span>ELSE<span class="op">:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="pp">if</span><span class="op">-</span>condition</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  jump<span class="op">-</span>if<span class="op">-</span>false<span class="op">:</span> L1</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="pp">if</span><span class="op">-</span>block</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">jump:</span> L3</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">L1:</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="pp">else</span><span class="op">-</span>if<span class="op">-</span>condition</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  jump<span class="op">-</span>if<span class="op">-</span>false<span class="op">:</span> L2</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="pp">else</span><span class="op">-</span>if<span class="op">-</span>block</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">jump:</span> L3</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">L2:</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="pp">else</span><span class="op">-</span>block</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="fu">L3:</span></span></code></pre></div>
+<p>最大的困难点在于跳转指令跳转位置不是产生该指令的时候能够决定的，所以需要预留跳转地址、记录位置，然后再在跳转位置确定后再去填充。
+<em>while</em> 语句的翻译类似，就不再展示了。</p>
+<p>一个有趣的现象是很多人都误认为 <em>jump if true</em> 和 <em>jump if false</em> 可以达到相同的效果，无非是翻译时的逻辑变了而已。
+事实上，<em>jump if false</em> 常常能够用更少的指令数目去实现 <em>jump if true</em> 想要做到的事。
+下面是使用 <em>jump if true</em> 的翻译结果：</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="pp">IF</span><span class="op">-</span>ELSE<span class="op">-</span>IF<span class="op">-</span>ELSE<span class="op">:</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="pp">if</span><span class="op">-</span>condition</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  jump<span class="op">-</span>if<span class="op">-</span>true<span class="op">:</span> L1</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">jump:</span> L2</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">L1:</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="pp">if</span><span class="op">-</span>block</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">jump:</span> L5</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">L2:</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="pp">else</span><span class="op">-</span>if<span class="op">-</span>condition</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  jump<span class="op">-</span>if<span class="op">-</span>true<span class="op">:</span> L3</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">jump:</span> L4</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">L3:</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="pp">else</span><span class="op">-</span>if<span class="op">-</span>block</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">jump:</span> L5</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="fu">L4:</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="pp">else</span><span class="op">-</span>block</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="fu">L5:</span></span></code></pre></div>
+<h3 id="函数的实现">函数的实现</h3>
+<p>首先需要介绍运行时栈帧：</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> frame <span class="op">{</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint8_t</span><span class="op">*</span> rt_addr<span class="op">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> hg_value<span class="op">*</span> slot<span class="op">;</span> <span class="co">// 通过 slot 索引局部变量</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> vm <span class="op">{</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> chunk<span class="op">*</span> chk<span class="op">;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint8_t</span><span class="op">*</span> ip<span class="op">;</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> frame<span class="op">*</span> frame_top<span class="op">;</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> hg_value<span class="op">*</span> stack_top<span class="op">;</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> hg_value stack<span class="op">[</span>STACK_SIZE<span class="op">];</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> frame frames<span class="op">[</span>FRAME_SIZE<span class="op">];</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>这里栈帧只保存两个值——返回地址和求值栈的栈顶指针（也就是函数使用的运行栈的开始位置，类似于 x86 的 rbp 寄存器）。
+在遇到 CALL 指令的时候，会将 ip 指向函数的开始地址，同时设置新的 frame，具体实现的 C 语言代码如下（省略了部分代码）：</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> call<span class="op">(</span><span class="kw">struct</span> vm<span class="op">*</span> vm<span class="op">,</span> <span class="kw">struct</span> hg_function func<span class="op">,</span> <span class="dt">int</span> argc<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    vm<span class="op">-&gt;</span>frame_top<span class="op">++;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>vm<span class="op">-&gt;</span>frame_top <span class="op">=</span> <span class="op">(</span><span class="kw">struct</span> frame<span class="op">){</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>rt_addr <span class="op">=</span> vm<span class="op">-&gt;</span>ip<span class="op">,</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>slot    <span class="op">=</span> vm<span class="op">-&gt;</span>stack_top <span class="op">-</span> argc<span class="op">,</span> <span class="co">// 把参数包围在调用的函数的栈帧之中</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    vm<span class="op">-&gt;</span>ip <span class="op">=</span> func<span class="op">-&gt;</span>addr<span class="op">;</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>需要说明的是传参的部分。在调用函数时，会先将所有参数倒叙（从右至左）压到栈中，然后再执行 CALL 指令。
+这时 <code>stack_top</code> 指向第一个参数下面的位置，要让新的栈帧能够使用参数，需要让 <code>slot = stack_top - argument_count</code> 。
+这样在函数中就能够通过 <code>slot</code> 使用参数，例如 <code>slot[0]</code> 就是第一个参数（如果有参数）。</p>
+<h2 id="结语">结语</h2>
+<p>Hedgehog 目前还仅仅处于开始的阶段，还在实现基本的功能。我接下来会继续完善优化 Hedgehog，以达到实用的地步。</p>
+    </section>
+</article>
+
+        </main>
+
+        <footer>
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </footer>
+    </body>
+
+    <script src="../js/prism.js"></script>
+
+</html>
