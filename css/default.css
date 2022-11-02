@@ -13,7 +13,60 @@ body {
   padding: 1em;
   font-size: 18px;
   font-family: "Georgia", "Noto Serif SC", serif;
+}
 
+section > p {
+  letter-spacing: 1px;
+}
+
+code, pre {
+	color: #333;
+	background: none;
+	text-shadow: 0 1px white;
+	font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', Consolas, Menlo, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: .9em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+    letter-spacing: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+@media print {
+	code, pre {
+		text-shadow: none;
+	}
+}
+
+/* Code blocks */
+
+pre {
+	margin: .5em 0;
+	border-radius: .3em;
+	border: 0.1em gainsboro solid;
+	overflow: auto;
+}
+
+:not(pre)>code, pre {
+	background: white;
+}
+
+/* Inline code */
+
+:not(pre)>code {
+	padding: .1em;
+	white-space: normal;
+	background: transparent;
+	color: #c7264e;
 }
 
 header {

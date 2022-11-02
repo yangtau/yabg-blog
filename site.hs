@@ -3,6 +3,7 @@
 
 import Data.Monoid (mappend)
 import Hakyll
+import Text.Pandoc
 
 --------------------------------------------------------------------------------
 main :: IO ()
@@ -26,14 +27,14 @@ main = hakyll $ do
   match (fromList ["projects.md"]) $ do
     route $ setExtension "html"
     compile $
-      pandocCompiler
+      tauPandocCompiler
         >>= loadAndApplyTemplate "templates/default.html" defaultContext
         >>= relativizeUrls
 
   match "posts/*" $ do
     route $ setExtension "html"
     compile $
-      pandocCompiler
+      tauPandocCompiler
         >>= loadAndApplyTemplate "templates/post.html" postCtx
         >>= loadAndApplyTemplate "templates/default.html" postCtx
         >>= relativizeUrls
@@ -41,7 +42,7 @@ main = hakyll $ do
   match "posts/hide/*" $ do
     route $ setExtension "html"
     compile $
-      pandocCompiler
+      tauPandocCompiler
         >>= loadAndApplyTemplate "templates/post.html" postCtx
         >>= loadAndApplyTemplate "templates/default.html" postCtx
         >>= relativizeUrls
@@ -80,3 +81,20 @@ postCtx :: Context String
 postCtx =
   dateField "date" "%B %e, %Y"
     `mappend` defaultContext
+
+tauPandocCompiler = pandocCompilerWith defaultHakyllReaderOptions tauWriterOptions
+
+tauWriterOptions :: WriterOptions
+tauWriterOptions =
+  def
+    { writerExtensions =
+        foldr
+          enableExtension
+          pandocExtensions
+          [ Ext_smart,
+            Ext_gfm_auto_identifiers
+          ],
+      writerHighlightStyle = Nothing,
+      writerWrapText = WrapPreserve,
+      writerTableOfContents = True
+    }
