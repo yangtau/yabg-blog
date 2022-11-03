@@ -445,8 +445,8 @@ func 2 (copy and then trans): hits:3586, misses:259, evictions:227
 
 具体步骤如下：
 
-![步骤1](/images/csapp-cachelab-1.jpg)
-![步骤2](/images/csapp-cachelab-2.jpg)
+![](/images/csapp-cachelab-1.jpg)
+![](/images/csapp-cachelab-2.jpg)
 
 1. 先将 `A` 的前四行按照 (1) 复制到 `B` 中。
 2. 按照 (2) 将 `A` 中对应位置的元素存到本地变量中。

@@ -82,18 +82,15 @@ postCtx =
   dateField "date" "%B %e, %Y"
     `mappend` defaultContext
 
-tauPandocCompiler = pandocCompilerWith defaultHakyllReaderOptions tauWriterOptions
+tauPandocCompiler = pandocCompilerWith tauReaderOptions tauWriterOptions
 
-tauWriterOptions :: WriterOptions
+extensions = foldr enableExtension pandocExtensions [Ext_smart, Ext_gfm_auto_identifiers]
+
+tauReaderOptions = def {readerExtensions = extensions}
+
 tauWriterOptions =
   def
-    { writerExtensions =
-        foldr
-          enableExtension
-          pandocExtensions
-          [ Ext_smart,
-            Ext_gfm_auto_identifiers
-          ],
+    { writerExtensions = extensions,
       writerHighlightStyle = Nothing,
       writerWrapText = WrapPreserve,
       writerTableOfContents = True
