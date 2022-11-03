@@ -11,8 +11,6 @@ Hedgehog 是我在编译课上完成的一门编程语言, 其目的是学习编
 它的源码开源在了 Github 上： [hedgehog](https://github.com/yangtau/hedgehog)，
 欢迎 star、fork 和提 issue。
 
-[TOC]
-
 ## 前言
 
 Hedgehog 的设计目标是一门像 Python，Ruby 那样容易上手，语法简单，编程效率高，功能足够强大的脚步语言。
