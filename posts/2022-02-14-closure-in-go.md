@@ -41,12 +41,12 @@ func NewCounter(init int) func() int {
 package closures
 
 func Bar(n int) int {
-	var res int = 0
-	add4 := func() {
-		res = n + 4
-	}
-	add4()
-	return res
+    var res int = 0
+    add4 := func() {
+        res = n + 4
+    }
+    add4()
+    return res
 }
 ```
 
@@ -63,7 +63,7 @@ go 编译器自带了一些非常实用的功能，我们即使不了解具体�
 
 例如对于上面第一个代码片段，我们可以得到下面的输出：
 
-```
+```plaint
 $ go tool compile -l -m -m foo.go
 foo.go:6:3: NewCounter.func1 capturing by ref: a (addr=true assign=true width=8)
 foo.go:5:9: func literal escapes to heap:
@@ -84,65 +84,65 @@ foo.go:5:9: func literal escapes to heap
 
 ```assembly
 "".NewCounter STEXT size=157 args=0x10 locals=0x20 funcid=0x0
-	0x0000 00000 (foo.go:3)	TEXT	"".NewCounter(SB), ABIInternal, $32-16
-	0x0000 00000 (foo.go:3)	MOVQ	(TLS), CX
-	0x0009 00009 (foo.go:3)	CMPQ	SP, 16(CX)
-	0x000d 00013 (foo.go:3)	PCDATA	$0, $-2
-	0x000d 00013 (foo.go:3)	JLS	147
-	0x0013 00019 (foo.go:3)	PCDATA	$0, $-1
-	0x0013 00019 (foo.go:3)	SUBQ	$32, SP
-	0x0017 00023 (foo.go:3)	MOVQ	BP, 24(SP)
-	0x001c 00028 (foo.go:3)	LEAQ	24(SP), BP
-	0x0021 00033 (foo.go:3)	FUNCDATA	$0, gclocals·2589ca35330fc0fce83503f4569854a0(SB)
-	0x0021 00033 (foo.go:3)	FUNCDATA	$1, gclocals·9fb7f0986f647f17cb53dda1484e0f7a(SB)
-	0x0021 00033 (foo.go:4)	LEAQ	type.int(SB), AX ; AX = sizeof(int)
-	0x0028 00040 (foo.go:4)	MOVQ	AX, (SP)
-	0x002c 00044 (foo.go:4)	PCDATA	$1, $0
-	0x002c 00044 (foo.go:4)	CALL	runtime.newobject(SB) ; 为 a 在堆上分配空间
-	0x0031 00049 (foo.go:4)	MOVQ	8(SP), AX             ; AX = &a
-	0x0036 00054 (foo.go:4)	MOVQ	AX, "".&a+16(SP)      
-	0x003b 00059 (foo.go:4)	MOVQ	"".init+40(SP), CX
-	0x0040 00064 (foo.go:4)	MOVQ	CX, (AX)              ; *a = init
-	0x0043 00067 (foo.go:5)	LEAQ	type.noalg.struct { F uintptr; "".a *int }(SB), CX ; CX = sizeof(struct{F unintptr; a *int})
-	0x004a 00074 (foo.go:5)	MOVQ	CX, (SP)
-	0x004e 00078 (foo.go:5)	PCDATA	$1, $1
-	0x004e 00078 (foo.go:5)	CALL	runtime.newobject(SB) ; 为 closure 分配内存空间
-	0x0053 00083 (foo.go:5)	MOVQ	8(SP), AX             ; AX = &closure
-	0x0058 00088 (foo.go:5)	LEAQ	"".NewCounter.func1(SB), CX ; CX = 指向 closure 代码的指针
-	0x005f 00095 (foo.go:5)	MOVQ	CX, (AX)                    ; closure.F = CX
-	0x0062 00098 (foo.go:5)	PCDATA	$0, $-2
-	0x0062 00098 (foo.go:5)	CMPL	runtime.writeBarrier(SB), $0
-	0x0069 00105 (foo.go:5)	JNE	131
-	0x006b 00107 (foo.go:5)	MOVQ	"".&a+16(SP), CX ; CX = &a
-	0x0070 00112 (foo.go:5)	MOVQ	CX, 8(AX)        ; closure.a = &a
-	0x0074 00116 (foo.go:5)	PCDATA	$0, $-1
-	0x0074 00116 (foo.go:5)	MOVQ	AX, "".~r1+48(SP)
-	0x0079 00121 (foo.go:5)	MOVQ	24(SP), BP
-	0x007e 00126 (foo.go:5)	ADDQ	$32, SP
-	0x0082 00130 (foo.go:5)	RET
-	0x0083 00131 (foo.go:5)	PCDATA	$0, $-2
-	0x0083 00131 (foo.go:5)	LEAQ	8(AX), DI
-	0x0087 00135 (foo.go:5)	MOVQ	"".&a+16(SP), CX
-	0x008c 00140 (foo.go:5)	CALL	runtime.gcWriteBarrierCX(SB)
-	0x0091 00145 (foo.go:5)	JMP	116
-	0x0093 00147 (foo.go:5)	NOP
-	0x0093 00147 (foo.go:3)	PCDATA	$1, $-1
-	0x0093 00147 (foo.go:3)	PCDATA	$0, $-2
-	0x0093 00147 (foo.go:3)	CALL	runtime.morestack_noctxt(SB)
-	0x0098 00152 (foo.go:3)	PCDATA	$0, $-1
-	0x0098 00152 (foo.go:3)	JMP	0
+    0x0000 00000 (foo.go:3)    TEXT    "".NewCounter(SB), ABIInternal, $32-16
+    0x0000 00000 (foo.go:3)    MOVQ    (TLS), CX
+    0x0009 00009 (foo.go:3)    CMPQ    SP, 16(CX)
+    0x000d 00013 (foo.go:3)    PCDATA    $0, $-2
+    0x000d 00013 (foo.go:3)    JLS    147
+    0x0013 00019 (foo.go:3)    PCDATA    $0, $-1
+    0x0013 00019 (foo.go:3)    SUBQ    $32, SP
+    0x0017 00023 (foo.go:3)    MOVQ    BP, 24(SP)
+    0x001c 00028 (foo.go:3)    LEAQ    24(SP), BP
+    0x0021 00033 (foo.go:3)    FUNCDATA    $0, gclocals·2589ca35330fc0fce83503f4569854a0(SB)
+    0x0021 00033 (foo.go:3)    FUNCDATA    $1, gclocals·9fb7f0986f647f17cb53dda1484e0f7a(SB)
+    0x0021 00033 (foo.go:4)    LEAQ    type.int(SB), AX ; AX = sizeof(int)
+    0x0028 00040 (foo.go:4)    MOVQ    AX, (SP)
+    0x002c 00044 (foo.go:4)    PCDATA    $1, $0
+    0x002c 00044 (foo.go:4)    CALL    runtime.newobject(SB) ; 为 a 在堆上分配空间
+    0x0031 00049 (foo.go:4)    MOVQ    8(SP), AX             ; AX = &a
+    0x0036 00054 (foo.go:4)    MOVQ    AX, "".&a+16(SP)      
+    0x003b 00059 (foo.go:4)    MOVQ    "".init+40(SP), CX
+    0x0040 00064 (foo.go:4)    MOVQ    CX, (AX)              ; *a = init
+    0x0043 00067 (foo.go:5)    LEAQ    type.noalg.struct { F uintptr; "".a *int }(SB), CX ; CX = sizeof(struct{F unintptr; a *int})
+    0x004a 00074 (foo.go:5)    MOVQ    CX, (SP)
+    0x004e 00078 (foo.go:5)    PCDATA    $1, $1
+    0x004e 00078 (foo.go:5)    CALL    runtime.newobject(SB) ; 为 closure 分配内存空间
+    0x0053 00083 (foo.go:5)    MOVQ    8(SP), AX             ; AX = &closure
+    0x0058 00088 (foo.go:5)    LEAQ    "".NewCounter.func1(SB), CX ; CX = 指向 closure 代码的指针
+    0x005f 00095 (foo.go:5)    MOVQ    CX, (AX)                    ; closure.F = CX
+    0x0062 00098 (foo.go:5)    PCDATA    $0, $-2
+    0x0062 00098 (foo.go:5)    CMPL    runtime.writeBarrier(SB), $0
+    0x0069 00105 (foo.go:5)    JNE    131
+    0x006b 00107 (foo.go:5)    MOVQ    "".&a+16(SP), CX ; CX = &a
+    0x0070 00112 (foo.go:5)    MOVQ    CX, 8(AX)        ; closure.a = &a
+    0x0074 00116 (foo.go:5)    PCDATA    $0, $-1
+    0x0074 00116 (foo.go:5)    MOVQ    AX, "".~r1+48(SP)
+    0x0079 00121 (foo.go:5)    MOVQ    24(SP), BP
+    0x007e 00126 (foo.go:5)    ADDQ    $32, SP
+    0x0082 00130 (foo.go:5)    RET
+    0x0083 00131 (foo.go:5)    PCDATA    $0, $-2
+    0x0083 00131 (foo.go:5)    LEAQ    8(AX), DI
+    0x0087 00135 (foo.go:5)    MOVQ    "".&a+16(SP), CX
+    0x008c 00140 (foo.go:5)    CALL    runtime.gcWriteBarrierCX(SB)
+    0x0091 00145 (foo.go:5)    JMP    116
+    0x0093 00147 (foo.go:5)    NOP
+    0x0093 00147 (foo.go:3)    PCDATA    $1, $-1
+    0x0093 00147 (foo.go:3)    PCDATA    $0, $-2
+    0x0093 00147 (foo.go:3)    CALL    runtime.morestack_noctxt(SB)
+    0x0098 00152 (foo.go:3)    PCDATA    $0, $-1
+    0x0098 00152 (foo.go:3)    JMP    0
 
 ; NewCounter 中返回的 closure 的代码
 "".NewCounter.func1 STEXT nosplit size=19 args=0x8 locals=0x0 funcid=0x0
-	0x0000 00000 (foo.go:5)	TEXT	"".NewCounter.func1(SB), NOSPLIT|NEEDCTXT|ABIInternal, $0-8
-	0x0000 00000 (foo.go:5)	FUNCDATA	$0, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
-	0x0000 00000 (foo.go:5)	FUNCDATA	$1, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
-	0x0000 00000 (foo.go:5)	MOVQ	8(DX), AX  ; *DX+8 这里存储的是 a 的指针
- 	0x0004 00004 (foo.go:6)	MOVQ	(AX), CX   ; CX = &a
-	0x0007 00007 (foo.go:6)	INCQ	CX         ; CX++
-	0x000a 00010 (foo.go:6)	MOVQ	CX, (AX)   ; *a = CX
-	0x000d 00013 (foo.go:7)	MOVQ	CX, "".~r0+8(SP)
-	0x0012 00018 (foo.go:7)	RET
+    0x0000 00000 (foo.go:5)    TEXT    "".NewCounter.func1(SB), NOSPLIT|NEEDCTXT|ABIInternal, $0-8
+    0x0000 00000 (foo.go:5)    FUNCDATA    $0, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
+    0x0000 00000 (foo.go:5)    FUNCDATA    $1, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
+    0x0000 00000 (foo.go:5)    MOVQ    8(DX), AX  ; *DX+8 这里存储的是 a 的指针
+     0x0004 00004 (foo.go:6)    MOVQ    (AX), CX   ; CX = &a
+    0x0007 00007 (foo.go:6)    INCQ    CX         ; CX++
+    0x000a 00010 (foo.go:6)    MOVQ    CX, (AX)   ; *a = CX
+    0x000d 00013 (foo.go:7)    MOVQ    CX, "".~r0+8(SP)
+    0x0012 00018 (foo.go:7)    RET
 
 ```
 
@@ -163,33 +163,33 @@ func Bar() {
 
 ```assembly
 "".Bar STEXT size=71 args=0x0 locals=0x18 funcid=0x0
-	0x0000 00000 (bar.go:3)	TEXT	"".Bar(SB), ABIInternal, $24-0
-	0x0000 00000 (bar.go:3)	MOVQ	(TLS), CX
-	0x0009 00009 (bar.go:3)	CMPQ	SP, 16(CX)
-	0x000d 00013 (bar.go:3)	PCDATA	$0, $-2
-	0x000d 00013 (bar.go:3)	JLS	64
-	0x000f 00015 (bar.go:3)	PCDATA	$0, $-1
-	0x000f 00015 (bar.go:3)	SUBQ	$24, SP
-	0x0013 00019 (bar.go:3)	MOVQ	BP, 16(SP)
-	0x0018 00024 (bar.go:3)	LEAQ	16(SP), BP
-	0x001d 00029 (bar.go:3)	FUNCDATA	$0, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
-	0x001d 00029 (bar.go:3)	FUNCDATA	$1, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
-	0x001d 00029 (bar.go:4)	MOVQ	$0, (SP)
-	0x0025 00037 (bar.go:4)	PCDATA	$1, $0
-	0x0025 00037 (bar.go:4)	CALL	"".NewCounter(SB)
-	0x002a 00042 (bar.go:4)	MOVQ	8(SP), DX ; DX = closure 对象的指针
-	0x002f 00047 (bar.go:5)	MOVQ	(DX), AX  ; AX = clousre.F （代码指针）
-	0x0032 00050 (bar.go:5)	CALL	AX        ; 调用 closure
-	0x0034 00052 (bar.go:6)	MOVQ	16(SP), BP
-	0x0039 00057 (bar.go:6)	ADDQ	$24, SP
-	0x003d 00061 (bar.go:6)	RET
-	0x003e 00062 (bar.go:6)	NOP
-	0x003e 00062 (bar.go:3)	PCDATA	$1, $-1
-	0x003e 00062 (bar.go:3)	PCDATA	$0, $-2
-	0x003e 00062 (bar.go:3)	NOP
-	0x0040 00064 (bar.go:3)	CALL	runtime.morestack_noctxt(SB)
-	0x0045 00069 (bar.go:3)	PCDATA	$0, $-1
-	0x0045 00069 (bar.go:3)	JMP	0
+    0x0000 00000 (bar.go:3)    TEXT    "".Bar(SB), ABIInternal, $24-0
+    0x0000 00000 (bar.go:3)    MOVQ    (TLS), CX
+    0x0009 00009 (bar.go:3)    CMPQ    SP, 16(CX)
+    0x000d 00013 (bar.go:3)    PCDATA    $0, $-2
+    0x000d 00013 (bar.go:3)    JLS    64
+    0x000f 00015 (bar.go:3)    PCDATA    $0, $-1
+    0x000f 00015 (bar.go:3)    SUBQ    $24, SP
+    0x0013 00019 (bar.go:3)    MOVQ    BP, 16(SP)
+    0x0018 00024 (bar.go:3)    LEAQ    16(SP), BP
+    0x001d 00029 (bar.go:3)    FUNCDATA    $0, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
+    0x001d 00029 (bar.go:3)    FUNCDATA    $1, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
+    0x001d 00029 (bar.go:4)    MOVQ    $0, (SP)
+    0x0025 00037 (bar.go:4)    PCDATA    $1, $0
+    0x0025 00037 (bar.go:4)    CALL    "".NewCounter(SB)
+    0x002a 00042 (bar.go:4)    MOVQ    8(SP), DX ; DX = closure 对象的指针
+    0x002f 00047 (bar.go:5)    MOVQ    (DX), AX  ; AX = clousre.F （代码指针）
+    0x0032 00050 (bar.go:5)    CALL    AX        ; 调用 closure
+    0x0034 00052 (bar.go:6)    MOVQ    16(SP), BP
+    0x0039 00057 (bar.go:6)    ADDQ    $24, SP
+    0x003d 00061 (bar.go:6)    RET
+    0x003e 00062 (bar.go:6)    NOP
+    0x003e 00062 (bar.go:3)    PCDATA    $1, $-1
+    0x003e 00062 (bar.go:3)    PCDATA    $0, $-2
+    0x003e 00062 (bar.go:3)    NOP
+    0x0040 00064 (bar.go:3)    CALL    runtime.morestack_noctxt(SB)
+    0x0045 00069 (bar.go:3)    PCDATA    $0, $-1
+    0x0045 00069 (bar.go:3)    JMP    0
 ```
 
 从调用 closure 的汇编我们可以看到， `NewCounter` 返回了 closure 对象的指针，在调用 closure 前这个指针赋值给 DX 寄存器。这样在 closure 的汇编代码中，我们就能通过 DX 寄存器正确地访问到 closed variable。
@@ -204,7 +204,7 @@ func Bar() {
 
 ```go
 func Call(v int, fn func(i int)) {
-	fn(v + 5)
+    fn(v + 5)
 }
 ```
 
@@ -224,4 +224,3 @@ func ByValue1() func() int {
 ---
 
 相比于普通的函数，closure 多了一些动态的、可变的东西，它使得比较静态的函数变得更加像普通的数据，可以被动态地创建出来，可以用于参数的传递。当然更加灵活的同时也带来了更复杂的编译器实现和堆上内存分配的抽象代价。
-

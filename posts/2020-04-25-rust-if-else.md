@@ -27,9 +27,9 @@ a = 3 if 3 > 1 else 1
 
 ```python
 if 3 > 1:
-	a = 3
+    a = 3
 else:
-	a = 1
+    a = 1
 # `a` 直接在 *if-else* 的分支中被赋值的，*if-else* 语句本身并没有产生一个值
 ```
 
@@ -71,7 +71,7 @@ if x > 10 {
 let x = 20;
 let mut y = 0;
 if x > 20 {
-	y = 1;
+    y = 1;
 }
 ```
 

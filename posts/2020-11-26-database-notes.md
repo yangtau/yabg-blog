@@ -90,4 +90,3 @@ A <u>foreign key</u> specifies that an attribute from one relation has to map to
   $$R \div S$$
 
 ## SQL
-
